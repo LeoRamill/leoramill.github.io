@@ -108,6 +108,50 @@
 }
 .contact-cta__btn:hover { background-color: #e5e7eb; }
 
-/* ----- Small-screen safety: no horizontal overflow anywhere ----- */
-html, body { overflow-x: hidden; }
+/* ----- Small-screen safety ----- */
+/* `clip` (not `hidden`) cuts anything sticking out sideways without turning <body> into a scroll
+   container, so the sticky navbar and the sticky "On this page" column keep working. */
+body { overflow-x: clip; }
 img { max-width: 100%; }
+
+/* ----- "On this page" table of contents: smooth scroll + active section ----- */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+article h2[id], article h3[id], article h4[id] { scroll-margin-top: 1.25rem; }
+
+.hb-toc ul { position: relative; margin-left: 0.15rem; border-left: 2px solid #e5e7eb; }
+.dark .hb-toc ul { border-left-color: #3f3f46; }
+.hb-toc li { margin: 0; }
+.hb-toc li a {
+  position: relative; display: block; width: auto;
+  margin-left: -2px; padding: 0.4rem 0.8rem;
+  border-left: 2px solid transparent; border-radius: 0 0.4rem 0.4rem 0;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.hb-toc li a:hover {
+  color: rgb(var(--color-primary-600));
+  background-color: rgb(var(--color-primary-500) / 0.06);
+  transform: translateX(3px);
+}
+.dark .hb-toc li a:hover { color: rgb(var(--color-primary-300)); }
+.hb-toc li a.active {
+  color: rgb(var(--color-primary-600));
+  border-left-color: rgb(var(--color-primary-600));
+  background-color: rgb(var(--color-primary-500) / 0.1);
+  font-weight: 600;
+}
+.dark .hb-toc li a.active {
+  color: rgb(var(--color-primary-300));
+  border-left-color: rgb(var(--color-primary-300));
+  background-color: rgb(var(--color-primary-400) / 0.15);
+}
+.hb-toc li a.is-clicked { animation: toc-pulse 0.5s ease; }
+@keyframes toc-pulse {
+  0% { background-color: rgb(var(--color-primary-500) / 0.35); transform: translateX(4px); }
+  100% { background-color: rgb(var(--color-primary-500) / 0.1); transform: translateX(0); }
+}
+
+/* ----- News list on phones: the hover highlight of each item extends 1rem past the container ----- */
+@media (max-width: 639px) {
+  article .-inset-x-4 { left: 0; right: 0; }
+}
