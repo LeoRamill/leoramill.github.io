@@ -308,3 +308,50 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
   .academic-stop { grid-template-columns: 3.7rem minmax(0, 1fr); }
   .academic-card { grid-column: 2; }
 }
+
+/* ----- Shaping galleries: clickable cards, modal reviews, notes ----- */
+.shaping-card-button { display: grid; width: 100%; gap: 0.75rem; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.shaping-card-button .shaping-cover, .shaping-card-button .shaping-card-copy { display: grid; }
+.shaping-card-button:hover .shaping-cover, .shaping-card-button:focus-visible .shaping-cover { border-color: var(--card-accent); box-shadow: 0 24px 58px #16201b29; transform: translateY(-0.28rem); }
+.shaping-card-button:focus-visible { outline: 2px solid var(--card-accent); outline-offset: 0.35rem; }
+.shaping-card-note { display: block; color: var(--muted); font-size: 0.9rem; font-weight: 400; line-height: 1.3; }
+.shaping-source-note--lead { max-width: 44rem; margin-block-start: clamp(0.65rem, 1.35vw, 1rem); font-size: clamp(1.08rem, 1.8vw, 1.42rem); font-weight: 700; line-height: 1.08; }
+.shaping-source-note--lead a { color: var(--blue); font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
+.shaping-source-note--bottom { margin-top: clamp(1.5rem, 4vw, 2.75rem); }
+.shaping-source-note--bottom a { color: var(--blue); font-size: clamp(1.35rem, 2.6vw, 2.4rem); font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
+.shaping-list-page .shaping-gallery:first-of-type { padding-top: clamp(0.85rem, 2vw, 1.6rem); }
+.shaping-source-note--bottom + .shaping-gallery { padding-top: clamp(1.25rem, 3vw, 2.75rem); }
+.shaping-gallery + .shaping-gallery { padding-top: clamp(3.5rem, 7vw, 6.5rem); }
+
+html.has-open-dialog { overflow: hidden; }
+.shaping-dialog { width: min(100% - 1rem, 980px); max-height: calc(100svh - 1rem); padding: 0; border: 0; background: transparent; color: var(--ink); }
+.shaping-dialog::backdrop { background: #17201b85; backdrop-filter: blur(10px); }
+.shaping-dialog-panel {
+  position: relative; display: grid; grid-template-columns: minmax(13rem, 0.76fr) minmax(0, 1.24fr); gap: clamp(1.1rem, 3.5vw, 2.25rem);
+  max-height: calc(100svh - 1rem); padding: clamp(0.75rem, 2vw, 1.25rem); overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--line), transparent 25%); background: #fbfcf7f7; box-shadow: 0 34px 90px #16201b3d;
+}
+.dark .shaping-dialog-panel { background: #1f1f23f7; }
+.shaping-dialog-close { position: absolute; top: 0.85rem; right: 0.85rem; z-index: 2; display: grid; place-items: center; width: 2.2rem; aspect-ratio: 1; border: 1px solid color-mix(in srgb, var(--line), transparent 10%); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.shaping-dialog-cover { position: relative; display: grid; place-items: center; overflow: hidden; align-self: start; aspect-ratio: 2 / 3; border: 1px solid color-mix(in srgb, var(--card-accent), var(--line) 62%); background: linear-gradient(135deg, color-mix(in srgb, var(--card-accent), white 74%), #fbfcf7f5), var(--paper); box-shadow: 0 18px 38px #16201b1a; }
+.dark .shaping-dialog-cover { background: linear-gradient(135deg, color-mix(in srgb, var(--card-accent), #18181b 70%), #27272a), var(--paper); }
+.shaping-dialog-cover img { width: 100%; height: 100%; object-fit: cover; }
+.shaping-dialog-cover span { max-width: 12ch; padding: 0.5rem; color: color-mix(in srgb, var(--card-accent), var(--ink) 34%); font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 900; line-height: 0.95; text-align: center; text-transform: lowercase; hyphens: auto; }
+.shaping-gallery--song .shaping-dialog-cover, .shaping-gallery--artist .shaping-dialog-cover, .shaping-gallery--compact .shaping-dialog-cover { aspect-ratio: 1; }
+.shaping-dialog-copy { align-self: center; display: grid; gap: 1rem; padding: clamp(1rem, 3vw, 2rem) clamp(0.25rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem) 0; }
+.shaping-dialog-copy h2 { font-size: clamp(2.25rem, 6vw, 5rem); }
+.shaping-dialog-copy p { max-width: 42rem; margin: 0; color: var(--ink); font-size: clamp(1rem, 1.55vw, 1.16rem); font-weight: 500; line-height: 1.5; }
+.shaping-dialog-copy .shaping-card-meta { color: var(--muted); font-size: 0.76rem; font-weight: 800; }
+.shaping-dialog-catchphrase, .shaping-dialog-copy .shaping-dialog-catchphrase { max-width: 38rem; color: var(--blue); font-size: clamp(1.2rem, 2.2vw, 1.65rem); font-weight: 800; line-height: 1.16; }
+.shaping-stars { display: flex; align-items: center; flex-wrap: wrap; gap: 0.13rem; }
+.shaping-star { position: relative; display: inline-block; color: color-mix(in srgb, var(--line), white 20%); font-size: clamp(1rem, 2vw, 1.45rem); line-height: 1; }
+.dark .shaping-star { color: #3f3f46; }
+.shaping-star::before { position: absolute; inset: 0; width: var(--star-fill); overflow: hidden; color: var(--yellow); content: "★"; }
+.shaping-rating-text { margin-left: 0.45rem; color: var(--ink); font-size: 0.9rem; font-weight: 900; }
+.shaping-spotify-link { justify-self: start; color: var(--green); font-weight: 900; }
+@media (max-width: 720px) {
+  .shaping-dialog { width: min(100% - 0.75rem, 34rem); }
+  .shaping-dialog-panel { grid-template-columns: 1fr; }
+  .shaping-dialog-cover { width: min(100%, 16rem); margin-inline: auto; }
+  .shaping-dialog-copy { padding: 0 0.35rem 0.75rem; }
+}
