@@ -1,0 +1,11 @@
+{{/* 🏠 / Shaping / Page */}}
+<nav class="shaping-breadcrumbs" aria-label="Breadcrumb">
+  <a class="breadcrumb-link" href="{{ site.Home.RelPermalink }}" aria-label="Back to home">🏠</a>
+  {{ $section := .FirstSection }}
+  {{ if ne . $section }}
+    <span class="breadcrumb-separator" aria-hidden="true">/</span>
+    <a class="breadcrumb-link" href="{{ $section.RelPermalink }}">{{ $section.Title }}</a>
+  {{ end }}
+  <span class="breadcrumb-separator" aria-hidden="true">/</span>
+  <span class="breadcrumb-current is-current">{{ .Title }}</span>
+</nav>

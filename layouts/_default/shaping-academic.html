@@ -1,0 +1,29 @@
+{{ define "main" }}
+{{/* Vertical roadmap of studies. Stops come from `stops` in the front matter. */}}
+<section class="shaping-scope shaping-page academic-page">
+  <div class="academic-shell">
+    {{ partial "shaping_breadcrumbs" . }}
+    <h1 id="academic-title" class="shaping-title">{{ .Title }}</h1>
+    {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
+    <div class="academic-roadmap">
+      <ol class="academic-stops">
+        {{ range .Params.stops }}
+        <li class="academic-stop">
+          <span class="academic-dot" aria-hidden="true"></span>
+          <div class="academic-copy">
+            <span class="academic-label">{{ .label }}</span>
+            {{ with .date }}<span class="academic-date">{{ . }}</span>{{ end }}
+            {{ with .school }}<span class="academic-school">{{ . | markdownify }}</span>{{ end }}
+            {{ with .text }}<p class="academic-text">{{ . | markdownify }}</p>{{ end }}
+          </div>
+          {{ with .image }}
+          <figure class="academic-card">{{ with $.Params.url }}<a href="{{ . }}">{{ end }}<img src="{{ . }}" alt="" loading="lazy">{{ if $.Params.url }}</a>{{ end }}</figure>
+          {{ end }}
+        </li>
+        {{ end }}
+      </ol>
+    </div>
+    {{ with .Content }}<div class="prose prose-slate dark:prose-invert mx-auto mt-10">{{ . }}</div>{{ end }}
+  </div>
+</section>
+{{ end }}

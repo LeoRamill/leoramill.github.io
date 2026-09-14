@@ -1,0 +1,44 @@
+{{ define "main" }}
+{{/* "Shaping" landing: a floating mini-me surrounded by orbiting icons that open the sub-pages,
+     and a "currently / old" link underneath. Content and links come from the page front matter. */}}
+{{ $minime := resources.Get "media/mini-me.png" | default (resources.Get "media/mini-me.svg") }}
+<section class="shaping-scope shaping-page" aria-labelledby="shaping-title">
+  {{ partial "shaping_breadcrumbs" . }}
+  <h1 id="shaping-title" class="shaping-title">{{ .Title }}</h1>
+  {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
+  {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
+
+  <div class="shaping-hero">
+    <div class="mini-me-wrap" aria-hidden="true">
+      {{ with $minime }}<img class="mini-me" src="{{ .RelPermalink }}" width="768" height="1365" alt="" loading="eager" decoding="sync">{{ end }}
+    </div>
+    <nav class="shaping-orbits" aria-label="Shaping sections">
+      {{ range $i, $orb := .Params.orbits }}
+      <a class="shaping-orb shaping-orb--{{ add $i 1 }}" href="{{ $orb.url | relURL }}" aria-label="{{ $orb.label }}" data-orb="{{ $orb.icon | default "emoji" }}">
+        {{ if eq $orb.icon "youtube" }}
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+        {{ else if eq $orb.icon "spotify" }}
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24Zm5.52 17.34c-.24.36-.66.48-1.02.24-2.82-1.74-6.36-2.1-10.56-1.14-.42.12-.78-.18-.9-.54-.12-.42.18-.78.54-.9 4.56-1.02 8.52-.6 11.64 1.32.42.18.48.66.3 1.02Zm1.44-3.3c-.3.42-.84.6-1.26.3-3.24-1.98-8.16-2.58-11.94-1.38-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14 4.38-1.32 9.78-.66 13.5 1.62.36.18.54.78.24 1.2Zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.3c-.6.18-1.2-.18-1.38-.72-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.72 1.62.54.3.72 1.02.42 1.56-.3.42-1.02.6-1.56.3Z"/></svg>
+        {{ else }}
+        <span aria-hidden="true">{{ $orb.emoji | default "✨" }}</span>
+        {{ end }}
+      </a>
+      {{ end }}
+    </nav>
+  </div>
+
+  {{ with .Params.focus }}
+  <section class="focus-section" aria-labelledby="focus-title">
+    <a class="focus-time-link" href="{{ .url | relURL }}" aria-label="{{ .aria | default (printf "Open %s" .old) }}">
+      <h2 id="focus-title">
+        <span class="focus-current">{{ .current }}</span>
+        <span class="focus-old" aria-hidden="true">{{ .old }}</span>
+      </h2>
+    </a>
+    {{ with .hint }}<p class="focus-title-hint">{{ . }}</p>{{ end }}
+  </section>
+  {{ end }}
+
+  {{ with .Content }}<div class="focus-writing-area prose prose-slate dark:prose-invert">{{ . }}</div>{{ end }}
+</section>
+{{ end }}

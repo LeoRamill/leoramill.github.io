@@ -1,0 +1,31 @@
+{{ define "main" }}
+{{/* Wall of cards (books, movies, videos, songs...). Items come from `galleries` in the front matter. */}}
+<section class="shaping-scope shaping-page shaping-list-page">
+  {{ partial "shaping_breadcrumbs" . }}
+  <h1 class="shaping-title">{{ .Title }}</h1>
+  {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
+  {{ with .Content }}<div class="shaping-source-note shaping-source-note--lead">{{ . }}</div>{{ end }}
+
+  {{ range .Params.galleries }}
+  <section class="shaping-gallery shaping-gallery--{{ .kind | default "book" }}">
+    {{ with .title }}<p class="shaping-gallery-eyebrow">{{ . }}</p>{{ end }}
+    <div class="shaping-wall">
+      {{ range .items }}
+      <article class="shaping-card"{{ with .accent }} style="--card-accent: {{ . }}"{{ end }}>
+        {{ if .url }}<a class="shaping-card-static" href="{{ .url }}" target="_blank" rel="noopener">{{ else }}<div class="shaping-card-static">{{ end }}
+          <div class="shaping-cover">
+            {{ with .cover }}<img src="{{ . }}" alt="{{ $.Title }}: {{ $.Params.title }}" loading="lazy">{{ else }}<span class="shaping-cover-fallback">{{ .title }}</span>{{ end }}
+          </div>
+          <div class="shaping-card-copy">
+            {{ with .meta }}<span class="shaping-card-meta">{{ . }}</span>{{ end }}
+            <strong>{{ .title }}</strong>
+            {{ with .note }}<p class="shaping-card-note">{{ . | markdownify }}</p>{{ end }}
+          </div>
+        {{ if .url }}</a>{{ else }}</div>{{ end }}
+      </article>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</section>
+{{ end }}
