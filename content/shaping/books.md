@@ -1,26 +1,33 @@
 ---
 title: Books
 layout: shaping-gallery
-description: "The books that stayed with me."
-# Each gallery is a wall of cards. `cover` is an image URL (optional: without it the title is shown as a big word),
-# `url` opens on click, `meta` is the small uppercase line, `note` a short comment.
+# Sentence under the title (optionally a link)
+lead:
+  text: "You forget the pages, but you keep the person they made."
+  url: ""
+# Items with `rating` (out of 10), `catchphrase` or `review` open a modal on click; the others are static.
+# `cover`: a full image URL, or a file name placed in `assets/media/shaping/` (e.g. atomic-habits.jpg).
 galleries:
-  - title: Fiction
+  - title: ""
     kind: book
+    label: Book
     items:
-      - title: Siddhartha
-        meta: Hermann Hesse · 1922
-        note: A path, not a destination.
-      - title: The Little Prince
-        meta: Antoine de Saint-Exupéry · 1943
-      - title: Norwegian Wood
-        meta: Haruki Murakami · 1987
-  - title: Non-fiction
-    kind: book
-    items:
+      - title: The 7 Habits of Highly Effective People
+        meta: Stephen R. Covey
+        rating: 9
+        catchphrase: Write here the one line that sums up why it stayed.
+        review: "Example review: replace this text with your own words about what the book changed in how you think or work."
+      - title: Atomic Habits
+        meta: James Clear
+        rating: 8.5
+        catchphrase: Tiny things, repeated until they become you.
+        review: "Example review: small repeated actions compound into identity. Replace with your own take."
       - title: Deep Learning
-        meta: Goodfellow, Bengio, Courville · 2016
-        url: https://www.deeplearningbook.org/
-      - title: Thinking, Fast and Slow
-        meta: Daniel Kahneman · 2011
+        meta: Ian Goodfellow, Yoshua Bengio, Aaron Courville
+      - title: The Mythical Man-Month
+        meta: Frederick P. Brooks
+      - title: A Short History of the World
+        meta: H. G. Wells
+      - title: Wohpe
+        meta: Salvatore Sanfilippo
 ---
