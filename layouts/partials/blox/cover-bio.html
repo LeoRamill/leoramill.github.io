@@ -1,0 +1,27 @@
+{{/* Custom block: cover-bio */}}
+{{/* Full-width cover photo followed by an italic biography (riccardocadei-style "About"). */}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+
+{{ $author := $block.content.username | default "admin" }}
+{{ $person_page := site.GetPage (printf "/authors/%s" $author) }}
+
+<div class="cover-bio">
+  {{ with $block.content.image }}
+    {{ $img := resources.Get (path.Join "media" .) }}
+    {{ if $img }}
+      {{ if ne $img.MediaType.SubType "svg" }}{{ $img = $img.Fit "1800x1800 webp q85" }}{{ end }}
+      <img class="cover-bio__cover" src="{{ $img.RelPermalink }}"{{ if ne $img.MediaType.SubType "svg" }} width="{{ $img.Width }}" height="{{ $img.Height }}"{{ end }} alt="{{ $block.content.alt | default "" }}" loading="lazy">
+    {{ else }}
+      {{ warnf "cover-bio: image `%s` not found in `assets/media/`" . }}
+    {{ end }}
+  {{ end }}
+
+  <div class="cover-bio__text prose prose-slate dark:prose-invert">
+    {{ with $block.content.text }}
+      {{ . | emojify | $page.RenderString }}
+    {{ else }}
+      {{ with $person_page }}{{ .Content }}{{ end }}
+    {{ end }}
+  </div>
+</div>
