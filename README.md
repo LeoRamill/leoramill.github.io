@@ -1,8 +1,8 @@
 # website
 
-Sito personale di Leonard Vincent Ramil costruito con [Hugo Blox](https://hugoblox.com) (template *Academic CV*, lo stesso della cartella `epalu.github.io-main`) ma con la home impostata come quella di `riccardocadei.github.io-master`: icone social a sinistra nella barra di navigazione, avatar tondo con nome e tagline, foto di copertina, bio in corsivo, "Selected News" e pubblicazioni selezionate.
+Sito personale di Leonard Vincent Ramil costruito con [Hugo Blox](https://hugoblox.com) (template *Academic CV*) con la home ispirata al sito di Riccardo Cadei: icone social a sinistra nella barra di navigazione, avatar tondo con nome e tagline, foto di copertina, bio in corsivo, "Selected News" e progetti selezionati.
 
-Il "gioco di sfondi" del template epalu è mantenuto: hero scuro con `Meteor.svg`, sezione bianca, sezione grigia, sezione bianca, chiusura scura con `stacked-peaks.svg`. Tutto è responsive (telefono e desktop) e supporta la modalità chiara/scura.
+Il "gioco di sfondi" del template Academic CV è mantenuto: hero scuro con `Meteor.svg`, sezione bianca, sezione grigia, sezione bianca, chiusura scura con `stacked-peaks.svg`. Tutto è responsive (telefono e desktop) e supporta la modalità chiara/scura.
 
 ## Come lanciarlo in locale
 
@@ -30,7 +30,7 @@ hugo server
 
 ## Blocchi custom
 
-I tre blocchi che riproducono il layout di riccardocadei stanno in `layouts/partials/blox/`:
+I tre blocchi che riproducono quel layout stanno in `layouts/partials/blox/`:
 
 - `profile-hero.html`: avatar + nome + tagline + icone social + pulsante CV.
 - `cover-bio.html`: foto di copertina + bio in corsivo (prende il testo dalla pagina autore).
@@ -41,13 +41,6 @@ La barra di navigazione con le icone social a sinistra è in `layouts/partials/c
 ## Deploy
 
 Il workflow `.github/workflows/publish.yaml` pubblica su GitHub Pages a ogni push su `main` (il sito sarà su `https://leoramill.github.io/website/`; in Settings → Pages la sorgente deve essere "GitHub Actions"). `netlify.toml` permette in alternativa il deploy su Netlify.
-
-## Cartelle di riferimento
-
-- `epalu.github.io-main`: sito Hugo Blox di Emanuele Palumbo (riferimento per template e sfondi).
-- `riccardocadei.github.io-master`: sito HTML statico di Riccardo Cadei (riferimento per il layout della home).
-
-Hugo le ignora (non sono cartelle riconosciute del progetto) e si possono cancellare quando non servono più.
 
 ## Dati da verificare
 

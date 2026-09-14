@@ -1,8 +1,0 @@
-_site
-.sass-cache
-.jekyll-metadata
-.ruby-version
-Gemfile.lock
-.DS_store
-.bundle/
-vendor/
