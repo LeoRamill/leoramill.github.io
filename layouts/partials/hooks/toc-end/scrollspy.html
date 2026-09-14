@@ -1,0 +1,70 @@
+{{/* "On this page" enhancements: smooth scroll on click, highlight of the section being read, URL hash kept in sync. */}}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var toc = document.querySelector('.hb-toc');
+    if (!toc) return;
+    var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+    if (!links.length) return;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var idOf = function (a) { return decodeURIComponent(a.getAttribute('href').slice(1)); };
+    var linkById = {};
+    var targets = [];
+    links.forEach(function (a) {
+      var el = document.getElementById(idOf(a));
+      if (el) { linkById[el.id] = a; targets.push(el); }
+    });
+    if (!targets.length) return;
+
+    var current = null;
+    var lockUntil = 0; // after a click, keep the clicked entry active while the smooth scroll runs
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function (a) { a.classList.toggle('active', linkById[id] === a); });
+    }
+
+    // The section whose heading is closest above the "resting" line (where a heading lands after a
+    // click, i.e. its scroll-margin-top) is the active one.
+    function offset() {
+      var pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      var margin = parseFloat(getComputedStyle(targets[0]).scrollMarginTop) || 0;
+      return pad + margin + 24;
+    }
+    function update() {
+      if (Date.now() < lockUntil) return;
+      var line = offset();
+      var active = targets[0];
+      for (var i = 0; i < targets.length; i++) {
+        if (targets[i].getBoundingClientRect().top - line <= 0) active = targets[i]; else break;
+      }
+      // At the very bottom of the page, always light up the last entry.
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) active = targets[targets.length - 1];
+      setActive(active.id);
+    }
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () { update(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var id = idOf(a);
+        var el = document.getElementById(id);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        history.replaceState(null, '', '#' + id);
+        lockUntil = Date.now() + 1200;
+        setActive(id);
+        a.classList.remove('is-clicked');
+        void a.offsetWidth; // restart the pulse animation
+        a.classList.add('is-clicked');
+      });
+    });
+  });
+</script>
