@@ -1,0 +1,14 @@
+{{/* Simple list view for news - displays date (MM-YYYY) and summary */}}
+<div class="space-y-2">
+  {{ range .Pages }}
+    <div class="flex items-start space-x-2">
+      <span class="text-sm text-gray-600 font-mono">
+        {{ .Date.Format "01-2006" }}
+      </span>
+      <span class="text-sm">-</span>
+      <span class="text-sm">
+        {{ .Params.summary | default .Summary }}
+      </span>
+    </div>
+  {{ end }}
+</div>
