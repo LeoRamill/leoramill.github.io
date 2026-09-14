@@ -13,14 +13,16 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: Computer Science and AI student · Per Aspera Ad Astra
+role: Research Intern at Inria
 
 # Organizations/Affiliations
 organizations:
+  - name: Inria
+    url: https://team.inria.fr/
   - name: EURECOM
     url: https://www.eurecom.fr/
-  - name: Sapienza Università di Roma
-    url: https://www.uniroma1.it/
+  - name: Politecnico di Torino 
+    url: https://www.polito.it/
 
 # Social network links (shown in the navbar and in the hero)
 profiles:
@@ -44,8 +46,10 @@ interests:
   - Photography
 
 education:
-  - area: M.Sc. in Computer Science (Data Science track)
+  - area: Double M.Sc. in Computer Science (Data Science track)
     institution: EURECOM, France
+  - area: M.Sc. in Data Science and Engineering
+    institution: Politecnico di Torino, Italy
   - area: B.Sc. in Applied Computer Science and Artificial Intelligence
     institution: Sapienza Università di Roma, Italy
 ---
