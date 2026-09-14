@@ -4,4 +4,4 @@ cms_exclude: true
 view: article-grid
 ---
 
-A collection of problems, challenges and frameworks I have solved and implemented during the last few years and that I can share publicly. If you are interested in further details, do not hesitate to contact me privately.
+A collection of the projects I have worked on during my studies at Sapienza and EURECOM, from computer vision and deep learning to web development and human-computer interaction. If you are interested in further details, do not hesitate to contact me.

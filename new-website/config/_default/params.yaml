@@ -5,7 +5,7 @@
 # Appearance
 appearance:
   mode: system   # light | dark | system
-  color: red     # accent colour (matches the red accents of the original site)
+  color: indigo  # accent colour (change to red, rose, blue, emerald... see Hugo Blox themes)
 
 # SEO
 marketing:
@@ -13,8 +13,8 @@ marketing:
     site_type: Person
     local_business_type: ''
     org_name: ''
-    description: 'Personal website of Riccardo Cadei, researcher in Causal Learning and AI: publications, projects and CV.'
-    twitter: 'riccardocadeii'
+    description: 'Personal website of Leonard Vincent Ramil, Computer Science and AI student: projects, news and CV.'
+    twitter: ''
   analytics:
     google_analytics: ''
     baidu_tongji: ''
@@ -40,12 +40,12 @@ header:
       # Leave `text` empty to show only the social icons on the left of the navbar
       text: ""
       # Logo filename in `assets/media/` folder (shown as a small round avatar)
-      filename: "icon.png"
+      filename: "icon.jpg"
 
 # Site footer
 footer:
   copyright:
-    notice: '© {year} Riccardo Cadei. This work is licensed under {license}'
+    notice: '© {year} Leonard Vincent Ramil. This work is licensed under {license}'
     license:
       enable: true
       allow_derivatives: false

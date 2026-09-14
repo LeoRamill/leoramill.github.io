@@ -1,10 +1,10 @@
 ---
 # Display name
-title: Riccardo Cadei
+title: Leonard Vincent Ramil
 
 # Full name (for SEO) - also used by the hero block: bold first name, light last name
-first_name: Riccardo
-last_name: Cadei
+first_name: Leonard Vincent
+last_name: Ramil
 
 # Is this the primary user of the site?
 superuser: true
@@ -13,53 +13,47 @@ superuser: true
 highlight_name: true
 
 # Role/position/tagline
-role: Researcher in Causal Learning and AI
+role: Computer Science and AI student · Per Aspera Ad Astra
 
 # Organizations/Affiliations
 organizations:
-  - name: Causal Learning and AI Lab
-    url: https://ista.ac.at/en/research/locatello-group/
-  - name: ISTA
-    url: https://ista.ac.at/
-  - name: ELLIS
-    url: https://ellis.eu/
+  - name: EURECOM
+    url: https://www.eurecom.fr/
+  - name: Sapienza Università di Roma
+    url: https://www.uniroma1.it/
 
 # Social network links (shown in the navbar and in the hero)
 profiles:
   - icon: at-symbol
-    url: 'mailto:riccardo.cadei@ist.ac.at'
+    url: 'mailto:leonardvincentramil@icloud.com'
     label: E-mail Me
-  - icon: academicons/google-scholar
-    url: https://scholar.google.com/citations?user=dYnjzcMAAAAJ&hl=en
-    label: Google Scholar
   - icon: brands/github
-    url: https://github.com/riccardocadei
+    url: https://github.com/LeoRamill
     label: GitHub
   - icon: brands/linkedin
-    url: https://www.linkedin.com/in/riccardocadei
+    url: https://www.linkedin.com/in/leonard-vincent-ramil
     label: LinkedIn
-  - icon: brands/x
-    url: https://x.com/riccardocadeii
-    label: X
+  - icon: brands/instagram
+    url: https://www.instagram.com/leo.ramill
+    label: Instagram
 
 interests:
-  - Causal Inference
-  - Causal Representation Learning
-  - AI for Science
+  - Machine Learning and Deep Learning
+  - Computer Vision
+  - AI and Art
+  - Photography
 
 education:
-  - area: Ph.D. in Causal Learning and AI
-    institution: ISTA, Austria
-  - area: Visiting Graduate Student
-    institution: Harvard University, USA
-  - area: M.Sc. in Data Science
-    institution: EPFL, Switzerland
-  - area: B.Sc. in Mathematical Engineering
-    institution: Politecnico di Milano, Italy
+  - area: M.Sc. in Computer Science (Data Science track)
+    institution: EURECOM, France
+  - area: B.Sc. in Applied Computer Science and Artificial Intelligence
+    institution: Sapienza Università di Roma, Italy
 ---
 
 Hello World,
 
-I am Riccardo, an enthusiastic researcher (Ph.D.) at [Causal Learning and Artificial Intelligence Lab](https://ista.ac.at/en/research/locatello-group/) at [ISTA](https://ista.ac.at/) led by [Francesco Locatello](https://www.francescolocatello.com/) and co-supervised by [Cordelia Schmid](https://scholar.google.com/citations?user=IvqCXP4AAAAJ&hl=en) as a member of [ELLIS](https://ellis.eu/) program (previously Harvard and EPFL). Through my research, I aim to **bring Causal Inference into the modern Machine Learning era**, scaling experiment size, measurement complexity, and number of testable hypotheses, when limited by analysis bottlenecks. I actively collaborate with biologists, neuroscientists, public health and economic development experts to translate my foundational, methodological, and applied contributions into concrete scientific workflows.
+I am Leonard, a Computer Science student passionate about merging artificial intelligence with artistic expression. After a Bachelor's degree in [Applied Computer Science and Artificial Intelligence](https://corsidilaurea.uniroma1.it/en/corso/2023/31734/home) at [Sapienza Università di Roma](https://www.uniroma1.it/), I am now pursuing a Master's degree in Computer Science (Data Science track) at [EURECOM](https://www.eurecom.fr/). My current focus is on **machine learning and deep learning**, with hands-on projects spanning computer vision, domain adaptation, medical imaging and explainable AI.
 
-This is my personal website where you can browse my publications and accomplished projects publicly available. Enjoy your reading, and do not hesitate to reach out for any constructive discussion.
+Outside of code, I love travelling and exploring the world through photography, trying to capture my own perspective of reality. I am always happy to talk about technology, art, cinema, TV series and photography.
+
+This is my personal website where you can browse my projects and keep up with what I am working on. Enjoy your reading, and do not hesitate to reach out for any constructive discussion.

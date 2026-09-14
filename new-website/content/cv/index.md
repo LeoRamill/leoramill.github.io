@@ -1,55 +1,41 @@
 ---
 title: Curriculum Vitae
 type: page
+share: false
+reading_time: false
+commentable: false
 ---
-
-Download the [PDF version of my CV](/uploads/CV.pdf).
 
 ## General Information
 
-- **Full name:** Riccardo Cadei
-- **Nationality:** Italian
-- **Languages:** Italian (native), English (fluent), French (enough to order a croissant)
-- **Research area:** Causal Learning and Artificial Intelligence for Science (public health, medicine, neuroscience, biology)
+- **Full name:** Leonard Vincent Ramil
+- **Based in:** Rome, Italy (studying in Sophia Antipolis, France)
+- **E-mail:** [leonardvincentramil@icloud.com](mailto:leonardvincentramil@icloud.com)
+- **Links:** [GitHub](https://github.com/LeoRamill), [LinkedIn](https://www.linkedin.com/in/leonard-vincent-ramil), [Instagram](https://www.instagram.com/leo.ramill)
+- **Interests:** artificial intelligence, art, photography, travel, cinema and TV series
 
 ## Education
 
-- **2024 to now: ISTA, Ph.D. Student.** Causal Learning and Artificial Intelligence group. Supervisor: Francesco Locatello. Co-supervisor: Cordelia Schmid. External visit: Willow group at INRIA Paris (March to July 2025).
-- **2022 to 2023: Harvard University, Visiting Graduate Student.** Department of Biostatistics, Harvard T.H. Chan School of Public Health and Harvard Data Science Initiative. Thesis: Causal Rule Ensemble, interpretable discovery and estimation of heterogeneous treatment effects (P.I.: Francesca Dominici).
-- **2020 to 2023: EPFL, M.Sc. in Data Science.** Research at VITA (causal motion forecasting) and LESO-PB (rooftop photovoltaic detection).
-- **2017 to 2020: Politecnico di Milano, B.Sc. in Mathematical Engineering.** Grade 110/110. Thesis on mathematical programming for activity planning in an oncology day-hospital.
+- **2025 to now: EURECOM, M.Sc. in Computer Science (Data Science track).** Semester project on deep learning quality control of artery segmentations in MRA volumes (VesselVerse).
+- **2022 to 2025: Sapienza Università di Roma, B.Sc. in Applied Computer Science and Artificial Intelligence (ACSAI).** Courses and projects in machine learning, deep learning, computer vision and NLP, human-computer interaction, web and software architecture.
 
-## Work Experience
+## Projects
 
-- **2023: Founder in Residence at Entrepreneur First** (Station F, Paris). Start-up idea in Responsible AI and Sustainability.
-- **2023: Research Fellow at Harvard** (NSAPH group). Causal inference and machine learning for climate change, environmental health and regulatory policy.
-- **2022: Machine Learning Researcher at Schlumberger-Doll Research** (Cambridge, MA). Deep learning for causal modeling of acoustic subsurface data.
-- **2021: Research Assistant at Intelligent Global Health, EPFL.** Mobile app for non-invasive upper-body posture detection (P.I.: Martin Jaggi).
-- **2020 to 2021: Machine Learning Engineer at L.O.L. Consulting Group** (freelance). Rooftop detection for photovoltaic panels from satellite images.
-
-## Teaching
-
-- **2021 to 2022: Teaching Assistant at EPFL.** Introduction to Machine Learning for Bioengineers (BIO-322).
-- **2018 to 2019: Student Assistant at Politecnico di Milano.** Calculus 1 and Linear Algebra.
-- **2019: Olympic Math Teacher at BrixiAmaTe.** Combinatorics and probability for Mathematical Olympiad.
-
-## Honors and Awards
-
-- **2023:** Nova 111 Student List, among the 10 most promising Italian computer scientists under 25.
-- **2023:** Health Effects Institute, Jane Warren Award.
-- **2021:** Generali Data Challenge 2020, 1st place out of 280+ participants.
-- **2020:** EPFL Higgs Boson Challenge, 2nd place out of 290+ teams.
-- **2020:** Politecnico di Milano, Machine Learning for Networking Contest, 1st place.
-- **2019:** Oracle Labs and Politecnico di Milano, Graph Machine Learning Contest, 1st place.
-- **2016 to 2018:** Top-6 national placements in the Grand Prix of Applied Mathematics and in the international competition for mathematical and logical games.
+- **VesselVerse Quality Control (2025 to 2026):** multimodal deep learning pipeline (multi-view ResNet, MLP on vascular metrics, GradCAM) for automated quality control of medical image segmentations.
+- **ADACS (2025):** adversarial domain adaptation via cross-domain mixed sampling for semantic segmentation, GTAV to Cityscapes, up to 37.01% mIoU with ResNet-101.
+- **WASAPhoto (2024):** photo-sharing web application in Go and Vue.js, containerised with Docker.
+- **ProfessorAdvisor (2024):** human-centered design project, from needfinding to a tested digital prototype.
+- **KYC, Know Your Cards (2023):** Pokémon card classifier and grader with OpenCV and a CNN.
+- **Analyzing Tradeoffs between Activation Functions and Optimizers (2023):** deep learning study on first-generation Pokémon classification.
 
 ## Skills
 
-- **Machine learning:** Python (NumPy, pandas, scikit-learn), R, Julia, PyTorch, TensorFlow.
-- **Mathematics and statistics:** MATLAB, R, statsmodels, SciPy, AMPL, CPLEX.
-- **Big data:** Apache Spark, Scala, HDFS, Hadoop, AWS.
-- **Other:** Git, LaTeX, HTML/CSS, Android Studio.
+- **Programming languages:** Python, Java, R, Go.
+- **Machine learning and deep learning:** PyTorch, TensorFlow, Keras, OpenCV, scikit-learn, NumPy, pandas, SciPy, Matplotlib.
+- **Web development:** HTML5, CSS3, JavaScript, Vue.js, Docker, OpenAPI.
+- **Databases:** PostgreSQL, SQLite, MySQL.
+- **Design and documentation:** Figma, Canva, LaTeX, Markdown.
 
-## Sport
+## Languages
 
-Marathon runner (personal best 2h42m35s, Florence 2024) and former trainer of the Politecnico di Milano athletics team.
+- Italian, English. <!-- Aggiungi qui le lingue che parli e il livello. -->

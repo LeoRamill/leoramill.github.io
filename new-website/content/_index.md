@@ -16,8 +16,8 @@ sections:
     content:
       username: admin
       button:
-        text: Download CV
-        url: uploads/CV.pdf
+        text: View CV
+        url: /cv/
     design:
       css_class: dark
       background:
@@ -37,8 +37,9 @@ sections:
     id: about
     content:
       username: admin
-      image: cover.jpg
-      alt: Riccardo teaching in a classroom
+      # Placeholder cover (generated). Replace with your own photo, e.g. `cover.jpg` in `assets/media/`.
+      image: cover.svg
+      alt: Per Aspera Ad Astra
       # Leave `text` empty to use the biography written in `content/authors/admin/_index.md`
       text: ""
 
@@ -54,19 +55,20 @@ sections:
     design:
       css_class: section-alt
 
-  # 4. White section: selected publications in citation style.
+  # 4. White section: selected projects (cards).
   - block: collection
-    id: publications
+    id: projects
     content:
-      title: Selected Publications
-      text: 'Browse the [full list of publications](/publication/).'
-      count: 0
+      title: Selected Projects
+      text: 'Browse [all projects](/project/).'
+      count: 4
       filters:
         folders:
-          - publication
+          - project
         featured_only: true
     design:
-      view: citation
+      view: article-grid
+      columns: 2
 
   # 5. Closing dark section (second background of the epalu template) with a call to action.
   - block: markdown
@@ -76,8 +78,8 @@ sections:
       text: |
         <div class="contact-cta">
           <h2>Let's talk</h2>
-          <p>Reach out for any constructive discussion, collaboration or just to say hi.</p>
-          <a class="contact-cta__btn" href="mailto:riccardo.cadei@ist.ac.at">Send me an e-mail</a>
+          <p>Reach out for any constructive discussion, collaboration, or just to talk about AI, art and photography.</p>
+          <a class="contact-cta__btn" href="mailto:leonardvincentramil@icloud.com">Send me an e-mail</a>
         </div>
     design:
       css_class: dark

@@ -10,8 +10,8 @@
   {{ with $block.content.image }}
     {{ $img := resources.Get (path.Join "media" .) }}
     {{ if $img }}
-      {{ $img = $img.Fit "1800x1800 webp q85" }}
-      <img class="cover-bio__cover" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $block.content.alt | default "" }}" loading="lazy">
+      {{ if ne $img.MediaType.SubType "svg" }}{{ $img = $img.Fit "1800x1800 webp q85" }}{{ end }}
+      <img class="cover-bio__cover" src="{{ $img.RelPermalink }}"{{ if ne $img.MediaType.SubType "svg" }} width="{{ $img.Width }}" height="{{ $img.Height }}"{{ end }} alt="{{ $block.content.alt | default "" }}" loading="lazy">
     {{ else }}
       {{ warnf "cover-bio: image `%s` not found in `assets/media/`" . }}
     {{ end }}
