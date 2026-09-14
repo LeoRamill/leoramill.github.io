@@ -52,7 +52,7 @@ La barra di navigazione con le icone social a sinistra è in `layouts/partials/c
 
 ## Deploy
 
-Il workflow `.github/workflows/publish.yaml` pubblica su GitHub Pages a ogni push su `main` (il sito sarà su `https://leoramill.github.io/website/`; in Settings → Pages la sorgente deve essere "GitHub Actions"). `netlify.toml` permette in alternativa il deploy su Netlify.
+Il workflow `.github/workflows/publish.yaml` pubblica su GitHub Pages a ogni push su `main` (il sito è su `https://leoramill.github.io/`; in Settings → Pages la sorgente deve essere "GitHub Actions"). `netlify.toml` permette in alternativa il deploy su Netlify.
 
 ## Dati da verificare
 
