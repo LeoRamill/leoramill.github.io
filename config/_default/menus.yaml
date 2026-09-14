@@ -5,6 +5,9 @@ main:
   - name: About
     url: /
     weight: 10
+  - name: Shaping
+    url: /shaping/
+    weight: 15
   - name: Projects
     url: /project/
     weight: 20

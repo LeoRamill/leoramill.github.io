@@ -28,6 +28,18 @@ hugo server
 | Colore accento, footer, logo | `config/_default/params.yaml` |
 | Titolo e URL del sito | `config/_default/hugo.yaml` |
 
+## Sezione "Shaping"
+
+Pagina ispirata a faustozamparelli.com/shaping: un mini-me fluttuante circondato da quattro icone che portano alle sotto-pagine (libri, film, YouTube, Spotify) e la scritta "currently" che al passaggio del mouse diventa "old" e porta alla pagina degli studi.
+
+| Cosa | File |
+|---|---|
+| Testi, icone-orbita e link della pagina principale | `content/shaping/_index.md` |
+| Immagine del mini-me | metti `mini-me.png` (768×1365, sfondo trasparente) in `assets/media/`: sostituisce da solo il segnaposto `mini-me.svg` |
+| Libri, film, video, canzoni (griglie di card) | `content/shaping/books.md`, `movies.md`, `videos.md`, `songs.md` (lista `galleries` → `items` con `title`, `meta`, `cover` URL, `url`, `note`) |
+| Percorso di studi | `content/shaping/academic.md` (lista `stops`) |
+| Layout e stili | `layouts/_default/shaping*.html`, sezione "Shaping" in `assets/css/custom.css` |
+
 ## Blocchi custom
 
 I tre blocchi che riproducono quel layout stanno in `layouts/partials/blox/`:
