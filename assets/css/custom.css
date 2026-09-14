@@ -1,0 +1,113 @@
+/* =====================================================================
+   Custom styles for the riccardocadei-style layout on the epalu template
+   (loaded automatically by Hugo Blox after the theme CSS).
+   Dark mode: Hugo Blox toggles the `dark` class on <html>; dark sections
+   of the homepage also carry `css_class: dark`, so `.dark .x` covers both.
+   ===================================================================== */
+
+/* ----- Navbar: social icons on the left, menu on the right ----- */
+.navbar-left { display: flex; align-items: center; gap: 0.75rem; }
+.navbar-logo { width: 2.25rem; height: 2.25rem; border-radius: 9999px; object-fit: cover; }
+.navbar-social { display: flex; align-items: center; gap: 0.65rem; list-style: none; margin: 0; padding: 0; }
+.navbar-social a { display: inline-flex; line-height: 0; transition: transform 0.15s ease; }
+.navbar-social a:hover { transform: scale(1.15); }
+.navbar-social__icon { height: 1.65rem; width: auto; }
+.navbar-social a[data-icon="at-symbol"] { color: #d44638; }
+.navbar-social a[data-icon="academicons/google-scholar"] { color: #4285f4; }
+.navbar-social a[data-icon="brands/linkedin"] { color: #0a66c2; }
+.navbar-social a[data-icon="brands/github"],
+.navbar-social a[data-icon="brands/x"] { color: #111827; }
+.dark .navbar-social a[data-icon="brands/github"],
+.dark .navbar-social a[data-icon="brands/x"] { color: #ffffff; }
+@media (max-width: 480px) {
+  .navbar-social { gap: 0.45rem; }
+  .navbar-social__icon { height: 1.4rem; }
+}
+
+/* ----- Hero: avatar + name + tagline + social (on the dark Meteor background) ----- */
+.profile-hero {
+  max-width: 64rem; margin: 0 auto; padding: 0 1.25rem;
+  display: flex; align-items: center; gap: 2.75rem;
+}
+.dark .profile-hero { color: #ffffff; }
+.profile-hero__avatar {
+  flex: none; width: 11.5rem; height: 11.5rem; border-radius: 9999px; object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+.profile-hero__text { min-width: 0; }
+.profile-hero__name {
+  font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: 1.05; font-weight: 300;
+  letter-spacing: -0.01em; margin: 0;
+}
+.profile-hero__name strong { font-weight: 700; }
+.profile-hero__role { font-size: clamp(1.05rem, 2.2vw, 1.4rem); opacity: 0.9; margin: 0.7rem 0 0; }
+.profile-hero__orgs { margin: 0.5rem 0 0; font-size: 0.95rem; opacity: 0.75; }
+.profile-hero__orgs a:hover { text-decoration: underline; }
+.profile-hero__social { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; padding: 0; margin: 1.4rem 0 0; }
+.profile-hero__social a { display: inline-flex; line-height: 0; color: inherit; transition: transform 0.15s ease; }
+.profile-hero__social a:hover { transform: scale(1.15); }
+.profile-hero__icon { height: 1.85rem; width: auto; }
+.profile-hero__btn {
+  display: inline-flex; align-items: center; margin-top: 1.4rem; padding: 0.55rem 1.15rem;
+  border-radius: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.55);
+  font-weight: 600; font-size: 0.9rem; transition: background-color 0.15s ease;
+}
+.profile-hero__btn:hover { background-color: rgba(255, 255, 255, 0.14); }
+@media (max-width: 767px) {
+  .profile-hero { flex-direction: column; text-align: center; gap: 1.5rem; }
+  .profile-hero__avatar { width: 8.5rem; height: 8.5rem; }
+  .profile-hero__social { justify-content: center; }
+}
+
+/* ----- Cover photo + italic bio ----- */
+.cover-bio { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
+.cover-bio__cover {
+  display: block; width: 100%; height: auto; border-radius: 0.75rem;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+.cover-bio__text { max-width: none; margin-top: 2rem; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
+.cover-bio__text strong { font-style: italic; }
+@media (min-width: 768px) {
+  .cover-bio__text { text-align: justify; font-size: 1.15rem; }
+}
+
+/* ----- Selected News timeline ----- */
+.news-list { max-width: 64rem; margin: 0 auto; padding: 0 1.25rem; }
+.news-list__title { font-size: 1.875rem; font-weight: 700; margin: 0 0 1.75rem; text-align: center; }
+.news-list ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.1rem; }
+.news-list__item { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; align-items: start; }
+.news-list__date {
+  display: inline-block; justify-self: start; margin-top: 0.15rem;
+  background-color: #b91c1c; color: #ffffff;
+  font-weight: 700; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 0.3rem 0.6rem; border-radius: 0.3rem; white-space: nowrap;
+}
+.news-list__body { font-weight: 300; line-height: 1.7; }
+.news-list__body p { margin: 0; }
+.news-list__body a { color: #b91c1c; font-weight: 400; }
+.dark .news-list__body a { color: #f87171; }
+.news-list__body a:hover { text-decoration: underline; }
+.news-list__more { display: block; text-align: center; margin-top: 1.75rem; font-weight: 600; }
+@media (max-width: 640px) {
+  .news-list__item { grid-template-columns: 1fr; gap: 0.35rem; }
+}
+
+/* ----- Alternate (soft grey) section background ----- */
+.section-alt { background-color: #f4f4f5; }
+.dark .section-alt { background-color: #18181b; }
+
+/* ----- Closing dark call-to-action ----- */
+.contact-cta { text-align: center; max-width: 40rem; margin: 0 auto; padding: 0 1.25rem; color: #ffffff; }
+.contact-cta h2 { font-size: 2rem; font-weight: 700; margin: 0 0 0.75rem; color: #ffffff; }
+.contact-cta p { opacity: 0.85; margin: 0 0 1.5rem; }
+.contact-cta__btn {
+  display: inline-block; padding: 0.65rem 1.4rem; border-radius: 0.5rem;
+  background-color: #ffffff; color: #111827; font-weight: 600; text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+.contact-cta__btn:hover { background-color: #e5e7eb; }
+
+/* ----- Small-screen safety: no horizontal overflow anywhere ----- */
+html, body { overflow-x: hidden; }
+img { max-width: 100%; }
