@@ -155,3 +155,24 @@ article h2[id], article h3[id], article h4[id] { scroll-margin-top: 1.25rem; }
 @media (max-width: 639px) {
   article .-inset-x-4 { left: 0; right: 0; }
 }
+
+/* ----- Fixed page background with "windows" (light sections opaque, dark sections tinted) ----- */
+/* The layer is a real fixed element (works on iOS, unlike background-attachment: fixed). It sits at
+   z-index -1, so <body> must stay transparent: the page colour lives on <html>. */
+html { background-color: #ffffff; }
+html.dark { background-color: rgb(24 24 27); }
+body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
+.site-fixed-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-color: #000; background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+/* Sections that must hide the fixed layer */
+.section-solid { background-color: #ffffff; }
+.dark .section-solid { background-color: rgb(24 24 27); }
+/* Text on the translucent hero: a soft shadow keeps it readable over the meteors */
+.profile-hero__name, .profile-hero__role, .profile-hero__orgs { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85); }
+.profile-hero__avatar { box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6); }
+.contact-cta h2, .contact-cta p { text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9); }
+/* The footer is a light "window" too: opaque so its text stays readable */
+.page-footer { background-color: #ffffff; }
+.dark .page-footer { background-color: rgb(24 24 27); }

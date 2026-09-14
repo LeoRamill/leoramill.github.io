@@ -14,6 +14,19 @@
 {{ $first := $person.first_name }}
 {{ $last := $person.last_name }}
 
+{{/* Fixed full-page background layer (as in the reference page): stays still while the page scrolls,
+     light sections cover it, dark sections let it show through their tint. Set
+     `design.fixed_background.filename` (in `assets/media/`) or `false` to disable. */}}
+{{ $fixed := $block.design.fixed_background }}
+{{ if ne $fixed false }}
+  {{ $fixed_name := $fixed.filename | default "Meteor.svg" }}
+  {{ with resources.Get (path.Join "media" $fixed_name) }}
+    <div class="site-fixed-bg" aria-hidden="true" style="background-image: url('{{ .RelPermalink }}');{{ with $fixed.color }} background-color: {{ . }};{{ end }}"></div>
+  {{ else }}
+    {{ warnf "profile-hero: fixed background `%s` not found in `assets/media/`" $fixed_name }}
+  {{ end }}
+{{ end }}
+
 <div class="profile-hero">
   {{ if $avatar }}
     {{ $img := $avatar.Fill "360x360 Center webp q90" }}
