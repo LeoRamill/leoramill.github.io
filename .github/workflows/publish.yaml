@@ -45,6 +45,9 @@ jobs:
     - name: Setup Pages
       id: pages
       uses: actions/configure-pages@v3
+      with:
+        # Enable GitHub Pages (source: GitHub Actions) on first run if it is not enabled yet
+        enablement: true
     - name: Build with Hugo
       env:
         HUGO_ENVIRONMENT: production

@@ -60,7 +60,7 @@ sections:
     id: projects
     content:
       title: Selected Projects
-      text: 'Browse [all projects](/project/).'
+      text: 'Browse [all projects](project/).'
       count: 4
       filters:
         folders:

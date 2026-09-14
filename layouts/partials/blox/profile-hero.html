@@ -51,7 +51,7 @@
     {{ end }}
 
     {{ with $block.content.button }}
-    <a class="profile-hero__btn" href="{{ .url | relURL }}" target="_blank" rel="noopener">{{ .text }}</a>
+    <a class="profile-hero__btn" href="{{ strings.TrimPrefix "/" .url | relURL }}" target="_blank" rel="noopener">{{ .text }}</a>
     {{ end }}
   </div>
 </div>

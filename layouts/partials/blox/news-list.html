@@ -24,6 +24,6 @@
   </ul>
 
   {{ with $block.content.more }}
-  <a class="news-list__more" href="{{ .url | relURL }}">{{ .text }} →</a>
+  <a class="news-list__more" href="{{ strings.TrimPrefix "/" .url | relURL }}">{{ .text }} →</a>
   {{ end }}
 </div>
