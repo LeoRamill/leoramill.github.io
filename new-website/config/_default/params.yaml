@@ -1,0 +1,60 @@
+# SITE SETUP
+# Guide: https://docs.hugoblox.com/tutorial/
+# Documentation: https://docs.hugoblox.com/
+
+# Appearance
+appearance:
+  mode: system   # light | dark | system
+  color: red     # accent colour (matches the red accents of the original site)
+
+# SEO
+marketing:
+  seo:
+    site_type: Person
+    local_business_type: ''
+    org_name: ''
+    description: 'Personal website of Riccardo Cadei, researcher in Causal Learning and AI: publications, projects and CV.'
+    twitter: 'riccardocadeii'
+  analytics:
+    google_analytics: ''
+    baidu_tongji: ''
+    plausible: ''
+    fathom: ''
+    pirsch: ''
+  verification:
+    google: ''
+    baidu: ''
+
+# Site header
+header:
+  navbar:
+    enable: true
+    blox: "navbar"
+    show_logo: true
+    fixed_to_top: true
+    show_search: true
+    show_theme_chooser: true
+    # Push the menu to the right, like the original site (social icons stay on the left)
+    align: right
+    logo:
+      # Leave `text` empty to show only the social icons on the left of the navbar
+      text: ""
+      # Logo filename in `assets/media/` folder (shown as a small round avatar)
+      filename: "icon.png"
+
+# Site footer
+footer:
+  copyright:
+    notice: '© {year} Riccardo Cadei. This work is licensed under {license}'
+    license:
+      enable: true
+      allow_derivatives: false
+      share_alike: true
+      allow_commercial: false
+
+# Site features
+features:
+  math:
+    enable: true
+  privacy_pack:
+    enable: false

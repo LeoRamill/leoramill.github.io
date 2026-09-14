@@ -1,0 +1,57 @@
+{{/* Custom block: profile-hero */}}
+{{/* Round avatar + name + tagline + social icons, laid out like riccardocadei.com, */}}
+{{/* meant to sit on the dark "Meteor" background of the epalu template. */}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+
+{{ $author := $block.content.username | default "admin" }}
+{{ $person_page := site.GetPage (printf "/authors/%s" $author) }}
+{{ if not $person_page }}
+  {{ errorf "profile-hero: could not find an author page at `/authors/%s`" $author }}
+{{ end }}
+{{ $person := $person_page.Params }}
+{{ $avatar := ($person_page.Resources.ByType "image").GetMatch "*avatar*" }}
+{{ $first := $person.first_name }}
+{{ $last := $person.last_name }}
+
+<div class="profile-hero">
+  {{ if $avatar }}
+    {{ $img := $avatar.Fill "360x360 Center webp q90" }}
+    <img class="profile-hero__avatar" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $person_page.Title }}" fetchpriority="high">
+  {{ end }}
+
+  <div class="profile-hero__text">
+    <h1 class="profile-hero__name">
+      {{- if and $first $last -}}
+        <strong>{{ $first }}</strong> {{ $last }}
+      {{- else -}}
+        <strong>{{ $person_page.Title }}</strong>
+      {{- end -}}
+    </h1>
+    {{ with $person.role }}<p class="profile-hero__role">{{ . | markdownify | emojify }}</p>{{ end }}
+
+    {{ with $person.organizations }}
+    <p class="profile-hero__orgs">
+      {{ range $i, $org := . }}{{ if $i }} · {{ end }}{{ with $org.url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ end }}{{ $org.name }}{{ if $org.url }}</a>{{ end }}{{ end }}
+    </p>
+    {{ end }}
+
+    {{ with $person.profiles }}
+    <ul class="profile-hero__social">
+      {{ range . }}
+      {{ $link := .url | default .link }}
+      {{ $external := hasPrefix $link "http" }}
+      <li>
+        <a href="{{ $link | safeURL }}" {{ if $external }}target="_blank" rel="noopener"{{ end }} aria-label="{{ .label | default .icon }}" title="{{ .label | default .icon }}">
+          {{ partial "functions/get_icon" (dict "name" .icon "attributes" "class=\"profile-hero__icon\"") }}
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+    {{ end }}
+
+    {{ with $block.content.button }}
+    <a class="profile-hero__btn" href="{{ .url | relURL }}" target="_blank" rel="noopener">{{ .text }}</a>
+    {{ end }}
+  </div>
+</div>

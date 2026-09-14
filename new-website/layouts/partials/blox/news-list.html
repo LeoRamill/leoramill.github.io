@@ -1,0 +1,29 @@
+{{/* Custom block: news-list */}}
+{{/* "Selected News" timeline: date badge + short text, fed by pages in `content/news/`. */}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+
+{{ $count := $block.content.count | default 5 }}
+{{ $section := $block.content.section | default "news" }}
+{{ $pages := (where site.RegularPages "Section" $section).ByDate.Reverse }}
+{{ if gt $count 0 }}{{ $pages = first $count $pages }}{{ end }}
+
+<div class="news-list">
+  {{ with $block.content.title }}<h2 class="news-list__title">{{ . | markdownify | emojify }}</h2>{{ end }}
+
+  <ul>
+    {{ range $item := $pages }}
+    <li class="news-list__item">
+      <span class="news-list__date">{{ .Date.Format (site.Params.locale.news_date_format | default "Jan 2006") }}</span>
+      <div class="news-list__body">
+        {{/* Render with the news page itself as context (the landing page has extra output formats whose link hooks return nothing). */}}
+        {{ with $item.Params.summary }}{{ $item.RenderString (. | emojify) }}{{ else }}{{ $item.Summary }}{{ end }}
+      </div>
+    </li>
+    {{ end }}
+  </ul>
+
+  {{ with $block.content.more }}
+  <a class="news-list__more" href="{{ .url | relURL }}">{{ .text }} →</a>
+  {{ end }}
+</div>
