@@ -1,34 +1,54 @@
 {{ define "main" }}
-{{/* One review, on its own page: cover, rating and catchphrase up top, the long text below. */}}
+{{/* One review, on its own page: cover, rating and catchphrase up top, the long text below.
+     Drop a `background.*` next to `index.md` and it becomes the fixed page backdrop, with the
+     same tint-over-image play as the homepage hero. `backdrop: false` turns it off. */}}
 {{ $cover := "" }}
 {{ with (.Resources.ByType "image").GetMatch "cover.*" }}{{ $cover = (.Fit "900x1350 webp q85").RelPermalink }}{{ end }}
 {{ if not $cover }}{{ $cover = partial "shaping_cover" .Params.cover }}{{ end }}
+
+{{/* Served as uploaded, not resized: a backdrop is often saved straight off the web and can be in a
+     format Hugo cannot decode (an AVIF named .jpg, say), which processing would turn into an error. */}}
+{{ $backdrop := "" }}
+{{ if ne .Params.backdrop false }}
+  {{ with (.Resources.ByType "image").GetMatch "background.*" }}{{ $backdrop = .RelPermalink }}{{ end }}
+{{ end }}
+
 {{ $accent := .Params.accent | default "#6f4dbf" }}
-<article class="shaping-scope shaping-page shaping-review-page">
-  {{ partial "shaping_breadcrumbs" . }}
+<article class="shaping-scope shaping-page shaping-review-page{{ if $backdrop }} has-backdrop{{ end }}">
+  {{ with $backdrop }}<div class="site-fixed-bg review-backdrop" aria-hidden="true" style="background-image: url('{{ . }}');"></div>{{ end }}
 
-  <div class="review-head">
-    <div class="review-cover" style="--card-accent: {{ $accent }}">
-      {{ with $cover }}<img src="{{ . }}" alt="" loading="eager" decoding="async">{{ else }}<span>{{ $.Title }}</span>{{ end }}
-    </div>
-    <div class="review-intro">
-      <p class="shaping-card-meta">
-        {{- with .Parent }}{{ .Title }}{{ end -}}
-        {{- with $.Params.meta }} · {{ . }}{{ end -}}
-      </p>
-      <h1 class="review-title">{{ .Title }}</h1>
-      {{ with .Params.rating }}{{ partial "shaping_stars" . }}{{ end }}
-      {{ with .Params.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
-      {{ with .Params.url }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $.Params.url_text | default "Open" }} →</a>{{ end }}
+  <div class="review-hero">
+    <div class="review-hero-inner">
+      {{ partial "shaping_breadcrumbs" . }}
+
+      <div class="review-head">
+        <div class="review-cover" style="--card-accent: {{ $accent }}">
+          {{ with $cover }}<img src="{{ . }}" alt="" loading="eager" decoding="async">{{ else }}<span>{{ $.Title }}</span>{{ end }}
+        </div>
+        <div class="review-intro">
+          <p class="shaping-card-meta">
+            {{- with .Parent }}{{ .Title }}{{ end -}}
+            {{- with $.Params.meta }} · {{ . }}{{ end -}}
+          </p>
+          <h1 class="review-title">{{ .Title }}</h1>
+          {{ with .Params.rating }}{{ partial "shaping_stars" . }}{{ end }}
+          {{ with .Params.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
+          {{ with .Params.url }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $.Params.url_text | default "Open" }} →</a>{{ end }}
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="review-body prose prose-slate dark:prose-invert">
-    {{ .Content }}
-  </div>
+  <div class="review-sheet">
+    <div class="review-sheet-inner">
+      <div class="review-body prose prose-slate dark:prose-invert">
+        {{ .Content }}
+      </div>
 
-  {{ with .Parent }}
-  <p class="review-back"><a href="{{ .RelPermalink }}">← {{ .Title }}</a></p>
-  {{ end }}
+      {{ with .Parent }}
+      <p class="review-back"><a href="{{ .RelPermalink }}">← {{ .Title }}</a></p>
+      {{ end }}
+    </div>
+  </div>
 </article>
 {{ end }}

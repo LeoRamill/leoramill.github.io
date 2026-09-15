@@ -9,6 +9,8 @@ catchphrase: The best sci-fi movie of all time.
 # Shown in the preview window that opens from the poster; the text below is the full review
 summary: "Un mix perfetto di scienza vera e finzione, con una colonna sonora che regge tutta la storia."
 # Cover: put a `cover.jpg` (or .png/.webp) in this folder. Without it the card shows the title.
+# Backdrop: a `background.jpg` in this folder becomes the fixed page background, tinted like the
+# homepage hero. Add `backdrop: false` here to keep the plain page instead.
 ---
 
 Scrivi qui la recensione lunga: puoi usare paragrafi, **grassetto**, *corsivo*, citazioni e immagini,
