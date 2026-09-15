@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{/* One review, on its own page: cover, rating and catchphrase up top, the long text below.
-     Drop a `background.*` next to `index.md` and it becomes the fixed page backdrop, with the
-     same tint-over-image play as the homepage hero. `backdrop: false` turns it off. */}}
+     Drop a `background.*` next to `index.md` and it becomes the fixed backdrop of the whole page,
+     with the same tint-over-image play as the homepage hero. `backdrop: false` turns it off. */}}
 {{ $cover := "" }}
 {{ with (.Resources.ByType "image").GetMatch "cover.*" }}{{ $cover = (.Fit "900x1350 webp q85").RelPermalink }}{{ end }}
 {{ if not $cover }}{{ $cover = partial "shaping_cover" .Params.cover }}{{ end }}
