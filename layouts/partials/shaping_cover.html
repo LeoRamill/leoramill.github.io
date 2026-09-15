@@ -1,0 +1,16 @@
+{{/* Resolve a cover written in front matter: a full URL, or a file in `assets/media/shaping/`.
+     Returns the URL to use in <img src>, or an empty string. */}}
+{{ $spec := . }}
+{{ $url := "" }}
+{{ if $spec }}
+  {{ if hasPrefix $spec "http" }}
+    {{ $url = $spec }}
+  {{ else }}
+    {{ with resources.Get (path.Join "media/shaping" $spec) }}
+      {{ $url = (.Fit "600x900 webp q85").RelPermalink }}
+    {{ else }}
+      {{ warnf "shaping: cover `%s` not found in assets/media/shaping/" $spec }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ return $url }}

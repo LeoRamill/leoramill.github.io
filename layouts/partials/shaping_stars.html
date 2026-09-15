@@ -1,0 +1,6 @@
+{{/* Ten stars filled to the given rating out of 10 */}}
+{{ $r := float . }}
+<div class="shaping-stars" aria-label="{{ printf "%.1f" $r }} out of 10">
+  {{ range $s := seq 0 9 }}{{ $fill := math.Min (math.Max (mul (sub $r $s) 100) 0) 100 }}<span class="shaping-star" style="--star-fill: {{ printf "%.0f" $fill }}%">★</span>{{ end }}
+  <span class="shaping-rating-text">{{ printf "%.1f" $r }}/10</span>
+</div>

@@ -1,10 +1,11 @@
-{{/* 🏠 / Shaping / Page */}}
+{{/* 🏠 / Shaping / Movies / Interstellar — every section this page sits in */}}
 <nav class="shaping-breadcrumbs" aria-label="Breadcrumb">
   <a class="breadcrumb-link" href="{{ site.Home.RelPermalink }}" aria-label="Back to home">🏠</a>
-  {{ $section := .FirstSection }}
-  {{ if ne . $section }}
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a class="breadcrumb-link" href="{{ $section.RelPermalink }}">{{ $section.Title }}</a>
+  {{ range .Ancestors.Reverse }}
+    {{ if not .IsHome }}
+      <span class="breadcrumb-separator" aria-hidden="true">/</span>
+      <a class="breadcrumb-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{ end }}
   {{ end }}
   <span class="breadcrumb-separator" aria-hidden="true">/</span>
   <span class="breadcrumb-current is-current">{{ .Title }}</span>

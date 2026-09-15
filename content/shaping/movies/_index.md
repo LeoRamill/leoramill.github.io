@@ -1,6 +1,9 @@
 ---
 title: Movies
 layout: shaping-gallery
+# Every folder inside this one is a review page and gets this layout on its own
+cascade:
+  layout: shaping-review
 lead:
   text: "Watch more movies. Live more lives."
   url: ""
@@ -13,16 +16,9 @@ galleries:
     kind: movie
     label: Movie
     items:
-      - title: Interstellar
-        meta: Christopher Nolan
-        rating: 10
-        catchphrase: The best sci-fi movie of all time.
-        review: "Example review: replace with your own words. A perfect blend of real science and fiction, with a soundtrack that carries the whole story."
-      - title: Forrest Gump
-        meta: Robert Zemeckis
-        rating: 9.5
-        catchphrase: A timeless one.
-        review: "Example review: replace with why this film stayed with you."
+      # `page:` takes everything from the folder of the same name: title, cover, rating and text
+      - page: interstellar
+      - page: forrest-gump
       - title: The Social Network
         meta: David Fincher
       - title: La La Land
@@ -55,11 +51,7 @@ galleries:
     kind: series
     label: TV Series
     items:
-      - title: Black Mirror
-        meta: Charlie Brooker
-        rating: 9
-        catchphrase: Plug back in.
-        review: "Example review: replace with your own words."
+      - page: black-mirror
       - title: Big Little Lies
         meta: David E. Kelley
         rating: 9.8

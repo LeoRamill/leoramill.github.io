@@ -1,0 +1,34 @@
+{{ define "main" }}
+{{/* One review, on its own page: cover, rating and catchphrase up top, the long text below. */}}
+{{ $cover := "" }}
+{{ with (.Resources.ByType "image").GetMatch "cover.*" }}{{ $cover = (.Fit "900x1350 webp q85").RelPermalink }}{{ end }}
+{{ if not $cover }}{{ $cover = partial "shaping_cover" .Params.cover }}{{ end }}
+{{ $accent := .Params.accent | default "#6f4dbf" }}
+<article class="shaping-scope shaping-page shaping-review-page">
+  {{ partial "shaping_breadcrumbs" . }}
+
+  <div class="review-head">
+    <div class="review-cover" style="--card-accent: {{ $accent }}">
+      {{ with $cover }}<img src="{{ . }}" alt="" loading="eager" decoding="async">{{ else }}<span>{{ $.Title }}</span>{{ end }}
+    </div>
+    <div class="review-intro">
+      <p class="shaping-card-meta">
+        {{- with .Parent }}{{ .Title }}{{ end -}}
+        {{- with $.Params.meta }} · {{ . }}{{ end -}}
+      </p>
+      <h1 class="review-title">{{ .Title }}</h1>
+      {{ with .Params.rating }}{{ partial "shaping_stars" . }}{{ end }}
+      {{ with .Params.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
+      {{ with .Params.url }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $.Params.url_text | default "Open" }} →</a>{{ end }}
+    </div>
+  </div>
+
+  <div class="review-body prose prose-slate dark:prose-invert">
+    {{ .Content }}
+  </div>
+
+  {{ with .Parent }}
+  <p class="review-back"><a href="{{ .RelPermalink }}">← {{ .Title }}</a></p>
+  {{ end }}
+</article>
+{{ end }}
