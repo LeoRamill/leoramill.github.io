@@ -61,7 +61,7 @@
         {{ $thumb := .Resize "x560 webp q80" }}
         {{ $full := . }}
         {{ if gt .Width 1800 }}{{ $full = .Resize "1800x webp q82" }}{{ end }}
-        <button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" aria-label="Open photo">
+        <button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}" aria-label="Open photo">
           <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy" decoding="async">
         </button>
       {{ end }}
@@ -81,6 +81,7 @@
 </dialog>
 {{ end }}
 
+{{ partial "morph_dialog" . }}
 <script>
   // Arrow buttons scroll a strip by most of its visible width (trackpad and touch already work).
   document.querySelectorAll('[data-photo-scroll]').forEach(function (btn) {
@@ -92,25 +93,37 @@
     });
   });
 
-  // Click a photo to see it full size.
+  // A photo grows out of the strip into the full-size view, and drops back into it on close.
   (function () {
     var dlg = document.getElementById('photo-lightbox');
     if (!dlg) return;
     var img = dlg.querySelector('img');
-    document.querySelectorAll('[data-photo-full]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        img.src = btn.dataset.photoFull;
-        dlg.showModal();
-        document.documentElement.classList.add('has-open-dialog');
-      });
+    var pending = null;
+    window.hbMorph({
+      dialog: dlg,
+      triggers: Array.prototype.slice.call(document.querySelectorAll('[data-photo-full]')),
+      closers: Array.prototype.slice.call(dlg.querySelectorAll('[data-photo-close]')),
+      closeOnClick: function (e) { return e.target === dlg || e.target === img; },
+      source: function (btn) { return btn ? btn.querySelector('img') : null; },
+      target: function () { return img; },
+      extras: function () { return [dlg.querySelector('[data-photo-close]')]; },
+      beforeOpen: function (btn) {
+        // Intrinsic size first so the panel is laid out before the photo arrives, then show the
+        // thumbnail straight away and swap in the full size once it has loaded.
+        img.width = Number(btn.dataset.photoW) || 0;
+        img.height = Number(btn.dataset.photoH) || 0;
+        var thumb = btn.querySelector('img');
+        img.src = (thumb && (thumb.currentSrc || thumb.src)) || btn.dataset.photoFull;
+        pending = new Image();
+        pending.decoding = 'sync';
+        pending.onload = function () { if (dlg.open) img.src = btn.dataset.photoFull; };
+        pending.src = btn.dataset.photoFull;
+      },
+      afterClose: function () {
+        if (pending) { pending.onload = null; pending = null; }
+        img.removeAttribute('src');
+      }
     });
-    dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target === img) dlg.close(); });
-    dlg.addEventListener('close', function () {
-      document.documentElement.classList.remove('has-open-dialog');
-      img.removeAttribute('src');
-    });
-    var close = dlg.querySelector('[data-photo-close]');
-    if (close) close.addEventListener('click', function () { dlg.close(); });
   })();
 </script>
 {{ end }}
