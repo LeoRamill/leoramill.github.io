@@ -1,7 +1,37 @@
-# mini-me: pipeline di modifica
+# mini-me: script di ritocco
 
-Script Python (OpenCV/NumPy/SciPy) che ha prodotto l'attuale `assets/media/mini-me.png`
-a partire dal render originale del surfer:
+Due script, uno per render. Ogni volta che `assets/media/mini-me.png` viene rigenerato da zero
+le coordinate vanno rimisurate, perche' sono in pixel dell'immagine.
+
+## headscale.py - render attuale (surfista con occhiali, muta blu/arancio)
+
+Rimette in proporzione testa e corpo e ripristina lo sfondo trasparente:
+
+- la testa passava per 2,6 teste di figura, un rapporto da bobblehead; ridotta del 30% arriva
+  a 3,2 teste, in linea con la versione precedente del mini-me;
+- la riduzione e' una deformazione morbida ancorata al mento appoggiato sul collo della muta:
+  dentro la maschera della testa la scala e' piena, fuori e' identita', e la fascia di
+  transizione cade sullo sfondo e sulle spalle. Non restano buchi da riempire;
+- lo sfondo bianco torna trasparente. Le sacche chiuse dentro la figura (i vuoti fra i ciuffi
+  di capelli, quello fra le gambe) non si raggiungono dai bordi: si riconoscono perche' la carta
+  e' piatta e neutra, mentre schiuma dell'onda e bianco della tavola sono superfici illuminate
+  con escursione locale ~15 e dominante blu. I bordi sfumati vengono smontati dal bianco, cosi'
+  non resta alone su fondo scuro.
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install numpy opencv-python-headless scipy
+git show cd4730d:assets/media/mini-me.png > /tmp/mini-me-src.png
+.venv/bin/python tools/mini-me/headscale.py /tmp/mini-me-src.png assets/media/mini-me.png --scale 0.70
+```
+
+`--scale` regola quanto rimpicciolire la testa (0,70 = attuale; 0,80 e' piu' conservativo).
+`--keep-white` salta il ritaglio dello sfondo. Le coordinate della testa sono `HEAD_POLY` e
+`PIVOT` in cima allo script.
+
+## edit.py - render precedente (ragazzo in costume, poi muta arancio e glacier)
+
+Ha prodotto la versione del mini-me in uso fino al commit "change photo", a partire dal
+render originale del surfer. Non si applica al render attuale, resta come storia:
 
 - tavola (modello 3D): la sezione trasversale e' un deck bombato chiuso da un rail a quarto di cerchio,
   piu' largo sul lato vicino e ridotto a una lama su quello lontano per la prospettiva. La stampa "tribal"
