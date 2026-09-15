@@ -1,7 +1,8 @@
 {{ define "main" }}
-{{/* Wall of cards (books, movies, series, videos, songs...). Items come from `galleries` in the front matter.
-     An item with `rating`, `catchphrase` or `review` opens a modal (dialog) on click; otherwise it is a static
-     card, or a link when `url` is set. `cover` is either a full URL or a file name in `assets/media/shaping/`. */}}
+{{/* Wall of cards (books, movies, series, videos, songs...). An entry comes either from `galleries`
+     in the front matter, or from a review page in a folder of this section (`page: folder-name`, or
+     any page whose `gallery` matches this one). An entry with a rating, a catchphrase or some text
+     opens a preview panel on click; a review page adds a "Read more" link to the full page. */}}
 {{ $page := . }}
 <section class="shaping-scope shaping-page shaping-list-page">
   {{ partial "shaping_breadcrumbs" . }}
@@ -14,54 +15,85 @@
 
   {{ range $gi, $gallery := .Params.galleries }}
   {{ $kind := $gallery.kind | default "book" }}
+
+  {{/* An entry is either written inline in `items`, or `page: folder-name`, which pulls everything
+       from the review page of that name. Review pages of this kind that nobody listed are added
+       after the listed ones, so dropping in a folder is enough to make it show up. */}}
+  {{ $entries := slice }}
+  {{ $listed := slice }}
+  {{ range $gallery.items }}
+    {{ if .page }}
+      {{ with $page.GetPage .page }}
+        {{ $entries = $entries | append (dict "page" .) }}
+        {{ $listed = $listed | append .RelPermalink }}
+      {{ else }}
+        {{ warnf "%s: no review page called `%s` in this folder" $page.File.Path .page }}
+      {{ end }}
+    {{ else }}
+      {{ $entries = $entries | append (dict "item" .) }}
+    {{ end }}
+  {{ end }}
+  {{ range where $page.Pages "Params.gallery" $kind }}
+    {{ if not (in $listed .RelPermalink) }}{{ $entries = $entries | append (dict "page" .) }}{{ end }}
+  {{ end }}
+
   <section class="shaping-gallery shaping-gallery--{{ $kind }}" aria-label="{{ $gallery.title | default $kind }}">
     {{ with $gallery.title }}<p class="shaping-gallery-eyebrow">{{ . }}</p>{{ end }}
     <div class="shaping-wall">
-      {{ range $ii, $item := $gallery.items }}
+      {{ range $ii, $entry := $entries }}
       {{ $id := printf "%s-%d-%d" $kind $gi $ii }}
-      {{ $accent := $item.accent | default (index (slice "#356b4c" "#6f4dbf" "#9f4f45" "#aa7a2f" "#1d6f8f") (mod $ii 5)) }}
-      {{ $has_dialog := or $item.rating $item.catchphrase $item.review }}
-      {{/* Resolve the cover image */}}
-      {{ $cover := "" }}
-      {{ with $item.cover }}
-        {{ if hasPrefix . "http" }}{{ $cover = . }}{{ else }}
-          {{ with resources.Get (path.Join "media/shaping" .) }}{{ $cover = (.Fit "600x900 webp q85").RelPermalink }}{{ else }}{{ warnf "shaping: cover `%s` not found in assets/media/shaping/" . }}{{ end }}
-        {{ end }}
+
+      {{/* Normalise both shapes into one card, so everything below is rendered once */}}
+      {{ $c := dict }}
+      {{ with $entry.page }}
+        {{ $cover := "" }}
+        {{ with (.Resources.ByType "image").GetMatch "cover.*" }}{{ $cover = (.Fit "600x900 webp q85").RelPermalink }}{{ end }}
+        {{ if not $cover }}{{ $cover = partial "shaping_cover" .Params.cover }}{{ end }}
+        {{ $c = dict "title" .Title "meta" .Params.meta "rating" .Params.rating "catchphrase" .Params.catchphrase
+                     "text" .Params.summary "note" .Params.note "cover" $cover "accent" .Params.accent
+                     "more" .RelPermalink "moreText" (.Params.more_text | default "Read more")
+                     "link" .Params.url "linkText" (.Params.url_text | default "Open") }}
       {{ end }}
+      {{ with $entry.item }}
+        {{ $c = dict "title" .title "meta" .meta "rating" .rating "catchphrase" .catchphrase
+                     "text" .review "note" .note "cover" (partial "shaping_cover" .cover) "accent" .accent
+                     "more" "" "moreText" "" "link" .url "linkText" (.url_text | default "Open") }}
+      {{ end }}
+      {{ $accent := $c.accent | default (index (slice "#356b4c" "#6f4dbf" "#9f4f45" "#aa7a2f" "#1d6f8f") (mod $ii 5)) }}
+      {{ $has_dialog := or $c.rating $c.catchphrase $c.text }}
+      {{/* Nothing to preview but a page behind it: the card just goes there */}}
+      {{ $href := cond (ne $c.more "") $c.more ($c.link | default "") }}
+      {{ $external := and (ne $href "") (hasPrefix $href "http") }}
+
       <article class="shaping-card" style="--card-accent: {{ $accent }}">
         {{ if $has_dialog }}<button class="shaping-card-button" type="button" data-open-shaping="{{ $id }}" aria-haspopup="dialog">
-        {{ else if $item.url }}<a class="shaping-card-static" href="{{ $item.url }}" target="_blank" rel="noopener">
+        {{ else if $href }}<a class="shaping-card-static" href="{{ $href }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}>
         {{ else }}<div class="shaping-card-static">{{ end }}
           <span class="shaping-cover" aria-hidden="true">
-            {{ with $cover }}<img src="{{ . }}" alt="" loading="lazy" decoding="async">{{ else }}<span class="shaping-cover-fallback">{{ $item.title }}</span>{{ end }}
+            {{ with $c.cover }}<img src="{{ . }}" alt="" loading="lazy" decoding="async">{{ else }}<span class="shaping-cover-fallback">{{ $c.title }}</span>{{ end }}
           </span>
           <span class="shaping-card-copy">
-            {{ with $item.meta }}<span class="shaping-card-meta">{{ . }}</span>{{ end }}
-            <strong>{{ $item.title }}</strong>
-            {{ with $item.note }}<span class="shaping-card-note">{{ . | markdownify }}</span>{{ end }}
+            {{ with $c.meta }}<span class="shaping-card-meta">{{ . }}</span>{{ end }}
+            <strong>{{ $c.title }}</strong>
+            {{ with $c.note }}<span class="shaping-card-note">{{ . | markdownify }}</span>{{ end }}
           </span>
-        {{ if $has_dialog }}</button>{{ else if $item.url }}</a>{{ else }}</div>{{ end }}
+        {{ if $has_dialog }}</button>{{ else if $href }}</a>{{ else }}</div>{{ end }}
 
         {{ if $has_dialog }}
-        <dialog id="{{ $id }}" class="shaping-dialog shaping-scope" aria-label="{{ $item.title }} review">
+        <dialog id="{{ $id }}" class="shaping-dialog shaping-scope" aria-label="{{ $c.title }} review">
           <div class="shaping-dialog-panel">
             <button class="shaping-dialog-close" type="button" data-close-shaping aria-label="Close review">×</button>
             <div class="shaping-dialog-cover" style="--card-accent: {{ $accent }}">
-              {{ with $cover }}<img src="{{ . }}" alt="" loading="lazy" decoding="async">{{ else }}<span>{{ $item.title }}</span>{{ end }}
+              {{ with $c.cover }}<img src="{{ . }}" alt="" loading="lazy" decoding="async">{{ else }}<span>{{ $c.title }}</span>{{ end }}
             </div>
             <div class="shaping-dialog-copy">
-              <p class="shaping-card-meta">{{ $gallery.label | default (title $kind) }}{{ with $item.meta }} · {{ . }}{{ end }}</p>
-              <h2>{{ $item.title }}</h2>
-              {{ with $item.rating }}
-              {{ $r := float . }}
-              <div class="shaping-stars" aria-label="{{ printf "%.1f" $r }} out of 10">
-                {{ range $s := seq 0 9 }}{{ $fill := math.Min (math.Max (mul (sub $r $s) 100) 0) 100 }}<span class="shaping-star" style="--star-fill: {{ printf "%.0f" $fill }}%">★</span>{{ end }}
-                <span class="shaping-rating-text">{{ printf "%.1f" $r }}/10</span>
-              </div>
-              {{ end }}
-              {{ with $item.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
-              {{ with $item.review }}<p>{{ . | markdownify }}</p>{{ end }}
-              {{ with $item.url }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $item.url_text | default "Open" }} →</a>{{ end }}
+              <p class="shaping-card-meta">{{ $gallery.label | default (title $kind) }}{{ with $c.meta }} · {{ . }}{{ end }}</p>
+              <h2>{{ $c.title }}</h2>
+              {{ with $c.rating }}{{ partial "shaping_stars" . }}{{ end }}
+              {{ with $c.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
+              {{ with $c.text }}<p>{{ . | markdownify }}</p>{{ end }}
+              {{ with $c.more }}<a class="shaping-more-link" href="{{ . }}">{{ $c.moreText }} →</a>{{ end }}
+              {{ with $c.link }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $c.linkText }} →</a>{{ end }}
             </div>
           </div>
         </dialog>
