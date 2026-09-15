@@ -65,24 +65,134 @@ src=np.float32([[Wt/2,0],[Wt/2,L],[0,L/2],[Wt,L/2]])   # texture (x=v across, y=
 dst=np.float32([N,T,Fp,Qp])
 Hm=cv2.getPerspectiveTransform(src,dst); Hinv=np.linalg.inv(Hm)
 tex=make_texture(L,Wt)
-tex_s=cv2.resize(tex,(Wt//2,L//2),interpolation=cv2.INTER_AREA)
-tex_s=cv2.GaussianBlur(tex_s,(0,0),0.8)
+tex_a=cv2.GaussianBlur(cv2.resize(tex,(Wt//2,L//2),interpolation=cv2.INTER_AREA),(0,0),0.8)
+tex_b=cv2.GaussianBlur(tex_a,(0,0),2.6)          # mip used where the print compresses over the rail
 pts=np.stack([xs,ys,np.ones_like(xs)],-1).reshape(-1,3)@Hinv.T
 pts=pts[:,:2]/pts[:,2:3]
-mapx=(pts[:,0]/2).reshape(H,W).astype(np.float32); mapy=(pts[:,1]/2).reshape(H,W).astype(np.float32)
-patt=cv2.remap(tex_s,mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REPLICATE).astype(np.float32)
-# shading from blue deck pixels (normalised convolution), whites interpolated
-wgt=((S>=80)&board_region&~skin).astype(np.float32)
-sh_num=cv2.GaussianBlur(V/220.*wgt,(0,0),5); sh_den=cv2.GaussianBlur(wgt,(0,0),5)
-shade=np.where(sh_den>1e-3,sh_num/np.maximum(sh_den,1e-3),1.0)
-# add back specular highlights (very bright, low sat) as a small boost
-spec=np.clip((V-238)/17.,0,1)*np.clip((120-S)/120.,0,1)*board
-shade=np.clip(shade,0.55,1.25)+0.35*spec
+TV=pts[:,0].reshape(H,W); TU=pts[:,1].reshape(H,W)     # across (0..Wt) and along (0..L) the board
+
+# ---- outline in board space: centre line and half width at every station ----
+NB=200; idx=np.arange(NB)
+ub=np.clip((TU/L*NB).astype(int),0,NB-1)
+vlo=np.full(NB,np.nan); vhi=np.full(NB,np.nan)
+for i in range(NB):
+    m=board_region&(ub==i)
+    if m.sum()>40:
+        v=TV[m]; vlo[i]=np.percentile(v,0.4); vhi[i]=np.percentile(v,99.6)
+ok=~np.isnan(vlo)
+vlo=np.interp(idx,idx[ok],vlo[ok]); vhi=np.interp(idx,idx[ok],vhi[ok])
+ker=np.ones(9)/9.
+vlo=np.convolve(np.pad(vlo,4,mode="edge"),ker,"valid"); vhi=np.convolve(np.pad(vhi,4,mode="edge"),ker,"valid")
+station=np.clip(TU/L*NB,0,NB-1)
+vcen=(np.interp(station,idx,vlo)+np.interp(station,idx,vhi))/2.
+half=np.maximum((np.interp(station,idx,vhi)-np.interp(station,idx,vlo))/2.,1.)
+
+# ---- cross-section: flat deck closed by a quarter-round rail of radius Rr ----
+side=np.where(TV>=vcen,1.,-1.)                            # +1 near rail (lower left), -1 far rail
+Rr=np.where(side>0,76.,22.)                               # the far rail is foreshortened to a sliver
+dist=np.maximum(half-np.abs(TV-vcen),0.)                  # distance inward from the outline
+q=np.clip(dist/Rr,0,1)
+slope=np.minimum((1-q)/np.sqrt(np.maximum(q*(2-q),1e-4)),7.0)   # |dh/dd|: 0 on the deck, vertical at the edge
+crown=0.62*np.clip(np.abs(TV-vcen)/half,0,1)**1.6         # the deck itself is gently domed
+nx=-side*(slope+crown); nn=np.sqrt(nx*nx+1.); nx=nx/nn; nz=1./nn  # surface normal in the cross plane
+
+# ---- the print is painted on the surface, so it maps by arc length and squeezes over the rail ----
+arc=np.where(dist<Rr,Rr*np.arccos(np.clip(1-q,-1,1)),Rr*(np.pi/2)+(dist-Rr))
+half_arc=(half-Rr)+Rr*np.pi/2
+kscale=(Wt/2.)/float(np.nanmax(np.where(board_region,half_arc,np.nan)))
+v_tex=Wt/2.+side*(half_arc-arc)*kscale
+mapx=(v_tex/2).astype(np.float32); mapy=(TU/2).astype(np.float32)
+pa=cv2.remap(tex_a,mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REPLICATE).astype(np.float32)
+pb=cv2.remap(tex_b,mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REPLICATE).astype(np.float32)
+mip=np.clip((np.sqrt(1+slope**2)-1.35)/1.6,0,1)[...,None]
+patt=pa*(1-mip)+pb*mip
+
+# ---- foam rail: like the reference board, the print stops short of the edge ----
+def smoothstep(e0,e1,x):
+    t=np.clip((x-e0)/(e1-e0),0,1); return t*t*(3-2*t)
+railmix=smoothstep(0.24,0.52,q)[...,None]
+FOAM=np.array([246,248,250],np.float32)
+base=patt*railmix+FOAM*(1-railmix)
+under=(smoothstep(0.30,0.0,q)*(side>0))[...,None]         # the rail turns under and picks up the water
+base=base*(1-0.40*under)+np.array([196,156,96],np.float32)*0.40*under
+pin=(np.exp(-((q-0.54)/0.07)**2)*(side>0))[...,None]      # thin shadow where the print meets the rail
+base=base*(1-0.16*pin)
+
+# ---- lighting: diffuse across the curved section, gloss, and a fresnel rim at the silhouette ----
+def _n(v): v=np.array(v,float); return v/np.linalg.norm(v)
+Lv=_n([-0.40,-0.55,0.73]); Vv=_n([0.30,-0.12,0.95]); Hv=_n(Lv+Vv)
+kd=(0.44+0.56*np.clip(nx*Lv[0]+nz*Lv[2],0,1))/(0.44+0.56*Lv[2])
+ndh=np.clip(nx*Hv[0]+nz*Hv[2],0,1)
+gloss=0.55*ndh**60+0.09*ndh**10
+fres=np.clip(1-np.clip(nx*Vv[0]+nz*Vv[2],0,1),0,1)**2.6
+along=0.40+0.60*np.exp(-((TU/L-0.46)/0.40)**2)            # the highlight fades towards nose and tail
+rim=0.22*fres+0.66*along*np.exp(-((q-0.44)/0.15)**2)*(side>0)   # specular line along the near rail
+u_c=np.clip((TV-vcen)/half,-1,1)
+sheen=0.11*np.exp(-((u_c+0.18)/0.44)**2)*np.exp(-((TU/L-0.40)/0.55)**2)   # broad gloss over the deck
+
+# ---- keep the render's own light: the wave's cast shadow and the overall gradient ----
+# the old deck had lengthwise stripes of two tones: take the local upper envelope of V so the
+# estimate follows the light and not the stripes (the kernel spans the width, where they alternate)
+Vb=np.where(board_region&~skin_core,V,0).astype(np.float32)
+illum=cv2.dilate(Vb,cv2.getStructuringElement(cv2.MORPH_RECT,(41,111)))
+bmf=board_region.astype(np.float32)
+illum=np.where(cv2.GaussianBlur(bmf,(0,0),16)>1e-3,
+               cv2.GaussianBlur(illum*bmf,(0,0),16)/np.maximum(cv2.GaussianBlur(bmf,(0,0),16),1e-3),0.)
+ref=float(np.percentile(illum[board_region],86))
+shade=np.clip(illum/max(ref,1e-3),0.62,1.12)
+shade=np.clip(1.+(shade-1.)*1.25,0.60,1.15)               # the render's own light on the board
+# the boy's legs drop a shadow onto the deck, thrown away from the light
+caster=cv2.GaussianBlur((skin|navy).astype(np.float32),(0,0),3)
+caster=cv2.warpAffine(caster,np.float32([[1,0,17],[0,1,25]]),(W,H))
+legsh=np.clip(cv2.GaussianBlur(caster,(0,0),11)*1.5,0,1)*(1-cv2.GaussianBlur((skin|navy).astype(np.float32),(0,0),1.5))
+shade=shade*(1-0.30*legsh)
+
+new_board=base*(shade*kd)[...,None]
+g=np.clip((gloss+0.55*rim+sheen),0,0.92)[...,None]
+new_board=255-(255-new_board)*(1-g)
+# contact shadow of the feet on the deck, thrown away from the light
+feet=(skin_core&board_region).astype(np.float32)
+ao=cv2.warpAffine(cv2.GaussianBlur(feet,(0,0),7),np.float32([[1,0,6],[0,1,7]]),(W,H))
+ao=np.clip(ao*1.9,0,1)*(1-feet)
+new_board=np.clip(new_board*(1-0.42*ao)[...,None],0,255)
 board_soft=cv2.GaussianBlur(to_u8(board),(0,0),0.9)/255.
-new_board=np.clip(patt*shade[...,None]**1.1,0,255)
-# slight soft-top texture: mild desaturation towards render look
 out=bgr.copy()
 out=out*(1-board_soft[...,None])+new_board*board_soft[...,None]
+# ---- the board has thickness: a side wall hangs under the near silhouette ----
+col_has=board_region.any(0); xcol=np.arange(W,dtype=np.float32)
+ymax=np.where(col_has,H-1-np.argmax(board_region[::-1],0),np.nan).astype(np.float32)
+okc=~np.isnan(ymax)
+ymax_s=ymax.copy()
+ymax_s[okc]=np.convolve(np.pad(ymax[okc],7,mode="edge"),np.ones(15)/15.,"valid")   # smooth, sub-pixel edge
+ymax_s=np.where(okc,ymax_s,-1e6)
+thick=13.0+15.0*np.clip((xcol-float(N[0]))/(float(T[0])-float(N[0])),0,1)   # the tail is nearer, so it reads thicker
+dep=np.clip((ys-ymax_s[None,:])/thick[None,:],0,1)
+wall_a=np.clip(ys-ymax_s[None,:],0,1)*np.clip(ymax_s[None,:]+thick[None,:]-ys,0,1)
+wall_a=wall_a*(~board_region)*(~skin_core)*(okc[None,:])
+wall_a=np.clip(cv2.GaussianBlur(wall_a,(0,0),0.7),0,1)*(~board_region)*(~skin_core)
+wall=wall_a>0.5
+# the wall continues the colour of the pixel right above it, so rail and wall stay one surface
+erow=np.clip(np.round(ymax_s)-1,0,H-1).astype(int)
+edge_col=out[erow,np.arange(W)]                                  # (W,3)
+ramp=(1.0-0.52*dep**1.15)
+wtint=np.clip((dep-0.40)/0.60,0,1)*0.45
+wcol=edge_col[None,:,:]*ramp[...,None]*(1-wtint[...,None])+np.array([176,132,74],np.float32)*wtint[...,None]
+bounce=0.26*np.exp(-((dep-0.88)/0.11)**2)                        # light bouncing up off the water
+wcol=255-(255-wcol)*(1-bounce[...,None])
+out=out*(1-wall_a[...,None])+np.clip(wcol,0,255)*wall_a[...,None]
+alpha=np.maximum(alpha,wall_a)
+# ---- the board sits IN the wave: contact shadow thrown onto the water below it ----
+bm=np.clip(board_region.astype(np.float32)+wall_a,0,1)*(alpha>0.05)
+drop=cv2.warpAffine(cv2.GaussianBlur(bm,(0,0),11),np.float32([[1,0,9],[0,1,13]]),(W,H))
+occ=cv2.GaussianBlur(bm,(0,0),5)
+edge_ao=np.clip(cv2.GaussianBlur(bm,(0,0),3.2)*1.7,0,1)                 # the board occludes the wave behind it
+cast=np.clip(np.maximum(np.maximum(0.66*drop,0.44*occ),0.62*edge_ao),0,1)*(1-cv2.GaussianBlur(bm,(0,0),1.0))
+cast=cast*(1-np.clip(wall_a*1.6,0,1))*(~board_region)*(~skin)*(alpha>0.05)
+out=out*(1-0.40*cast)[...,None]
+if os.environ.get("BDEBUG"):
+    dd=os.path.dirname(OUT) or "."
+    for nm,fld,sc in (("q",q,255),("kd",kd*128,1),("shade",shade*128,1),("rim",rim*255,1),("cast",cast*255,1),("dep",dep*255,1)):
+        cv2.imwrite(os.path.join(dd,f"dbg_{nm}.png"),np.clip(fld*sc if sc!=1 else fld,0,255).astype(np.uint8))
 
 # ---------------- WETSUIT ----------------
 collar=[(0,300),(350,300),(360,440),(470,440),(505,458),(520,498),(545,512),(580,520),(615,512),(645,498),(660,470),(760,470),(1086,470)]
