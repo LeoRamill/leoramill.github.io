@@ -17,6 +17,9 @@ orbits:
   - label: Spotify
     icon: spotify
     url: /shaping/songs/
+  - label: Photography
+    emoji: "📸"
+    url: /shaping/photography/
 # "currently" turns into "old" on hover and links to the studies roadmap
 focus:
   current: currently

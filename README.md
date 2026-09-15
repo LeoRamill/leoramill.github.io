@@ -38,6 +38,7 @@ Pagina ispirata a faustozamparelli.com/shaping: un mini-me fluttuante circondato
 | Immagine del mini-me | metti `mini-me.png` (768×1365, sfondo trasparente) in `assets/media/`: sostituisce da solo il segnaposto `mini-me.svg` |
 | Libri, film, video, canzoni (griglie di card) | `content/shaping/books.md`, `movies.md`, `videos.md`, `songs.md`: `lead` (frase sotto il titolo), `more` (link dopo la prima griglia), lista `galleries` → `items` con `title`, `meta`, `cover` (URL o nome file in `assets/media/shaping/`), `rating` (su 10), `catchphrase`, `review` (con uno di questi la card apre una finestra con la recensione), `url`, `note` |
 | Percorso di studi | `content/shaping/academic.md` (lista `stops`) |
+| Fotografia | `content/shaping/photography/`: **ogni sottocartella è una sezione della pagina** e le foto dentro diventano la striscia scorrevole. Basta trascinare una cartella di immagini (jpg, png, webp) dentro `content/shaping/photography/` e la sezione compare da sola; l'ordine delle foto segue il nome del file. In `index.md` la lista `albums` serve solo a decidere l'ordine delle sezioni e, volendo, un titolo diverso (`title`) o una riga di descrizione (`note`) |
 | Layout e stili | `layouts/_default/shaping*.html`, sezione "Shaping" in `assets/css/custom.css` |
 
 ## Blocchi custom

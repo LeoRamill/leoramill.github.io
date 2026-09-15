@@ -1,0 +1,116 @@
+{{ define "main" }}
+{{/* Photography: one section per folder inside this page bundle, each one a strip of photos
+     that scrolls left to right. Drop a folder of images next to this page's `index.md` and the
+     section appears on its own; `albums` in the front matter only sets order and display titles. */}}
+{{ $page := . }}
+
+{{/* Images Hugo can process, ignoring any file sitting loose in the bundle root */}}
+{{ $images := slice }}
+{{ range .Resources.ByType "image" }}
+  {{ if and (in (slice "jpeg" "png" "webp" "tiff") .MediaType.SubType) (ne (path.Dir .Name) ".") }}
+    {{ $images = $images | append . }}
+  {{ end }}
+{{ end }}
+
+{{/* Folder list: the order given in `albums` first, then any other folder alphabetically */}}
+{{ $folders := slice }}
+{{ range $images }}
+  {{ $dir := path.Dir .Name }}
+  {{ if not (in $folders $dir) }}{{ $folders = $folders | append $dir }}{{ end }}
+{{ end }}
+{{ $folders = sort $folders }}
+{{ $titles := dict }}
+{{ $notes := dict }}
+{{ $ordered := slice }}
+{{ range .Params.albums }}
+  {{ $folder := .folder | default .title }}
+  {{ if $folder }}
+    {{ with .title }}{{ $titles = merge $titles (dict $folder .) }}{{ end }}
+    {{ with .note }}{{ $notes = merge $notes (dict $folder .) }}{{ end }}
+    {{ if and (in $folders $folder) (not (in $ordered $folder)) }}{{ $ordered = $ordered | append $folder }}{{ end }}
+  {{ end }}
+{{ end }}
+{{ range $folders }}{{ if not (in $ordered .) }}{{ $ordered = $ordered | append . }}{{ end }}{{ end }}
+
+<section class="shaping-scope shaping-page shaping-photo-page">
+  {{ partial "shaping_breadcrumbs" . }}
+  <h1 class="shaping-title">{{ .Title }}</h1>
+  {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
+  {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
+  {{ with .Content }}<div class="shaping-source-note">{{ . }}</div>{{ end }}
+
+  {{ range $folder := $ordered }}
+  {{ $photos := sort ($page.Resources.Match (printf "%s/*" $folder)) "Name" }}
+  {{ $title := index $titles $folder | default $folder }}
+  <section class="photo-album" aria-labelledby="album-{{ anchorize $folder }}">
+    <div class="photo-album-head">
+      <h2 class="photo-album-title" id="album-{{ anchorize $folder }}">{{ $title }}</h2>
+      <span class="photo-album-count">{{ len $photos }} {{ cond (eq (len $photos) 1) "photo" "photos" }}</span>
+      <div class="photo-nav">
+        <button type="button" class="photo-nav-btn" data-photo-scroll="-1" aria-label="Scroll {{ $title }} left">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="photo-nav-btn" data-photo-scroll="1" aria-label="Scroll {{ $title }} right">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+    {{ with $notes }}{{ with index . $folder }}<p class="photo-album-note">{{ . | markdownify }}</p>{{ end }}{{ end }}
+    <div class="photo-strip" data-photo-strip tabindex="0" role="group" aria-label="{{ $title }} photos, scroll horizontally">
+      {{ range $photos }}
+        {{ $thumb := .Resize "x560 webp q80" }}
+        {{ $full := . }}
+        {{ if gt .Width 1800 }}{{ $full = .Resize "1800x webp q82" }}{{ end }}
+        <button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" aria-label="Open photo">
+          <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy" decoding="async">
+        </button>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{ if not $ordered }}
+  <p class="shaping-source-note">{{ .Params.empty_note | default "No photos yet." }}</p>
+  {{ end }}
+</section>
+
+{{ if $ordered }}
+<dialog id="photo-lightbox" class="photo-lightbox" aria-label="Photo">
+  <button type="button" class="photo-lightbox-close" data-photo-close aria-label="Close photo">×</button>
+  <img alt="">
+</dialog>
+{{ end }}
+
+<script>
+  // Arrow buttons scroll a strip by most of its visible width (trackpad and touch already work).
+  document.querySelectorAll('[data-photo-scroll]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var album = btn.closest('.photo-album');
+      var strip = album && album.querySelector('[data-photo-strip]');
+      if (!strip) return;
+      strip.scrollBy({ left: Number(btn.dataset.photoScroll) * strip.clientWidth * 0.82, behavior: 'smooth' });
+    });
+  });
+
+  // Click a photo to see it full size.
+  (function () {
+    var dlg = document.getElementById('photo-lightbox');
+    if (!dlg) return;
+    var img = dlg.querySelector('img');
+    document.querySelectorAll('[data-photo-full]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        img.src = btn.dataset.photoFull;
+        dlg.showModal();
+        document.documentElement.classList.add('has-open-dialog');
+      });
+    });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target === img) dlg.close(); });
+    dlg.addEventListener('close', function () {
+      document.documentElement.classList.remove('has-open-dialog');
+      img.removeAttribute('src');
+    });
+    var close = dlg.querySelector('[data-photo-close]');
+    if (close) close.addEventListener('click', function () { dlg.close(); });
+  })();
+</script>
+{{ end }}
