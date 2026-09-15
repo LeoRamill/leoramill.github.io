@@ -2,6 +2,13 @@
 {{/* "Shaping" landing: a floating mini-me surrounded by orbiting icons that open the sub-pages,
      and a "currently / old" link underneath. Content and links come from the page front matter. */}}
 {{ $minime := resources.Get "media/mini-me.png" | default (resources.Get "media/mini-me.svg") }}
+{{/* Aspect ratio of the figure: read from the PNG, or from the SVG's width/height attributes */}}
+{{ $ratio := "3 / 4" }}
+{{ with $minime }}
+  {{ if ne .MediaType.SubType "svg" }}{{ $ratio = printf "%d / %d" .Width .Height }}{{ else }}
+    {{ $wh := findRE `width="(\d+)" height="(\d+)"` .Content 1 }}{{ with $wh }}{{ $n := findRE `\d+` (index . 0) }}{{ if ge (len $n) 2 }}{{ $ratio = printf "%s / %s" (index $n 0) (index $n 1) }}{{ end }}{{ end }}
+  {{ end }}
+{{ end }}
 <section class="shaping-scope shaping-page" aria-labelledby="shaping-title">
   {{ partial "shaping_breadcrumbs" . }}
   <h1 id="shaping-title" class="shaping-title">{{ .Title }}</h1>
@@ -9,8 +16,8 @@
   {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
 
   <div class="shaping-hero">
-    <div class="mini-me-wrap" aria-hidden="true">
-      {{ with $minime }}<img class="mini-me" src="{{ .RelPermalink }}" width="768" height="1365" alt="" loading="eager" decoding="sync">{{ end }}
+    <div class="mini-me-wrap" aria-hidden="true" style="aspect-ratio: {{ $ratio | safeCSS }}">
+      {{ with $minime }}<img class="mini-me" src="{{ .RelPermalink }}" alt="" loading="eager" decoding="sync">{{ end }}
     </div>
     <nav class="shaping-orbits" aria-label="Shaping sections">
       {{ range $i, $orb := .Params.orbits }}
