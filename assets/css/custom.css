@@ -203,8 +203,8 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 .shaping-title-hint { margin-block: clamp(0.25rem, 0.55vw, 0.4rem) 0; color: var(--blue); font-size: clamp(0.86rem, 1vw, 0.96rem); font-weight: 600; text-align: center; text-transform: lowercase; }
 
 /* Hero: floating mini-me + orbiting icons */
-.shaping-hero { position: relative; display: grid; place-items: center; min-height: clamp(15rem, 22.5vw, 19rem); margin-block: clamp(-2.4rem, -3vw, -1.3rem) clamp(-5.25rem, -7vw, -3rem); overflow: hidden; isolation: isolate; }
-.mini-me-wrap { --mini-me-lift: clamp(-2.35rem, -3.35vw, -1.2rem); position: relative; z-index: 2; width: clamp(15.5rem, 26vw, 22.5rem); aspect-ratio: 768 / 1365; animation: mini-me-drift 8s ease-in-out infinite; }
+.shaping-hero { position: relative; display: grid; place-items: center; min-height: clamp(15rem, 22.5vw, 19rem); margin-block: clamp(0.5rem, 1.2vw, 1rem) clamp(-1.5rem, -2vw, -0.75rem); overflow: hidden; isolation: isolate; }
+.mini-me-wrap { --mini-me-lift: 0rem; position: relative; z-index: 2; width: clamp(16rem, 28vw, 24rem); aspect-ratio: 3 / 4; animation: mini-me-drift 8s ease-in-out infinite; }
 .mini-me { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 26px 38px rgb(22 32 27 / 18%)); }
 .shaping-orbits { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .shaping-orb {
@@ -296,7 +296,7 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
   .shaping-title { font-size: clamp(2.75rem, 13.5vw, 3.85rem); line-height: 1.02; }
   .shaping-description { max-width: 19rem; font-size: clamp(0.92rem, 4vw, 1.02rem); }
   .shaping-hero { min-height: 17.25rem; }
-  .mini-me-wrap { width: clamp(14.5rem, 61vw, 18.75rem); }
+  .mini-me-wrap { width: clamp(14rem, 60vw, 18rem); }
   .shaping-orb { width: clamp(2.85rem, 11.5vw, 3.65rem); font-size: clamp(2.55rem, 10.8vw, 3.35rem); }
   .shaping-orb--1 { --orb-x: -28vw; --orb-y: -5.9rem; }
   .shaping-orb--2 { --orb-x: 28vw; --orb-y: -5.7rem; }
