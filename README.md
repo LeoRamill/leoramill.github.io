@@ -1,6 +1,6 @@
 # website
 
-Sito personale di Leonard Vincent Ramil costruito con [Hugo Blox](https://hugoblox.com) (template *Academic CV*) con la home ispirata al sito di Riccardo Cadei: icone social a sinistra nella barra di navigazione, avatar tondo con nome e tagline, foto di copertina, bio in corsivo, "Selected News" e progetti selezionati.
+Sito personale di Leonard Vincent Ramil costruito con [Hugo Blox](https://hugoblox.com) (template *Academic CV*): icone social a sinistra nella barra di navigazione, avatar tondo con nome e tagline, foto di copertina, bio in corsivo, "Selected News" e progetti selezionati.
 
 Lo sfondo `Meteor.svg` è un unico strato fisso dietro tutta la pagina: le sezioni chiare lo coprono, quelle scure (hero e chiusura) sono tinte semitrasparenti che lo lasciano riaffiorare con intensità diverse mentre si scorre. Si configura nel blocco `profile-hero` di `content/_index.md` (`design.fixed_background`: `filename` in `assets/media/`, oppure `false` per disattivarlo); le tinte sono i `gradient_start`/`gradient_end` di ogni sezione scura. Tutto è responsive (telefono e desktop) e supporta la modalità chiara/scura.
 
@@ -30,7 +30,7 @@ hugo server
 
 ## Sezione "Shaping"
 
-Pagina ispirata a faustozamparelli.com/shaping: un mini-me fluttuante circondato da quattro icone che portano alle sotto-pagine (libri, film, YouTube, Spotify) e la scritta "currently" che al passaggio del mouse diventa "old" e porta alla pagina degli studi.
+un mini-me fluttuante circondato da quattro icone che portano alle sotto-pagine (libri, film, YouTube, Spotify) e la scritta "currently" che al passaggio del mouse diventa "old" e porta alla pagina degli studi.
 
 | Cosa | File |
 |---|---|
