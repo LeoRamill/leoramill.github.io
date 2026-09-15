@@ -3,11 +3,11 @@ title: Foe
 meta: Garth Davis
 gallery: movie
 rating: 8.5
-catchphrase: Plug back in.
+catchphrase: Lasciamo che il tempo faccia il suo corso
 summary: "All’inizio ti senti così piena di vita ed è… eccitante, ma il tempo rende tutto prevedibile."
 ---
 
-> *“All’inizio ti senti così piena di vita ed è… eccitante, ma il tempo rende tutto prevedibile.. è come se lui non mi vedesse più.. come si avesse sostituito con un’altra… ho perso quelle parti che definiscono chi sono o chi potrei essere… e temo che non le recuperò mai… non dovrei dirti certe cose”*
+> *All’inizio ti senti così piena di vita ed è… eccitante, ma il tempo rende tutto prevedibile.. è come se lui non mi vedesse più.. come se avesse sostituito con un’altra… ho perso quelle parti che definiscono chi sono o chi potrei essere… e temo che non le recuperò mai… non dovrei dirti certe cose*
 > 
 
 Il tempo… Il tempo… possibile che il tempo faccia scomparire tutto? faccia scomparire la passione? Ma sopratutto rende normalizzato , rende **per scontato** una persona?
