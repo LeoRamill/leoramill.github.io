@@ -1,0 +1,119 @@
+{{/* Shared "morph" transition for dialogs: the thumbnail that was clicked grows into the panel
+     that opens, and shrinks back into place on close. Falls back to a plain open/close when the
+     browser has no Web Animations API or the visitor asked for reduced motion. */}}
+<script>
+(function () {
+  if (window.hbMorph) return;
+
+  var EASE_IN = 'cubic-bezier(.2,.75,.2,1)';
+  var EASE_OUT = 'cubic-bezier(.4,0,.7,1)';
+  var OPEN = 430, CLOSE = 300;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function animatable(el) { return !!el && typeof el.animate === 'function' && !reduced.matches; }
+  function box(el) { return el.getBoundingClientRect(); }
+  function radius(el) { return getComputedStyle(el).borderRadius; }
+
+  /* Transform that puts `to` exactly where `from` sits on screen */
+  function between(from, to) {
+    return 'translate(' + ((from.left + from.width / 2) - (to.left + to.width / 2)) + 'px,' +
+           ((from.top + from.height / 2) - (to.top + to.height / 2)) + 'px) ' +
+           'scale(' + (from.width / to.width) + ',' + (from.height / to.height) + ')';
+  }
+
+  function fade(els, opening) {
+    els.forEach(function (el, i) {
+      if (!animatable(el)) return;
+      el.getAnimations().forEach(function (a) { a.cancel(); });
+      var hidden = { opacity: 0, transform: 'translateY(' + (opening ? 14 : 6) + 'px)' };
+      var shown = { opacity: 1, transform: 'none' };
+      el.animate(opening ? [hidden, shown] : [shown, hidden], {
+        duration: opening ? OPEN * 0.6 : CLOSE * 0.7,
+        delay: opening ? 90 + i * 45 : 0,
+        easing: opening ? 'ease-out' : 'ease-in',
+        fill: opening ? 'backwards' : 'forwards'
+      });
+    });
+  }
+
+  window.hbMorph = function (cfg) {
+    var dlg = cfg.dialog;
+    var source = null, closing = false;
+    var pick = function (fn, arg) { return fn ? fn(arg) : null; };
+    var extras = function () { return (cfg.extras ? cfg.extras() : []).filter(Boolean); };
+
+    function restore() { if (source) { source.style.visibility = ''; source = null; } }
+
+    function open(trigger) {
+      if (closing || dlg.open) return;
+      if (cfg.beforeOpen) cfg.beforeOpen(trigger);
+      source = pick(cfg.source, trigger);
+      var from = source ? box(source) : null;
+      dlg.classList.add('is-opening');
+      dlg.showModal();
+      document.documentElement.classList.add('has-open-dialog');
+      window.setTimeout(function () { dlg.classList.remove('is-opening'); }, OPEN);
+
+      var target = pick(cfg.target, trigger);
+      if (!from || !from.width || !animatable(target)) return;
+      var to = box(target);
+      if (!to.width || !to.height) return;
+
+      source.style.visibility = 'hidden';
+      var start = between(from, to), startRadius = radius(source);
+      target.style.transform = start;              /* in place before the first paint */
+      target.style.borderRadius = startRadius;
+      target.getAnimations().forEach(function (a) { a.cancel(); });
+      var grow = target.animate(
+        [{ transform: start, borderRadius: startRadius },
+         { transform: 'none', borderRadius: radius(target) }],
+        { duration: OPEN, easing: EASE_IN });
+      grow.ready.catch(function () {}).then(function () {
+        target.style.transform = '';               /* the animation takes over from here */
+        target.style.borderRadius = '';
+      });
+      fade(extras(), true);
+    }
+
+    function close() {
+      if (closing || !dlg.open) return;
+      var target = pick(cfg.target);
+      if (!source || !animatable(target)) { dlg.close(); return; }
+      var from = box(source), to = box(target);
+      if (!from.width || !to.width) { dlg.close(); return; }
+
+      closing = true;
+      dlg.classList.add('is-closing');
+      fade(extras(), false);
+      target.getAnimations().forEach(function (a) { a.cancel(); });
+      var anim = target.animate(
+        [{ transform: 'none', borderRadius: radius(target) },
+         { transform: between(from, to), borderRadius: radius(source) }],
+        { duration: CLOSE, easing: EASE_OUT, fill: 'forwards' });
+      anim.finished.catch(function () {}).then(function () {
+        anim.cancel();          /* drop the held transform in the same frame as the close */
+        closing = false;
+        dlg.close();
+      });
+    }
+
+    (cfg.triggers || []).forEach(function (t) {
+      t.addEventListener('click', function () { open(t); });
+    });
+    (cfg.closers || []).forEach(function (c) { c.addEventListener('click', close); });
+    dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });  /* Esc */
+    dlg.addEventListener('click', function (e) {
+      if (cfg.closeOnClick ? cfg.closeOnClick(e) : e.target === dlg) close();
+    });
+    dlg.addEventListener('close', function () {
+      closing = false;
+      dlg.classList.remove('is-opening', 'is-closing');
+      document.documentElement.classList.remove('has-open-dialog');
+      restore();
+      if (cfg.afterClose) cfg.afterClose();
+    });
+
+    return { open: open, close: close };
+  };
+})();
+</script>

@@ -76,16 +76,20 @@
   {{ end }}
 </section>
 
+{{ partial "morph_dialog" . }}
 <script>
-  // Card → modal review (native <dialog>), as on the reference page.
+  // Each card grows into its review panel and shrinks back on close.
   document.querySelectorAll('[data-open-shaping]').forEach(function (btn) {
     var dlg = document.getElementById(btn.dataset.openShaping);
     if (!(dlg instanceof HTMLDialogElement)) return;
-    btn.addEventListener('click', function () { dlg.showModal(); document.documentElement.classList.add('has-open-dialog'); });
-    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
-    dlg.addEventListener('close', function () { document.documentElement.classList.remove('has-open-dialog'); });
-    var close = dlg.querySelector('[data-close-shaping]');
-    if (close) close.addEventListener('click', function () { dlg.close(); });
+    window.hbMorph({
+      dialog: dlg,
+      triggers: [btn],
+      closers: Array.prototype.slice.call(dlg.querySelectorAll('[data-close-shaping]')),
+      source: function () { return btn.querySelector('.shaping-cover'); },
+      target: function () { return dlg.querySelector('.shaping-dialog-cover'); },
+      extras: function () { return [dlg.querySelector('.shaping-dialog-copy'), dlg.querySelector('.shaping-dialog-close')]; }
+    });
   });
 </script>
 {{ end }}
