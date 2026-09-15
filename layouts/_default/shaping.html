@@ -17,7 +17,7 @@
 
   <div class="shaping-hero">
     <div class="mini-me-wrap" aria-hidden="true" style="aspect-ratio: {{ $ratio | safeCSS }}">
-      {{ with $minime }}<img class="mini-me" src="{{ .RelPermalink }}" alt="" loading="eager" decoding="sync">{{ end }}
+      {{ with $minime }}{{ $src := . }}{{ if ne .MediaType.SubType "svg" }}{{ $src = .Resize "900x webp q90" }}{{ end }}<img class="mini-me" src="{{ $src.RelPermalink }}" alt="" loading="eager" decoding="sync">{{ end }}
     </div>
     <nav class="shaping-orbits" aria-label="Shaping sections">
       {{ range $i, $orb := .Params.orbits }}
