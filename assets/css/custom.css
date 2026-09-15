@@ -474,31 +474,45 @@ html.has-open-dialog { overflow: hidden; }
 .review-back a { color: var(--blue); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
 .review-back a:hover { color: var(--ink); }
 
-/* ----- A review with its own `background.*`: the image stays put behind the page, the head sits on
-   a tinted window over it (as the homepage hero does over the meteors) and the text below scrolls
-   over a solid sheet that covers the image again. ----- */
+/* ----- A review with its own `background.*`: the image stays put behind the whole page and the
+   review reads as one dark window onto it, the way the homepage hero sits over the meteors. ----- */
 .review-backdrop { background-color: #0b0810; }
-/* The tint rides on the fixed layer, not on the hero, so it reaches the very top of the viewport
-   (under the navbar) instead of starting with a seam below it. */
-.review-backdrop::after { position: absolute; inset: 0; content: ""; background: linear-gradient(180deg, #0b08106b 0%, #0b0810a3 55%, #0b0810cc 100%); }
-.has-backdrop .review-hero {
-  --ink: #ffffff; --muted: #d9dadf; --blue: #cbb8ff; --line: #6b6b76;
-  color: #ffffff;
-  padding-block: clamp(1.25rem, 3vw, 2.5rem) clamp(2.5rem, 6vw, 4.5rem);
+/* The tint rides on the fixed layer, so it covers the viewport edge to edge (under the navbar too)
+   instead of seaming where a section starts. It carries the whole job of keeping text readable:
+   light at the top where the poster is, heavier further down where the prose runs. */
+.review-backdrop::after {
+  position: absolute; inset: 0; content: "";
+  background: linear-gradient(180deg, #0b081073 0%, #0b0810b8 46%, #0b0810d1 100%);
 }
-.has-backdrop .review-hero .shaping-breadcrumbs .breadcrumb-link,
-.has-backdrop .review-hero .shaping-breadcrumbs .is-current { color: #ffffff; }
+.has-backdrop {
+  --ink: #f6f6f8; --muted: #cfd0d7; --blue: #cbb8ff; --line: #6b6b76;
+  color: #f6f6f8;
+}
+.has-backdrop .review-hero { padding-block: clamp(1.25rem, 3vw, 2.5rem) clamp(2.5rem, 6vw, 4.5rem); }
+.has-backdrop .shaping-breadcrumbs .breadcrumb-link,
+.has-backdrop .shaping-breadcrumbs .is-current { color: #ffffff; }
 .has-backdrop .review-title,
-.has-backdrop .review-hero .shaping-card-meta,
-.has-backdrop .review-hero .shaping-dialog-catchphrase,
-.has-backdrop .review-hero .shaping-rating-text,
-.has-backdrop .review-hero .shaping-breadcrumbs { text-shadow: 0 1px 6px #00000096; }
-.has-backdrop .review-hero .shaping-star { color: #ffffff4d; }
+.has-backdrop .shaping-card-meta,
+.has-backdrop .shaping-dialog-catchphrase,
+.has-backdrop .shaping-rating-text,
+.has-backdrop .shaping-breadcrumbs { text-shadow: 0 1px 6px #00000096; }
+.has-backdrop .shaping-star { color: #ffffff4d; }
 .has-backdrop .review-cover { border-color: #ffffff59; box-shadow: 0 26px 60px #00000080; }
-/* The sheet also paints the run down to the footer, so a short review cannot leave a band of the
-   fixed image showing under it. A shadow costs no layout, so it cannot widen the page. */
-.has-backdrop .review-sheet { background-color: #ffffff; box-shadow: 0 50vh 0 50vh #ffffff; }
-.dark .has-backdrop .review-sheet { background-color: rgb(24 24 27); box-shadow: 0 50vh 0 50vh rgb(24 24 27); }
+
+/* The prose runs straight over the image, so every colour the theme's `prose` sets has to come back
+   light, and a shadow under the text keeps it off the brighter parts of the photo. */
+.has-backdrop .review-body,
+.has-backdrop .review-body p,
+.has-backdrop .review-body li,
+.has-backdrop .review-body strong,
+.has-backdrop .review-body h2,
+.has-backdrop .review-body h3 { color: #f6f6f8; text-shadow: 0 1px 7px #000000a6; }
+.has-backdrop .review-body blockquote { color: #e4e4ea; border-left-color: #cbb8ff; text-shadow: 0 1px 7px #000000a6; }
+.has-backdrop .review-body a { color: #cbb8ff; }
+.has-backdrop .review-body code { background-color: #ffffff1f; color: #f6f6f8; }
+.has-backdrop .review-body hr { border-color: #ffffff2e; }
+.has-backdrop .review-back a { color: #cbb8ff; text-shadow: 0 1px 7px #000000a6; }
+.has-backdrop .review-back a:hover { color: #ffffff; }
 
 @media (max-width: 720px) {
   .review-head { grid-template-columns: 1fr; gap: 1.25rem; }
