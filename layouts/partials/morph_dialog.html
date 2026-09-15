@@ -36,6 +36,20 @@
     });
   }
 
+  /* Locking the page hides the scrollbar and would widen the content by its width, moving
+     everything under the animation. Give that width back as padding while the dialog is open. */
+  function lockPage() {
+    var root = document.documentElement;
+    var bar = window.innerWidth - root.clientWidth;
+    if (bar > 0) root.style.paddingRight = bar + 'px';
+    root.classList.add('has-open-dialog');
+  }
+  function unlockPage() {
+    var root = document.documentElement;
+    root.classList.remove('has-open-dialog');
+    root.style.paddingRight = '';
+  }
+
   window.hbMorph = function (cfg) {
     var dlg = cfg.dialog;
     var source = null, closing = false;
@@ -50,8 +64,8 @@
       source = pick(cfg.source, trigger);
       var from = source ? box(source) : null;
       dlg.classList.add('is-opening');
+      lockPage();
       dlg.showModal();
-      document.documentElement.classList.add('has-open-dialog');
       window.setTimeout(function () { dlg.classList.remove('is-opening'); }, OPEN);
 
       var target = pick(cfg.target, trigger);
@@ -108,7 +122,7 @@
     dlg.addEventListener('close', function () {
       closing = false;
       dlg.classList.remove('is-opening', 'is-closing');
-      document.documentElement.classList.remove('has-open-dialog');
+      unlockPage();
       restore();
       if (cfg.afterClose) cfg.afterClose();
     });

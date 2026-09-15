@@ -40,7 +40,7 @@ un mini-me fluttuante circondato da quattro icone che portano alle sotto-pagine 
 | Percorso di studi | `content/shaping/academic.md` (lista `stops`) |
 | Fotografia | `content/shaping/photography/`: **ogni sottocartella è una sezione della pagina** e le foto dentro diventano la striscia scorrevole. Basta trascinare una cartella di immagini (jpg, png, webp) dentro `content/shaping/photography/` e la sezione compare da sola; l'ordine delle foto segue il nome del file. In `index.md` la lista `albums` serve solo a decidere l'ordine delle sezioni e, volendo, un titolo diverso (`title`) o una riga di descrizione (`note`) |
 | Layout e stili | `layouts/_default/shaping*.html`, sezione "Shaping" in `assets/css/custom.css` |
-| Transizione morph | `layouts/partials/morph_dialog.html`: la miniatura cliccata cresce fino a diventare il pannello e ci torna dentro alla chiusura (foto e card). Durate ed easing sono le costanti `OPEN`, `CLOSE`, `EASE_IN` e `EASE_OUT` in cima al file; con "riduci movimento" attivo nel sistema l'apertura è istantanea |
+| Transizione morph | `layouts/partials/morph_dialog.html`, incluso **solo** dai layout delle pagine Shaping: la miniatura cliccata cresce fino a diventare il pannello e ci torna dentro alla chiusura (foto e card). Durate ed easing sono le costanti `OPEN`, `CLOSE`, `EASE_IN` e `EASE_OUT` in cima al file; con "riduci movimento" attivo nel sistema l'apertura è istantanea. Gli stili stanno nella sezione "Morph transitions" di `assets/css/custom.css` e sono legati alle classi `.shaping-dialog` e `.photo-lightbox`, quindi non toccano le altre pagine |
 
 ## Blocchi custom
 

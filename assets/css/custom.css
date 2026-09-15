@@ -411,13 +411,14 @@ html.has-open-dialog { overflow: hidden; }
   .photo-lightbox-close { top: 0.5rem; right: 0.5rem; }
 }
 
-/* ----- Morph transitions: a thumbnail grows into the panel it opens ----- */
-/* Reserve the scrollbar so locking the page while a dialog is open shifts nothing,
-   which would otherwise offset the morph by the scrollbar width. */
-html { scrollbar-gutter: stable; }
-
-dialog.is-opening::backdrop { animation: hb-backdrop-in 0.34s ease both; }
-dialog.is-closing::backdrop { animation: hb-backdrop-out 0.28s ease both; }
+/* ----- Morph transitions (Shaping pages only): a thumbnail grows into the panel it opens -----
+   The page lock that comes with an open dialog would remove the scrollbar and shift the layout
+   under the animation; the width it frees is given back as padding by the script, so nothing
+   here touches pages that have no dialog. */
+.shaping-dialog.is-opening::backdrop,
+.photo-lightbox.is-opening::backdrop { animation: hb-backdrop-in 0.34s ease both; }
+.shaping-dialog.is-closing::backdrop,
+.photo-lightbox.is-closing::backdrop { animation: hb-backdrop-out 0.28s ease both; }
 @keyframes hb-backdrop-in { from { opacity: 0; } }
 @keyframes hb-backdrop-out { to { opacity: 0; } }
 
@@ -433,7 +434,8 @@ dialog.is-closing::backdrop { animation: hb-backdrop-out 0.28s ease both; }
 .shaping-card-button .shaping-cover { transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease; }
 
 @media (prefers-reduced-motion: reduce) {
-  dialog.is-opening::backdrop, dialog.is-closing::backdrop,
+  .shaping-dialog.is-opening::backdrop, .shaping-dialog.is-closing::backdrop,
+  .photo-lightbox.is-opening::backdrop, .photo-lightbox.is-closing::backdrop,
   .shaping-dialog.is-opening .shaping-dialog-panel, .shaping-dialog.is-closing .shaping-dialog-panel { animation: none; }
   .photo-item:active, .shaping-card-button:active .shaping-cover { transform: none; }
 }
