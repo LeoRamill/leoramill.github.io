@@ -1,4 +1,4 @@
-{{/* The News view, with the entry's own figure above the date in the left column.
+{{/* The News view, with the entry's own figure under the date in the left column.
      The figure is the first image of the document — whatever sits right under the title — so an
      entry shows one just by having one. `image:` in the front matter overrides it, `image: false`
      drops it. It is served as uploaded rather than resized: a figure saved off the web is often not
@@ -29,10 +29,10 @@
       <a href="{{ $item.RelPermalink }}"><span
         class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span><span class="relative z-10">{{ $item.Title }}</span></a>
     </h2>
-    {{/* Phone: the figure and the date stack above the title, in the one column there is */}}
+    {{/* Phone: the date and the figure stack above the title, in the one column there is */}}
     <div class="md:hidden order-first relative z-10 mb-3 pub-aside pub-aside--narrow">
-      {{ with $img }}<img class="pub-figure" src="{{ . }}" alt="" loading="lazy" decoding="async">{{ end }}
       <time class="pub-date" datetime="{{ time.Format "2006-01-02" $item.Date }}">{{ $date }}</time>
+      {{ with $img }}<img class="pub-figure" src="{{ . }}" alt="" loading="lazy" decoding="async">{{ end }}
     </div>
     <p class="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">{{ $summary }}</p>
     <div aria-hidden="true" class="relative z-10 mt-4 flex items-center text-sm font-medium text-primary-500">
@@ -42,9 +42,9 @@
       </svg>
     </div>
   </div>
-  {{/* Desktop: the left-hand column, figure on top of the date */}}
+  {{/* Desktop: the left-hand column, date with the figure under it */}}
   <div class="mt-1 hidden md:block order-first relative z-10 pub-aside">
-    {{ with $img }}<img class="pub-figure" src="{{ . }}" alt="" loading="lazy" decoding="async">{{ end }}
     <time class="pub-date" datetime="{{ time.Format "2006-01-02" $item.Date }}">{{ $date }}</time>
+    {{ with $img }}<img class="pub-figure" src="{{ . }}" alt="" loading="lazy" decoding="async">{{ end }}
   </div>
 </article>
