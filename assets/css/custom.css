@@ -199,14 +199,21 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
    some GPUs; baking costs nothing at runtime and cannot. Re-encode from the source clip to change
    it: the filter chain is in the commit that introduced this. */
 .site-fixed-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* One veil, not two. This layer used to carry a scrim of its own on top of each section's wash, and
-   the pair multiplied: measured on bare artwork, the scrim took 55% of the light and the wash 48%,
-   75% together — so the 0.28 the sections were tuned to was less than half of what reached the eye.
-   Worse, the scrim was pinned to the screen with a vertical ramp, 26% at the top of the viewport to
-   38% at the bottom, so the same paragraph darkened as it travelled down the window. Gone: the
-   sections' wash is now the only veil, at the value that reproduces the old total. The plain-video
-   fallback above keeps its scrim, since in that mode there is no per-section wash to lean on. */
-.site-fixed-bg--frames::after { content: none; }
+/* One veil, and it lives here rather than on the sections. It used to be five separate washes, one
+   per homepage block, each at this same 0.56 — which looks identical until you notice that five
+   stacked translucent boxes meet at four boundaries. A boundary lands wherever layout puts it,
+   fractional device pixels included, and a fractional edge is antialiased from both sides: the row
+   where two boxes meet gets a sliver of one plus a sliver of the other, which reads as a faint
+   horizontal line drawn across the page. Nothing in the artwork, nothing in the canvas — just an
+   edge. A single box that is exactly the viewport, fixed, has no edges inside the picture at all.
+   The alpha is unchanged from the five it replaces, so the reading stays where it was measured:
+   every block clears the 4.5:1 body text needs, News tightest at 5.0:1. Flat on purpose — the
+   scrim this once was had a vertical ramp, and a paragraph darkened as it travelled down the
+   window. The plain-video fallback above keeps its own scrim: in that mode this one is not drawn. */
+.site-fixed-bg--frames::after {
+  position: absolute; inset: 0; content: "";
+  background-color: rgb(10 8 16 / 0.56);
+}
 /* The canvas draws its cover-fit anchored a little above centre; `object-fit: cover` on a video
    anchors dead centre unless told otherwise, so the two framed the picture differently and it
    shifted the moment the loop faded in over the last frame. */
@@ -228,13 +235,9 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 }
 /* The theme's section wrapper must not clip, or `sticky` inside it cannot hold */
 #hero { overflow: visible; }
-/* The navbar is translucent at the top of the page, and the hero's wash started at the section's
-   own top — below it. That left a strip of unwashed picture across the top of the window, brighter
-   than everything under it. The wash is pulled up past any header height to close it. */
-#hero .home-section-bg { top: -50vh; }
 
 /* ----- Homepage over the picture -----
-   The sections carry the lightest wash their text survives, 0.28-0.32, set in `content/_index.md`.
+   The page carries the lightest single wash its text survives, 0.56, on the fixed layer above.
    Two things buy that, and without them the same reading needed 0.68. First a halo on the text:
    three stacked shadows, a tight dark one to cut the glyph away from whatever is right behind it
    and two soft wide ones to sink the area around it. Second the colours below — which turned out to
@@ -279,7 +282,8 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
    that would otherwise show the bare picture through the wrapper. */
 /* 0.56, the same as every section: at 0.86 the footer was a visible step down from the page above
    it — the one real seam left once the scrim was gone. */
-body:has(.hero-pin) .page-footer { background-color: rgb(10 8 16 / 0.56); color: rgb(226 232 240); }
+/* The scrim behind the footer is the page's, not the footer's — a second copy here would double it. */
+body:has(.hero-pin) .page-footer { background-color: transparent; color: rgb(226 232 240); }
 body:has(.hero-pin) .page-footer footer { margin-top: 0; padding: 1.5rem 0; color: inherit; }
 body:has(.hero-pin) .page-footer a { color: #ffffff; }
 
