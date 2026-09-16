@@ -2,8 +2,11 @@
      figure: date on its own line, then figure and text side by side as one clickable block.
      The figure is the first image of the document — whatever sits right under the title — so an
      entry shows one just by having one. `image:` in the front matter points at another, `image:
-     false` drops it. It is served as uploaded rather than resized: a figure saved off the web is
-     often not the format its extension claims, and processing such a file fails the build.
+     false` drops it.
+     A figure taken from the document arrives already resized by the theme's markdown image hook; one
+     named in `image:` is served as uploaded, since a figure saved off the web is often not the format
+     its extension claims and processing such a file fails the build. That build failure is still
+     reachable through the hook, so a figure in the body has to be a real file of its own format.
      The click target is a stretched overlay rather than an <a> wrapped round everything, so a
      summary containing a markdown link still produces valid HTML (as in the theme's own view). */}}
 {{ $item := .item }}
