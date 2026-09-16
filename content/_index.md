@@ -52,12 +52,12 @@ sections:
     id: about
     design:
       css_class: dark
-      # Dark window onto the looping artwork. 0.68-0.72 is as light as it goes while the text stays
-      # comfortable: measured, the worst contrast on the page is 6.1:1 here, against the 4.5:1 body
-      # text needs. Lighter than this and the artwork starts competing with the words.
+      # Dark window onto the looping artwork. With the picture lifted in custom.css this sits at
+      # 0.60-0.64: measured, the worst text on the page reads at 5.1:1, against the 4.5:1 body text
+      # needs. Dropping the tint altogether puts that at 2.4:1 — the words stop being readable.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.68)"
-        gradient_end: "rgba(10, 8, 16, 0.72)"
+        gradient_start: "rgba(10, 8, 16, 0.60)"
+        gradient_end: "rgba(10, 8, 16, 0.64)"
         gradient_angle: 180
     content:
       username: admin
@@ -78,12 +78,12 @@ sections:
         url: /news/
     design:
       css_class: dark
-      # Dark window onto the looping artwork. 0.68-0.72 is as light as it goes while the text stays
-      # comfortable: measured, the worst contrast on the page is 6.1:1 here, against the 4.5:1 body
-      # text needs. Lighter than this and the artwork starts competing with the words.
+      # Dark window onto the looping artwork. With the picture lifted in custom.css this sits at
+      # 0.60-0.64: measured, the worst text on the page reads at 5.1:1, against the 4.5:1 body text
+      # needs. Dropping the tint altogether puts that at 2.4:1 — the words stop being readable.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.68)"
-        gradient_end: "rgba(10, 8, 16, 0.72)"
+        gradient_start: "rgba(10, 8, 16, 0.60)"
+        gradient_end: "rgba(10, 8, 16, 0.64)"
         gradient_angle: 180
 
   # 4. Selected projects (cards), dark for now.
@@ -101,12 +101,12 @@ sections:
       view: article-grid
       columns: 2
       css_class: dark
-      # Dark window onto the looping artwork. 0.68-0.72 is as light as it goes while the text stays
-      # comfortable: measured, the worst contrast on the page is 6.1:1 here, against the 4.5:1 body
-      # text needs. Lighter than this and the artwork starts competing with the words.
+      # Dark window onto the looping artwork. With the picture lifted in custom.css this sits at
+      # 0.60-0.64: measured, the worst text on the page reads at 5.1:1, against the 4.5:1 body text
+      # needs. Dropping the tint altogether puts that at 2.4:1 — the words stop being readable.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.68)"
-        gradient_end: "rgba(10, 8, 16, 0.72)"
+        gradient_start: "rgba(10, 8, 16, 0.60)"
+        gradient_end: "rgba(10, 8, 16, 0.64)"
         gradient_angle: 180
 
   # 5. Closing dark section (second background of the epalu template) with a call to action.
@@ -124,7 +124,7 @@ sections:
       css_class: dark
       # Heavier tint than the hero: the same fixed background re-emerges, darker
       background:
-        gradient_start: "rgba(8, 4, 14, 0.58)"
-        gradient_end: "rgba(8, 4, 14, 0.68)"
+        gradient_start: "rgba(8, 4, 14, 0.50)"
+        gradient_end: "rgba(8, 4, 14, 0.60)"
         gradient_angle: 180
 ---
