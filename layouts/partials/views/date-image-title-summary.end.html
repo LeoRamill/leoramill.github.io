@@ -1,2 +1,13 @@
 </div>
 </div>
+<script>
+  // "and 4 more authors" swaps itself for the rest of the list
+  document.querySelectorAll('[data-pub-authors]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var rest = btn.parentElement.querySelector('.pub-authors-rest');
+      if (!rest) return;
+      rest.hidden = false;
+      btn.remove();
+    });
+  });
+</script>

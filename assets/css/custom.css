@@ -524,11 +524,10 @@ html.has-open-dialog { overflow: hidden; }
   .review-intro { justify-items: start; }
 }
 
-/* ----- Publications: the News list, with the entry's figure under the date -----
+/* ----- Publications: the News list dressed as an academic publication list -----
    Laid out by this file rather than by Tailwind utilities, so there is one piece of markup for both
-   widths instead of a phone copy and a desktop copy. Phone: date, figure and text stacked. Desktop:
-   the date on its own line, then the figure in the date's column with the text starting level with
-   it — the two together are one hit area. */
+   widths. Phone: date, thumbnail and text stacked. Desktop: the date in its own column, then the
+   thumbnail with the text starting level with it — the two together are one hit area. */
 .pub-entry { position: relative; }
 /* 1.5rem clears the 1rem the hover panel bleeds upward, so the panel never bites into the date */
 .pub-date { display: block; margin-bottom: 1.5rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(161 161 170); }
@@ -545,8 +544,8 @@ html.has-open-dialog { overflow: hidden; }
 }
 .dark .pub-hover { background-color: rgb(39 39 42 / 0.5); }
 .pub-block:hover .pub-hover, .pub-block:focus-within .pub-hover { opacity: 1; transform: scale(1); }
-/* The click target covers the figure and the text both, and sits above them so a tap anywhere in
-   the block opens the entry. */
+/* The click target covers the thumbnail and the text both, and sits above them so a tap anywhere in
+   the block opens the entry. The buttons and the authors toggle go above it again, below. */
 .pub-hit { position: absolute; inset: -1rem -1rem; z-index: 20; border-radius: 1rem; }
 .pub-label { position: relative; z-index: 10; }
 /* On a phone the block already spans the viewport, so bleeding 1rem sideways would push the page
@@ -555,24 +554,53 @@ html.has-open-dialog { overflow: hidden; }
   .pub-hover, .pub-hit { left: 0; right: 0; }
 }
 
+/* The thumbnail is a small card that keeps the figure's own proportions instead of being cropped
+   into a fixed square as in the reference style: a pipeline figure is far wider than it is tall, so
+   cropping would cut off both ends of it and letterboxing it into a square would leave it too small
+   to read. It is as wide as the date column allows, and the card hugs whatever shape it gets. */
 .pub-figure {
-  display: block; width: 100%; max-width: 9rem; aspect-ratio: 4 / 3; margin: 0 0 0.75rem; object-fit: cover;
-  z-index: 10;
-  border: 1px solid rgb(228 228 231); border-radius: 0.4rem; background-color: rgb(244 244 245);
+  display: block; z-index: 10; width: 100%; max-width: 10rem; margin: 0 0 0.85rem;
+  padding: 0.3rem; object-fit: contain;
+  border: 1px solid rgb(228 228 231); border-radius: 0.375rem; background-color: #ffffff;
+  box-shadow: 0 1px 3px rgb(24 24 27 / 0.08);
 }
-.dark .pub-figure { border-color: rgb(63 63 70); background-color: rgb(39 39 42); }
+.dark .pub-figure { border-color: rgb(63 63 70); background-color: rgb(24 24 27); box-shadow: none; }
 
 .pub-text { z-index: 10; }
-.pub-title { margin: 0; font-size: 1rem; line-height: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
-.pub-summary { margin: 0.5rem 0 0; font-size: 0.875rem; line-height: 1.25rem; }
-.pub-more { display: flex; align-items: center; margin-top: 1rem; font-size: 0.875rem; font-weight: 500; }
+.pub-title { margin: 0; font-size: 1.05rem; line-height: 1.45; font-weight: 500; letter-spacing: -0.005em; }
+.pub-authors, .pub-venue, .pub-summary { margin: 0.15rem 0 0; font-size: 0.9rem; line-height: 1.45; }
+.pub-summary { margin-top: 0.5rem; }
+/* The coloured line the reference style uses for an award or an impact factor */
+.pub-highlight { margin: 0.2rem 0 0; color: rgb(192 38 211); font-size: 0.9rem; line-height: 1.45; }
+.dark .pub-highlight { color: rgb(240 171 252); }
+
+/* `and 4 more authors` — expands the rest in place */
+.pub-authors-toggle {
+  position: relative; z-index: 30; padding: 0; border: 0; background: none; color: inherit;
+  font: inherit; cursor: pointer; text-decoration: underline; text-decoration-style: dotted;
+  text-underline-offset: 0.2em;
+}
+.pub-authors-toggle:hover { color: rgb(63 63 70); }
+.dark .pub-authors-toggle:hover { color: rgb(228 228 231); }
+
+/* ABS / PDF / CODE, outlined pills. Above the hit area so they keep their own clicks. */
+.pub-links { position: relative; z-index: 30; display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.85rem; }
+.pub-btn {
+  display: inline-flex; align-items: center; padding: 0.2rem 0.6rem;
+  border: 1px solid rgb(212 212 216); border-radius: 0.3rem;
+  color: rgb(63 63 70); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+  text-decoration: none; transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.pub-btn:hover { border-color: rgb(113 113 122); background-color: rgb(244 244 245); color: rgb(24 24 27); }
+.dark .pub-btn { border-color: rgb(63 63 70); color: rgb(212 212 216); }
+.dark .pub-btn:hover { border-color: rgb(113 113 122); background-color: rgb(39 39 42); color: #ffffff; }
 
 @media (min-width: 768px) {
   /* Same 192px first column the News list uses, so the dates line up between the two pages */
   .pub-entry { display: grid; grid-template-columns: 12rem minmax(0, 1fr); }
   .pub-date { grid-column: 1; }
-  /* The block spans both columns and repeats the same template, so the figure sits under the date
-     and the text starts at the figure's top edge */
+  /* The block spans both columns and repeats the same template, so the thumbnail sits under the date
+     and the text starts at the thumbnail's top edge */
   .pub-block { grid-column: 1 / -1; display: grid; grid-template-columns: 12rem minmax(0, 1fr); }
   .pub-figure { grid-column: 1; margin-bottom: 0; }
   .pub-text { grid-column: 2; }
