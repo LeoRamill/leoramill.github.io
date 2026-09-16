@@ -163,7 +163,10 @@ html { background-color: #ffffff; }
 html.dark { background-color: rgb(24 24 27); }
 body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 .site-fixed-bg {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  /* -2, not -1: the theme's own per-section wash sits at -1, and with both on the same level the
+     painting order is DOM order — this layer lives inside the hero section and so covered the
+     hero's wash, which had no effect at all. Every later section's wash worked, the hero's did not. */
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background-color: #000; background-size: cover; background-position: center; background-repeat: no-repeat;
 }
 /* The video variant of the layer. The zoom lives on the video, not on the fixed box, and the box
@@ -217,17 +220,25 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 /* The theme's section wrapper must not clip, or `sticky` inside it cannot hold */
 #hero { overflow: visible; }
 
-/* ----- Homepage with no wash over the picture -----
-   The sections carry no tint of their own, so the text sits straight on the artwork and has to
-   carry its own legibility. A halo does what it can: three stacked shadows, a tight dark one to
-   separate the glyph from whatever is right behind it and two soft wide ones to sink the area
-   around it. This is damage control, not a substitute for a wash — measured, the small text on the
-   project cards reads at 2.4:1 where body text usually wants 4.5:1. Putting a `background:`
-   gradient back on a section in `content/_index.md` restores the wash for that section. */
+/* ----- Homepage over the picture -----
+   The sections carry the lightest wash their text survives, 0.28-0.32, set in `content/_index.md`.
+   Two things buy that, and without them the same reading needed 0.68. First a halo on the text:
+   three stacked shadows, a tight dark one to cut the glyph away from whatever is right behind it
+   and two soft wide ones to sink the area around it. Second the colours below — which turned out to
+   matter far more than the wash ever did. */
 .home-no-veil, .home-no-veil h1, .home-no-veil h2, .home-no-veil h3, .home-no-veil p,
 .home-no-veil a, .home-no-veil span, .home-no-veil time, .home-no-veil strong, .home-no-veil em {
   text-shadow: 0 1px 2px #000000f2, 0 2px 10px #000000d9, 0 0 28px #000000b3;
 }
+/* The theme mutes small print to a mid grey that reads fine on a solid panel and badly over a
+   picture: it, not the wash, was what forced the tint up. Lifting it took the project cards from
+   needing 0.60 to needing 0.18 — the single biggest win in the whole exercise. */
+.home-no-veil .text-gray-500, .home-no-veil .dark\:text-gray-400, .home-no-veil p.text-sm,
+.home-no-veil time, .dark .home-no-veil .text-gray-500, .dark .home-no-veil .dark\:text-gray-400 { color: rgb(226 232 240); }
+.home-no-veil .news-list__body { color: #f8fafc; }
+/* The bio is set in italic slate-300 by the theme, and italics over a picture lose more than
+   upright text does: at white it needs a third less tint for the same reading. */
+.home-no-veil .cover-bio__text, .home-no-veil .cover-bio__text p, .dark .home-no-veil .cover-bio__text p { color: #ffffff; }
 /* The glass buttons and badges have their own backing, so a halo would only smear them */
 .home-no-veil .contact-cta__btn, .home-no-veil .news-list__date, .home-no-veil .profile-hero__btn { text-shadow: none; }
 
