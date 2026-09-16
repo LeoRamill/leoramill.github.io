@@ -20,15 +20,11 @@ sections:
         url: /cv/
     design:
       css_class: dark home-no-veil
-      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
-      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
-      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
-      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
-      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.56)"
-        gradient_end: "rgba(10, 8, 16, 0.56)"
-        gradient_angle: 180
+      # No per-section wash here. The veil is one scrim on the fixed layer itself
+      # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to
+      # carry each. Five stacked translucent boxes meet at four boundaries, and a boundary that
+      # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
+      # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
       # Fixed background shared by the whole page (see `layouts/partials/blox/profile-hero.html`).
       # With `video` set, the layer is the video: it plays once and rests on its last frame, and
       # zooms in as the first screen scrolls away. Remove the three video lines to go back to the
@@ -56,15 +52,11 @@ sections:
     id: about
     design:
       css_class: dark home-no-veil
-      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
-      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
-      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
-      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
-      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.56)"
-        gradient_end: "rgba(10, 8, 16, 0.56)"
-        gradient_angle: 180
+      # No per-section wash here. The veil is one scrim on the fixed layer itself
+      # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to
+      # carry each. Five stacked translucent boxes meet at four boundaries, and a boundary that
+      # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
+      # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
     content:
       username: admin
       # Placeholder cover (generated). Replace with your own photo, e.g. `cover.jpg` in `assets/media/`.
@@ -84,15 +76,11 @@ sections:
         url: /news/
     design:
       css_class: dark home-no-veil
-      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
-      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
-      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
-      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
-      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.56)"
-        gradient_end: "rgba(10, 8, 16, 0.56)"
-        gradient_angle: 180
+      # No per-section wash here. The veil is one scrim on the fixed layer itself
+      # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to
+      # carry each. Five stacked translucent boxes meet at four boundaries, and a boundary that
+      # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
+      # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
 
   # 4. Selected projects (cards), dark for now.
   - block: collection
@@ -109,15 +97,11 @@ sections:
       view: article-grid
       columns: 2
       css_class: dark home-no-veil
-      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
-      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
-      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
-      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
-      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.56)"
-        gradient_end: "rgba(10, 8, 16, 0.56)"
-        gradient_angle: 180
+      # No per-section wash here. The veil is one scrim on the fixed layer itself
+      # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to
+      # carry each. Five stacked translucent boxes meet at four boundaries, and a boundary that
+      # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
+      # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
 
   # 5. Closing dark section (second background of the epalu template) with a call to action.
   - block: markdown
@@ -132,14 +116,10 @@ sections:
         </div>
     design:
       css_class: dark home-no-veil
-      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
-      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
-      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
-      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
-      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.56)"
-        gradient_end: "rgba(10, 8, 16, 0.56)"
-        gradient_angle: 180
+      # No per-section wash here. The veil is one scrim on the fixed layer itself
+      # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to
+      # carry each. Five stacked translucent boxes meet at four boundaries, and a boundary that
+      # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
+      # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
       # Heavier tint than the hero: the same fixed background re-emerges, darker
 ---
