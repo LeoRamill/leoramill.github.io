@@ -532,17 +532,24 @@ html.has-open-dialog { overflow: hidden; }
 .pub-list { display: flex; flex-direction: column; gap: 4rem; width: min(100% - 1.5rem, 56rem); margin-inline: auto; }
 .pub-entry { position: relative; }
 
-/* The rule and the big grey year that open a year group */
-.pub-rule { margin: 0; border: 0; border-top: 1px solid rgb(228 228 231); }
-.dark .pub-rule { border-top-color: rgb(63 63 70); }
+/* The rule and the big grey year that open a year group. Shared by the publication list and the
+   photography page, which place them differently. */
+.year-rule { margin: 0; border: 0; border-top: 1px solid rgb(228 228 231); }
+.dark .year-rule { border-top-color: rgb(63 63 70); }
+.year-mark { color: rgb(228 228 231); font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+.dark .year-mark { color: rgb(63 63 70); }
+
+/* Publications: the year rides in the grid's third column, beside the entry that opens the group */
 /* A rule is its own flex child, so the 4rem gap would double up around it; pull the group tight */
 .pub-list > .pub-rule { margin-bottom: -1.5rem; }
 .pub-list > .pub-rule:first-child { margin-top: -2rem; }
-.pub-year {
-  display: none; grid-column: 3; grid-row: 1; align-self: start; justify-self: end;
-  color: rgb(228 228 231); font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em;
-}
-.dark .pub-year { color: rgb(63 63 70); }
+.pub-year { display: none; grid-column: 3; grid-row: 1; align-self: start; justify-self: end; }
+
+/* Photography: the year is a band of its own between the rule and the first album of the group */
+.photo-year-rule { margin-top: clamp(2.25rem, 5vw, 3.5rem); }
+.photo-year { margin: clamp(0.6rem, 1.5vw, 1rem) 0 0; text-align: right; }
+/* The first group opens right under the page heading, so it needs no extra room above it */
+.shaping-photo-page > .photo-year-rule:first-of-type { margin-top: clamp(1.5rem, 3vw, 2.25rem); }
 
 /* 1.5rem clears the 1rem the hover panel bleeds upward, so the panel never bites into the date */
 .pub-date { display: block; margin-bottom: 1.5rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(161 161 170); }

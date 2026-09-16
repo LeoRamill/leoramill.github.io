@@ -1,7 +1,10 @@
 {{ define "main" }}
 {{/* Photography: one section per folder inside this page bundle, each one a strip of photos
      that scrolls left to right. Drop a folder of images next to this page's `index.md` and the
-     section appears on its own; `albums` in the front matter only sets order and display titles. */}}
+     section appears on its own; `albums` in the front matter only sets order and display titles.
+     A folder inside a four-digit one — `2024/Corfu` — joins that year's group: the years read newest
+     first, with a rule and the year set large and grey, as the publication list does. An album left
+     outside a year folder still shows, after all the years. */}}
 {{ $page := . }}
 
 {{/* Images Hugo can process, ignoring any file sitting loose in the bundle root */}}
@@ -32,6 +35,20 @@
 {{ end }}
 {{ range $folders }}{{ if not (in $ordered .) }}{{ $ordered = $ordered | append . }}{{ end }}{{ end }}
 
+{{/* Years newest first, with the albums that sit outside any year folder last */}}
+{{ $years := slice }}
+{{ range $ordered }}
+  {{ $parts := split . "/" }}
+  {{ $y := "" }}
+  {{ if and (gt (len $parts) 1) (findRE "^[0-9]{4}$" (index $parts 0)) }}{{ $y = index $parts 0 }}{{ end }}
+  {{ if not (in $years $y) }}{{ $years = $years | append $y }}{{ end }}
+{{ end }}
+{{ $dated := slice }}
+{{ $undated := false }}
+{{ range $years }}{{ if . }}{{ $dated = $dated | append . }}{{ else }}{{ $undated = true }}{{ end }}{{ end }}
+{{ $groups := sort $dated "value" "desc" }}
+{{ if $undated }}{{ $groups = $groups | append "" }}{{ end }}
+
 <section class="shaping-scope shaping-page shaping-photo-page">
   {{ partial "shaping_breadcrumbs" . }}
   <h1 class="shaping-title">{{ .Title }}</h1>
@@ -39,9 +56,19 @@
   {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
   {{ with .Content }}<div class="shaping-source-note">{{ . }}</div>{{ end }}
 
+  {{ range $group := $groups }}
+  {{/* The undated group gets the rule too, so it does not read as the tail of the last year — but
+       only when a year came before it, or the page would open on a stray rule. */}}
+  {{ if or $group $dated }}<hr class="year-rule photo-year-rule">{{ end }}
+  {{ if $group }}<p class="year-mark photo-year">{{ $group }}</p>{{ end }}
   {{ range $folder := $ordered }}
+  {{ $parts := split $folder "/" }}
+  {{ $y := "" }}
+  {{ if and (gt (len $parts) 1) (findRE "^[0-9]{4}$" (index $parts 0)) }}{{ $y = index $parts 0 }}{{ end }}
+  {{ if eq $y $group }}
   {{ $photos := sort ($page.Resources.Match (printf "%s/*" $folder)) "Name" }}
-  {{ $title := index $titles $folder | default $folder }}
+  {{/* The album's own name, without the year folder in front of it */}}
+  {{ $title := index $titles $folder | default (path.Base $folder) }}
   <section class="photo-album" aria-labelledby="album-{{ anchorize $folder }}">
     <div class="photo-album-head">
       <h2 class="photo-album-title" id="album-{{ anchorize $folder }}">{{ $title }}</h2>
@@ -67,6 +94,8 @@
       {{ end }}
     </div>
   </section>
+  {{ end }}
+  {{ end }}
   {{ end }}
 
   {{ if not $ordered }}
