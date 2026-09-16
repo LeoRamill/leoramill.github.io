@@ -166,6 +166,26 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background-color: #000; background-size: cover; background-position: center; background-repeat: no-repeat;
 }
+/* The video variant of the layer. The zoom lives on the video, not on the fixed box, and the box
+   clips it, so scaling past the viewport can never hand the page a scrollbar. `--zoom-through` is
+   set by the script in the hero partial: 0 at the top, 1 once the first screen has scrolled away. */
+.site-fixed-bg--video { overflow: hidden; --zoom-through: 0; }
+.site-fixed-video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transform: scale(calc(1 + var(--zoom-through) * 0.5)); transform-origin: 50% 45%;
+  will-change: transform;
+}
+/* A standing scrim keeps the name readable over the bright centre of the picture; the scroll adds
+   the rest of the darkening on top, so the page fades the video down while it grows. */
+.site-fixed-bg--video::after {
+  position: absolute; inset: 0; content: "";
+  background: linear-gradient(180deg, #00000052 0%, #0000007a 100%);
+  opacity: calc(1 + var(--zoom-through) * 1.2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-fixed-video { transform: none; }
+}
+
 /* Sections that must hide the fixed layer */
 .section-solid { background-color: #ffffff; }
 .dark .section-solid { background-color: rgb(24 24 27); }

@@ -16,14 +16,69 @@
 
 {{/* Fixed full-page background layer (as in the reference page): stays still while the page scrolls,
      light sections cover it, dark sections let it show through their tint. Set
-     `design.fixed_background.filename` (in `assets/media/`) or `false` to disable. */}}
+     `design.fixed_background.filename` (in `assets/media/`) or `false` to disable.
+
+     With `design.fixed_background.video` the layer is a video instead: it plays once, muted, and
+     rests on its last frame; while the first screen scrolls away it zooms in and darkens — the
+     "zoom-through" into the page. `video_small` serves phones, `poster` is what shows before the
+     video arrives, for anyone who asked for reduced motion or data saving, and without JavaScript.
+     `video_webm` is a VP9 copy for the odd browser build without an H.264 decoder (some Linux
+     Chromiums); everything else plays the MP4. The files sit in `assets/media/` and are copied as
+     they are, never re-encoded by Hugo. */}}
 {{ $fixed := $block.design.fixed_background }}
 {{ if ne $fixed false }}
-  {{ $fixed_name := $fixed.filename | default "Meteor.svg" }}
-  {{ with resources.Get (path.Join "media" $fixed_name) }}
-    <div class="site-fixed-bg" aria-hidden="true" style="background-image: url('{{ .RelPermalink }}');{{ with $fixed.color }} background-color: {{ . }};{{ end }}"></div>
+  {{ $video := "" }}{{ $video_small := "" }}{{ $poster := "" }}
+  {{ with $fixed.video }}{{ with resources.Get (path.Join "media" .) }}{{ $video = .RelPermalink }}{{ else }}{{ warnf "profile-hero: video `%s` not found in `assets/media/`" . }}{{ end }}{{ end }}
+  {{ with $fixed.video_small }}{{ with resources.Get (path.Join "media" .) }}{{ $video_small = .RelPermalink }}{{ end }}{{ end }}
+  {{ $video_webm := "" }}
+  {{ with $fixed.video_webm }}{{ with resources.Get (path.Join "media" .) }}{{ $video_webm = .RelPermalink }}{{ end }}{{ end }}
+  {{ with $fixed.poster }}{{ with resources.Get (path.Join "media" .) }}{{ $poster = (.Resize "1600x webp q80").RelPermalink }}{{ end }}{{ end }}
+  {{ if $video }}
+    <div class="site-fixed-bg site-fixed-bg--video" aria-hidden="true"{{ with $poster }} style="background-image: url('{{ . }}');"{{ end }}>
+      <video class="site-fixed-video" muted playsinline autoplay preload="none" disablepictureinpicture
+             data-video="{{ $video }}"{{ with $video_small }} data-video-small="{{ . }}"{{ end }}{{ with $video_webm }} data-video-webm="{{ . }}"{{ end }}{{ with $poster }} poster="{{ . }}"{{ end }}></video>
+    </div>
+    <script>
+      // The source is picked here rather than in the markup, so the video is never fetched by anyone
+      // who asked for reduced motion or data saving: they keep the poster. Phones get the small file.
+      (function () {
+        var v = document.querySelector('.site-fixed-video');
+        if (!v) return;
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+                    (navigator.connection && navigator.connection.saveData);
+        if (still) { v.remove(); return; }
+        var small = v.dataset.videoSmall && window.matchMedia('(max-width: 767px)').matches;
+        var src = small ? v.dataset.videoSmall : v.dataset.video;
+        // No H.264 decoder in this build (some Linux Chromiums): take the VP9 copy if there is one
+        if (v.dataset.videoWebm && !v.canPlayType('video/mp4; codecs="avc1.64001F"') && v.canPlayType('video/webm; codecs="vp9"')) src = v.dataset.videoWebm;
+        v.src = src;
+        v.muted = true;
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+
+        // Zoom-through: as the first screen scrolls away, the layer scales up and darkens.
+        // One code path for every browser, driven by a CSS variable; the CSS does the rest.
+        var layer = v.parentElement, root = document.documentElement, ticking = false;
+        function update() {
+          ticking = false;
+          var h = window.innerHeight || 1;
+          var t = Math.min(Math.max(window.scrollY / h, 0), 1);
+          layer.style.setProperty('--zoom-through', t.toFixed(3));
+        }
+        window.addEventListener('scroll', function () {
+          if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+      })();
+    </script>
   {{ else }}
-    {{ warnf "profile-hero: fixed background `%s` not found in `assets/media/`" $fixed_name }}
+    {{ $fixed_name := $fixed.filename | default "Meteor.svg" }}
+    {{ with resources.Get (path.Join "media" $fixed_name) }}
+      <div class="site-fixed-bg" aria-hidden="true" style="background-image: url('{{ .RelPermalink }}');{{ with $fixed.color }} background-color: {{ . }};{{ end }}"></div>
+    {{ else }}
+      {{ warnf "profile-hero: fixed background `%s` not found in `assets/media/`" $fixed_name }}
+    {{ end }}
   {{ end }}
 {{ end }}
 

@@ -20,10 +20,17 @@ sections:
         url: /cv/
     design:
       css_class: dark
-      # Fixed background shared by the whole page (see `layouts/partials/blox/profile-hero.html`)
+      # Fixed background shared by the whole page (see `layouts/partials/blox/profile-hero.html`).
+      # With `video` set, the layer is the video: it plays once and rests on its last frame, and
+      # zooms in as the first screen scrolls away. Remove the three video lines to go back to the
+      # Meteor image.
       fixed_background:
         filename: Meteor.svg
         color: "#000000"
+        video: hero.mp4
+        video_small: hero-small.mp4
+        video_webm: hero.webm
+        poster: hero-poster.jpg
       # Light translucent tint: the meteors show through clearly here
       background:
         gradient_start: "rgba(15, 8, 24, 0.30)"
