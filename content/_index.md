@@ -66,7 +66,7 @@ sections:
     content:
       username: admin
       # Placeholder cover (generated). Replace with your own photo, e.g. `cover.jpg` in `assets/media/`.
-      image: cover.svg
+      image: cover.JPG
       alt: Per Aspera Ad Astra
       # Leave `text` empty to use the biography written in `content/authors/admin/_index.md`
       text: ""
