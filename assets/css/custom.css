@@ -528,7 +528,22 @@ html.has-open-dialog { overflow: hidden; }
    Laid out by this file rather than by Tailwind utilities, so there is one piece of markup for both
    widths. Phone: date, thumbnail and text stacked. Desktop: the date in its own column, then the
    thumbnail with the text starting level with it — the two together are one hit area. */
+/* Wider than the theme's `max-w-3xl` so the year column on the right costs the text nothing */
+.pub-list { display: flex; flex-direction: column; gap: 4rem; width: min(100% - 1.5rem, 56rem); margin-inline: auto; }
 .pub-entry { position: relative; }
+
+/* The rule and the big grey year that open a year group */
+.pub-rule { margin: 0; border: 0; border-top: 1px solid rgb(228 228 231); }
+.dark .pub-rule { border-top-color: rgb(63 63 70); }
+/* A rule is its own flex child, so the 4rem gap would double up around it; pull the group tight */
+.pub-list > .pub-rule { margin-bottom: -1.5rem; }
+.pub-list > .pub-rule:first-child { margin-top: -2rem; }
+.pub-year {
+  display: none; grid-column: 3; grid-row: 1; align-self: start; justify-self: end;
+  color: rgb(228 228 231); font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em;
+}
+.dark .pub-year { color: rgb(63 63 70); }
+
 /* 1.5rem clears the 1rem the hover panel bleeds upward, so the panel never bites into the date */
 .pub-date { display: block; margin-bottom: 1.5rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(161 161 170); }
 .dark .pub-date { color: rgb(113 113 122); }
@@ -569,6 +584,9 @@ html.has-open-dialog { overflow: hidden; }
 .pub-text { z-index: 10; }
 .pub-title { margin: 0; font-size: 1.05rem; line-height: 1.45; font-weight: 500; letter-spacing: -0.005em; }
 .pub-authors, .pub-venue, .pub-summary { margin: 0.15rem 0 0; font-size: 0.9rem; line-height: 1.45; }
+/* Your own name, wherever it shows up in an author list */
+.pub-me { color: rgb(39 39 42); font-weight: 700; }
+.dark .pub-me { color: rgb(244 244 245); }
 .pub-summary { margin-top: 0.5rem; }
 /* The coloured line the reference style uses for an award or an impact factor */
 .pub-highlight { margin: 0.2rem 0 0; color: rgb(192 38 211); font-size: 0.9rem; line-height: 1.45; }
@@ -596,12 +614,17 @@ html.has-open-dialog { overflow: hidden; }
 .dark .pub-btn:hover { border-color: rgb(113 113 122); background-color: rgb(39 39 42); color: #ffffff; }
 
 @media (min-width: 768px) {
-  /* Same 192px first column the News list uses, so the dates line up between the two pages */
-  .pub-entry { display: grid; grid-template-columns: 12rem minmax(0, 1fr); }
+  /* Same 192px first column the News list uses, so the dates line up between the two pages, plus a
+     narrow one on the right for the year */
+  /* 8rem, not the width of the year itself: the block bleeds 1rem to the right when it lights up on
+     hover, and a tighter column would put that panel under the year. */
+  .pub-entry { display: grid; grid-template-columns: 12rem minmax(0, 1fr) 8rem; }
   .pub-date { grid-column: 1; }
+  .pub-year { display: block; }
   /* The block spans both columns and repeats the same template, so the thumbnail sits under the date
      and the text starts at the thumbnail's top edge */
-  .pub-block { grid-column: 1 / -1; display: grid; grid-template-columns: 12rem minmax(0, 1fr); }
+  /* The block stops before the year column, so the hover panel never runs under the year */
+  .pub-block { grid-column: 1 / 3; display: grid; grid-template-columns: 12rem minmax(0, 1fr); }
   .pub-figure { grid-column: 1; margin-bottom: 0; }
   .pub-text { grid-column: 2; }
   /* Nothing in the first column: the text still starts where the other entries' text does */

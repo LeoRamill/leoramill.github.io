@@ -13,6 +13,10 @@
      "N more authors", default 3), `venue`, `highlight` (the coloured line: an award, an impact
      factor), and `buttons` (a map of label -> URL, rendered in the order below). It is called `buttons`
      and not `links` because `links` is the theme's own front-matter key, with a different shape.
+     Names listed in `params.publications.highlight_authors` come out in bold wherever they appear.
+
+     Entries are grouped by year: the first of each year carries a rule above it and the year set
+     large and grey on the right, the way an academic publication list reads.
 
      The figure, the title and the text are one hit area: the click target is a stretched overlay
      rather than an <a> wrapped round everything, so a summary containing a markdown link stays
@@ -35,12 +39,33 @@
   {{ end }}
 {{ end }}
 
+{{/* The entry that opens a year group gets the rule and the year. The theme hands the view an
+     index that restarts on each paginated page, so the position is found here against the section's
+     own ordering — the same the list layout paginates. */}}
+{{ $ordered := slice }}
+{{ with $item.Parent }}{{ $ordered = .Pages.ByDate.Reverse }}{{ end }}
+{{ $pos := 0 }}
+{{ range $i, $s := $ordered }}{{ if eq $s.RelPermalink $item.RelPermalink }}{{ $pos = $i }}{{ end }}{{ end }}
+{{ $year := $item.Date.Format "2006" }}
+{{ $opens_year := true }}
+{{ if gt $pos 0 }}{{ $opens_year = ne ((index $ordered (sub $pos 1)).Date.Format "2006") $year }}{{ end }}
+
+{{/* Each author, HTML-escaped, with your own name in bold */}}
+{{ $me := site.Params.publications.highlight_authors | default slice }}
 {{ $authors := $item.Params.authors }}
+{{ $names := slice }}
+{{ range $authors }}
+  {{ $n := htmlEscape . }}
+  {{ if in $me . }}{{ $n = printf "<strong class=\"pub-me\">%s</strong>" $n }}{{ end }}
+  {{ $names = $names | append $n }}
+{{ end }}
 {{ $shown := int ($item.Params.authors_shown | default 3) }}
 {{ $hidden := 0 }}
 {{ if and $authors (gt (len $authors) (add $shown 1)) }}{{ $hidden = sub (len $authors) $shown }}{{ end }}
 
+{{ if $opens_year }}<hr class="pub-rule">{{ end }}
 <article class="pub-entry">
+  {{ if $opens_year }}<span class="pub-year" aria-hidden="true">{{ $year }}</span>{{ end }}
   <time class="pub-date" datetime="{{ time.Format "2006-01-02" $item.Date }}">
     {{ time.Format (site.Params.locale.date_format | default ":date_long") $item.Date }}
   </time>
@@ -56,9 +81,9 @@
       {{ with $authors }}
       <p class="pub-authors text-zinc-600 dark:text-zinc-400">
         {{ if $hidden }}
-          {{ delimit (first $shown .) ", " }}, and <button class="pub-authors-toggle" type="button" data-pub-authors>{{ $hidden }} more authors</button><span class="pub-authors-rest" hidden>{{ delimit (after $shown .) ", " }}</span>
+          {{ delimit (first $shown $names) ", " | safeHTML }}, and <button class="pub-authors-toggle" type="button" data-pub-authors>{{ $hidden }} more authors</button><span class="pub-authors-rest" hidden>{{ delimit (after $shown $names) ", " | safeHTML }}</span>
         {{ else }}
-          {{ $n := len . }}{{ range $i, $a := . }}{{ if $i }}{{ if eq $i (sub $n 1) }}, and {{ else }}, {{ end }}{{ end }}{{ $a }}{{ end }}
+          {{ $n := len $names }}{{ range $i, $a := $names }}{{ if $i }}{{ if eq $i (sub $n 1) }}, and {{ else }}, {{ end }}{{ end }}{{ $a | safeHTML }}{{ end }}
         {{ end }}
       </p>
       {{ end }}
