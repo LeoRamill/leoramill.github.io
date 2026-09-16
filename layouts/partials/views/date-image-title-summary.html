@@ -63,9 +63,9 @@
 {{ $hidden := 0 }}
 {{ if and $authors (gt (len $authors) (add $shown 1)) }}{{ $hidden = sub (len $authors) $shown }}{{ end }}
 
-{{ if $opens_year }}<hr class="pub-rule">{{ end }}
+{{ if $opens_year }}<hr class="year-rule pub-rule">{{ end }}
 <article class="pub-entry">
-  {{ if $opens_year }}<span class="pub-year" aria-hidden="true">{{ $year }}</span>{{ end }}
+  {{ if $opens_year }}<span class="year-mark pub-year" aria-hidden="true">{{ $year }}</span>{{ end }}
   <time class="pub-date" datetime="{{ time.Format "2006-01-02" $item.Date }}">
     {{ time.Format (site.Params.locale.date_format | default ":date_long") $item.Date }}
   </time>
