@@ -33,8 +33,8 @@ sections:
         poster: hero-poster.jpg
         # With `frames`, the camera walks in with the scroll instead (frames of the push-in in
         # `assets/media/hero-frames/1280/` and `/720/`), the hero stays pinned for the walk, and
-        # `hold` is the rest of the clip, played once the camera has arrived. Remove these three
-        # lines to go back to the video simply playing on its own.
+        # `hold` is the rest of the clip, looping for good once the camera has arrived. Remove
+        # these three lines to go back to the video simply playing on its own.
         frames: hero-frames
         hold: hero-hold.mp4
         hold_webm: hero-hold.webm
@@ -47,11 +47,16 @@ sections:
         # No padding of its own: in the scroll-scrubbed mode the hero sets its height itself
         padding: [0, 0, 0, 0]
 
-  # 2. Light section: full-width cover photo + italic bio (as on riccardocadei's homepage).
+  # 2. Full-width cover photo + italic bio (as on riccardocadei's homepage), dark for now.
   - block: cover-bio
     id: about
     design:
-      css_class: section-solid
+      css_class: dark
+      # Dark window onto the looping artwork: heavy tint, so the text reads over it
+      background:
+        gradient_start: "rgba(10, 8, 16, 0.86)"
+        gradient_end: "rgba(10, 8, 16, 0.90)"
+        gradient_angle: 180
     content:
       username: admin
       # Placeholder cover (generated). Replace with your own photo, e.g. `cover.jpg` in `assets/media/`.
@@ -60,7 +65,7 @@ sections:
       # Leave `text` empty to use the biography written in `content/authors/admin/_index.md`
       text: ""
 
-  # 3. Soft grey section: "Selected News" timeline fed by `content/news/`.
+  # 3. "Selected News" timeline fed by `content/news/`, dark for now.
   - block: news-list
     id: news
     content:
@@ -70,9 +75,14 @@ sections:
         text: All news
         url: /news/
     design:
-      css_class: section-alt
+      css_class: dark
+      # Dark window onto the looping artwork: heavy tint, so the text reads over it
+      background:
+        gradient_start: "rgba(10, 8, 16, 0.86)"
+        gradient_end: "rgba(10, 8, 16, 0.90)"
+        gradient_angle: 180
 
-  # 4. White section: selected projects (cards).
+  # 4. Selected projects (cards), dark for now.
   - block: collection
     id: projects
     content:
@@ -86,7 +96,12 @@ sections:
     design:
       view: article-grid
       columns: 2
-      css_class: section-solid
+      css_class: dark
+      # Dark window onto the looping artwork: heavy tint, so the text reads over it
+      background:
+        gradient_start: "rgba(10, 8, 16, 0.86)"
+        gradient_end: "rgba(10, 8, 16, 0.90)"
+        gradient_angle: 180
 
   # 5. Closing dark section (second background of the epalu template) with a call to action.
   - block: markdown
