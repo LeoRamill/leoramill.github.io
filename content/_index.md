@@ -5,8 +5,11 @@ date: 2026-09-14
 type: landing
 
 design:
-  # Default section spacing
-  spacing: "5rem"
+  # Default section spacing, applied inline to every section but the hero (which sets its own 0).
+  # Was 5rem top and bottom: two sections then stacked 10rem of empty picture between the last line
+  # of one and the heading of the next, which on a page of short sections reads as five separate
+  # pages rather than one. 2.5rem still separates them clearly and lets two fit on a screen.
+  spacing: "2.5rem"
 
 sections:
   # 1. Dark hero with the Meteor background (the "gioco di sfondi" of the epalu template),
