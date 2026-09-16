@@ -24,6 +24,9 @@
      overlay, so they keep their own clicks. */}}
 {{ $item := .item }}
 {{ $page := .page }}
+{{/* The homepage's "Selected Publication" section reuses this markup for a handful of entries, where
+     year groups would be noise: `hide_year` drops the rule and the big grey year. */}}
+{{ $hide_year := .hide_year | default false }}
 {{ $summary := $item.Params.summary | default $item.Params.description | default $item.Summary }}
 {{ $summary = $summary | page.RenderString }}
 
@@ -49,6 +52,7 @@
 {{ $year := $item.Date.Format "2006" }}
 {{ $opens_year := true }}
 {{ if gt $pos 0 }}{{ $opens_year = ne ((index $ordered (sub $pos 1)).Date.Format "2006") $year }}{{ end }}
+{{ if $hide_year }}{{ $opens_year = false }}{{ end }}
 
 {{/* Each author, HTML-escaped, with your own name in bold */}}
 {{ $me := site.Params.publications.highlight_authors | default slice }}

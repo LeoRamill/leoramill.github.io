@@ -82,7 +82,25 @@ sections:
       # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
       # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
 
-  # 4. Selected projects (cards), dark for now.
+  # 4. "Selected Publication" — the newest entries of `content/publication/`, same markup as the
+  #    Publications page (see `layouts/partials/blox/publication-list.html`), dark for now.
+  - block: publication-list
+    id: publications
+    content:
+      title: Selected Publication
+      count: 3
+      more:
+        text: All publications
+        url: /publication/
+    design:
+      css_class: dark home-no-veil
+      # No per-section wash here. The veil is one scrim on the fixed layer itself
+      # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to
+      # carry each. Five stacked translucent boxes meet at four boundaries, and a boundary that
+      # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
+      # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
+
+  # 5. Selected projects (cards), dark for now.
   - block: collection
     id: projects
     content:
@@ -103,7 +121,7 @@ sections:
       # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
       # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
 
-  # 5. Closing dark section (second background of the epalu template) with a call to action.
+  # 6. Closing dark section (second background of the epalu template) with a call to action.
   - block: markdown
     id: contact
     content:

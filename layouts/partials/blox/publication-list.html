@@ -1,0 +1,42 @@
+{{/* Custom block: publication-list */}}
+{{/* "Selected Publication" on the homepage: the newest entries of `content/publication/`, rendered
+     with the same markup as the Publications page itself, so the section reads as a short excerpt
+     of that page rather than a second design of the same thing. The view partial is the one source
+     of truth for an entry — `hide_year` drops the year groups, which mean nothing over three rows.
+
+     Heading and "All publications" link borrow the News section's classes: the two sections sit one
+     under the other on the homepage and must line up. */}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+
+{{ $count := $block.content.count | default 3 }}
+{{ $section := $block.content.section | default "publication" }}
+{{ $pages := (where site.RegularPages "Section" $section).ByDate.Reverse }}
+{{ if gt $count 0 }}{{ $pages = first $count $pages }}{{ end }}
+
+<div class="news-list">
+  {{ with $block.content.title }}<h2 class="news-list__title">{{ . | markdownify | emojify }}</h2>{{ end }}
+
+  <div class="pub-list pub-list--home">
+    {{ range $item := $pages }}
+      {{ partial "views/date-image-title-summary" (dict "item" $item "page" $page "hide_year" true) }}
+    {{ end }}
+  </div>
+
+  {{ with $block.content.more }}
+  <a class="news-list__more" href="{{ strings.TrimPrefix "/" .url | relURL }}">{{ .text }} →</a>
+  {{ end }}
+</div>
+
+<script>
+  // Same "and N more authors" toggle the Publications page carries in the view's `.end.html`,
+  // which a homepage block does not get.
+  document.querySelectorAll('.pub-list--home [data-pub-authors]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var rest = btn.parentElement.querySelector('.pub-authors-rest');
+      if (!rest) return;
+      rest.hidden = false;
+      btn.remove();
+    });
+  });
+</script>
