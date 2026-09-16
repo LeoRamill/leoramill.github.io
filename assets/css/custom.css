@@ -523,3 +523,20 @@ html.has-open-dialog { overflow: hidden; }
   .review-cover { width: min(100%, 14rem); margin-inline: auto; }
   .review-intro { justify-items: start; }
 }
+
+/* ----- Publications: the News list, with the entry's own figure above the date -----
+   The column itself is laid out by the theme's own `hidden`/`md:block` utilities, so nothing here
+   may set `display` on it: this file loads after Tailwind and would win, showing both the phone and
+   the desktop copy at once. The figure and the date are block-level and simply stack. */
+/* Top-aligned, not baseline-aligned like the bare date it replaces, so the figure starts level with
+   the title instead of hanging above it. `align-self` is safe here; `display` would not be. */
+.pub-aside { align-self: start; }
+.pub-figure {
+  display: block; width: 100%; max-width: 11rem; aspect-ratio: 4 / 3; margin: 0 0 0.6rem; object-fit: cover;
+  border: 1px solid rgb(228 228 231); border-radius: 0.4rem; background-color: rgb(244 244 245);
+}
+.dark .pub-figure { border-color: rgb(63 63 70); background-color: rgb(39 39 42); }
+.pub-date { display: block; font-size: 0.875rem; line-height: 1.25rem; color: rgb(161 161 170); }
+.dark .pub-date { color: rgb(113 113 122); }
+/* On a phone the column is as wide as the text, so the figure would read as a banner; keep it small. */
+.pub-aside--narrow .pub-figure { max-width: 9rem; margin-bottom: 0.5rem; }

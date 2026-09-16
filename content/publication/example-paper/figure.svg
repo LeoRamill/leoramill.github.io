@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Placeholder figure">
+  <rect width="800" height="600" fill="#e8eaf0"/>
+  <g stroke="#b9bfd0" stroke-width="2" fill="none">
+    <path d="M90 510 H730"/><path d="M90 510 V80"/>
+  </g>
+  <g fill="none" stroke-width="7" stroke-linecap="round">
+    <path d="M120 470 C 240 440, 300 300, 400 250 S 620 170, 700 130" stroke="#356b4c"/>
+    <path d="M120 490 C 250 480, 330 400, 430 360 S 630 290, 700 265" stroke="#6f4dbf"/>
+    <path d="M120 498 C 260 496, 350 460, 450 440 S 640 400, 700 385" stroke="#aa7a2f"/>
+  </g>
+  <g fill="#8a91a6" font-family="Helvetica, Arial, sans-serif" font-size="26">
+    <text x="90" y="560">Sostituisci questa figura con la tua</text>
+  </g>
+</svg>
