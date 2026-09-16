@@ -226,6 +226,10 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 }
 /* The theme's section wrapper must not clip, or `sticky` inside it cannot hold */
 #hero { overflow: visible; }
+/* The navbar is translucent at the top of the page, and the hero's wash started at the section's
+   own top — below it. That left a strip of unwashed picture across the top of the window, brighter
+   than everything under it. The wash is pulled up past any header height to close it. */
+#hero .home-section-bg { top: -50vh; }
 
 /* ----- Homepage over the picture -----
    The sections carry the lightest wash their text survives, 0.28-0.32, set in `content/_index.md`.
@@ -271,7 +275,9 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 /* On the homepage, where every section is dark, the footer is a tinted window like the rest. The
    theme wraps it in `.page-footer`, which is what paints; the footer inside carries a top margin
    that would otherwise show the bare picture through the wrapper. */
-body:has(.hero-pin) .page-footer { background-color: rgb(10 8 16 / 0.86); color: rgb(226 232 240); }
+/* 0.56, the same as every section: at 0.86 the footer was a visible step down from the page above
+   it — the one real seam left once the scrim was gone. */
+body:has(.hero-pin) .page-footer { background-color: rgb(10 8 16 / 0.56); color: rgb(226 232 240); }
 body:has(.hero-pin) .page-footer footer { margin-top: 0; padding: 1.5rem 0; color: inherit; }
 body:has(.hero-pin) .page-footer a { color: #ffffff; }
 
