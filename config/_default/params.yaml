@@ -58,3 +58,12 @@ features:
     enable: true
   privacy_pack:
     enable: false
+
+# Publications
+publications:
+  # Every spelling of your own name, so it comes out in bold in the author lists
+  highlight_authors:
+    - Leonard Vincent Ramil
+    - Vincent Leonard Ramil
+    - L. V. Ramil
+    - Leonard V. Ramil
