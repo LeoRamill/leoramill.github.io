@@ -498,6 +498,10 @@ html.has-open-dialog { overflow: hidden; }
 .has-backdrop .shaping-breadcrumbs { text-shadow: 0 1px 6px #00000096; }
 .has-backdrop .shaping-star { color: #ffffff4d; }
 .has-backdrop .review-cover { border-color: #ffffff59; box-shadow: 0 26px 60px #00000080; }
+/* A review with a backdrop but no cover yet: keep the lettered placeholder dark, so it reads as part
+   of the page instead of a pale hole in it. */
+.has-backdrop .review-cover:not(:has(img)) { background: linear-gradient(135deg, color-mix(in srgb, var(--card-accent), #0b0810 58%), #15111f); }
+.has-backdrop .review-cover span { color: #ffffffd6; }
 
 /* The prose runs straight over the image, so every colour the theme's `prose` sets has to come back
    light, and a shadow under the text keeps it off the brighter parts of the photo. */

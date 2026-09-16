@@ -1,6 +1,9 @@
 ---
 title: Books
 layout: shaping-gallery
+# Every folder inside this one is a review page and gets this layout on its own
+cascade:
+  layout: shaping-review
 # Sentence under the title (optionally a link)
 lead:
   text: "You forget the pages, but you keep the person they made."
@@ -12,16 +15,9 @@ galleries:
     kind: book
     label: Book
     items:
-      - title: The 7 Habits of Highly Effective People
-        meta: Stephen R. Covey
-        rating: 9
-        catchphrase: Write here the one line that sums up why it stayed.
-        review: "Example review: replace this text with your own words about what the book changed in how you think or work."
-      - title: Atomic Habits
-        meta: James Clear
-        rating: 8.5
-        catchphrase: Tiny things, repeated until they become you.
-        review: "Example review: small repeated actions compound into identity. Replace with your own take."
+      # `page:` takes everything from the folder of the same name: title, cover, rating and text
+      - page: seven-habits
+      - page: atomic-habits
       - title: Deep Learning
         meta: Ian Goodfellow, Yoshua Bengio, Aaron Courville
       - title: The Mythical Man-Month
