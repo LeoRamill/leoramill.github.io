@@ -19,7 +19,7 @@ sections:
         text: View CV
         url: /cv/
     design:
-      css_class: dark
+      css_class: dark home-no-veil
       # Fixed background shared by the whole page (see `layouts/partials/blox/profile-hero.html`).
       # With `video` set, the layer is the video: it plays once and rests on its last frame, and
       # zooms in as the first screen scrolls away. Remove the three video lines to go back to the
@@ -38,11 +38,6 @@ sections:
         frames: hero-frames
         hold: hero-hold.mp4
         hold_webm: hero-hold.webm
-      # Light translucent tint: the meteors show through clearly here
-      background:
-        gradient_start: "rgba(15, 8, 24, 0.30)"
-        gradient_end: "rgba(15, 8, 24, 0.50)"
-        gradient_angle: 180
       spacing:
         # No padding of its own: in the scroll-scrubbed mode the hero sets its height itself
         padding: [0, 0, 0, 0]
@@ -51,14 +46,11 @@ sections:
   - block: cover-bio
     id: about
     design:
-      css_class: dark
-      # Dark window onto the looping artwork. With the picture lifted in custom.css this sits at
-      # 0.60-0.64: measured, the worst text on the page reads at 5.1:1, against the 4.5:1 body text
-      # needs. Dropping the tint altogether puts that at 2.4:1 — the words stop being readable.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.60)"
-        gradient_end: "rgba(10, 8, 16, 0.64)"
-        gradient_angle: 180
+      css_class: dark home-no-veil
+      # No wash over the picture, by choice: the artwork shows at full strength and the text carries
+      # its own halo instead (see `.dark .home-no-veil` in custom.css). Measured, the small text on
+      # the project cards reads at 2.4:1 against the 4.5:1 body text usually needs — the halo helps
+      # but does not make that number. Put a `background:` gradient back here to restore a wash.
     content:
       username: admin
       # Placeholder cover (generated). Replace with your own photo, e.g. `cover.jpg` in `assets/media/`.
@@ -77,14 +69,11 @@ sections:
         text: All news
         url: /news/
     design:
-      css_class: dark
-      # Dark window onto the looping artwork. With the picture lifted in custom.css this sits at
-      # 0.60-0.64: measured, the worst text on the page reads at 5.1:1, against the 4.5:1 body text
-      # needs. Dropping the tint altogether puts that at 2.4:1 — the words stop being readable.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.60)"
-        gradient_end: "rgba(10, 8, 16, 0.64)"
-        gradient_angle: 180
+      css_class: dark home-no-veil
+      # No wash over the picture, by choice: the artwork shows at full strength and the text carries
+      # its own halo instead (see `.dark .home-no-veil` in custom.css). Measured, the small text on
+      # the project cards reads at 2.4:1 against the 4.5:1 body text usually needs — the halo helps
+      # but does not make that number. Put a `background:` gradient back here to restore a wash.
 
   # 4. Selected projects (cards), dark for now.
   - block: collection
@@ -100,14 +89,11 @@ sections:
     design:
       view: article-grid
       columns: 2
-      css_class: dark
-      # Dark window onto the looping artwork. With the picture lifted in custom.css this sits at
-      # 0.60-0.64: measured, the worst text on the page reads at 5.1:1, against the 4.5:1 body text
-      # needs. Dropping the tint altogether puts that at 2.4:1 — the words stop being readable.
-      background:
-        gradient_start: "rgba(10, 8, 16, 0.60)"
-        gradient_end: "rgba(10, 8, 16, 0.64)"
-        gradient_angle: 180
+      css_class: dark home-no-veil
+      # No wash over the picture, by choice: the artwork shows at full strength and the text carries
+      # its own halo instead (see `.dark .home-no-veil` in custom.css). Measured, the small text on
+      # the project cards reads at 2.4:1 against the 4.5:1 body text usually needs — the halo helps
+      # but does not make that number. Put a `background:` gradient back here to restore a wash.
 
   # 5. Closing dark section (second background of the epalu template) with a call to action.
   - block: markdown
@@ -121,10 +107,6 @@ sections:
           <a class="contact-cta__btn" href="mailto:leonardvincentramil@icloud.com">Send me an e-mail</a>
         </div>
     design:
-      css_class: dark
+      css_class: dark home-no-veil
       # Heavier tint than the hero: the same fixed background re-emerges, darker
-      background:
-        gradient_start: "rgba(8, 4, 14, 0.50)"
-        gradient_end: "rgba(8, 4, 14, 0.60)"
-        gradient_angle: 180
 ---

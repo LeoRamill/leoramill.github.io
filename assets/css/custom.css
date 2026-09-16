@@ -217,8 +217,22 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 /* The theme's section wrapper must not clip, or `sticky` inside it cannot hold */
 #hero { overflow: visible; }
 
-/* A section set `dark` in the homepage config is a window onto the fixed layer, tinted by its own
-   gradient; the theme's `dark:` variants take care of its own blocks, these take care of ours. */
+/* ----- Homepage with no wash over the picture -----
+   The sections carry no tint of their own, so the text sits straight on the artwork and has to
+   carry its own legibility. A halo does what it can: three stacked shadows, a tight dark one to
+   separate the glyph from whatever is right behind it and two soft wide ones to sink the area
+   around it. This is damage control, not a substitute for a wash — measured, the small text on the
+   project cards reads at 2.4:1 where body text usually wants 4.5:1. Putting a `background:`
+   gradient back on a section in `content/_index.md` restores the wash for that section. */
+.home-no-veil, .home-no-veil h1, .home-no-veil h2, .home-no-veil h3, .home-no-veil p,
+.home-no-veil a, .home-no-veil span, .home-no-veil time, .home-no-veil strong, .home-no-veil em {
+  text-shadow: 0 1px 2px #000000f2, 0 2px 10px #000000d9, 0 0 28px #000000b3;
+}
+/* The glass buttons and badges have their own backing, so a halo would only smear them */
+.home-no-veil .contact-cta__btn, .home-no-veil .news-list__date, .home-no-veil .profile-hero__btn { text-shadow: none; }
+
+/* A section set `dark` in the homepage config is a window onto the fixed layer; the theme's `dark:`
+   variants take care of its own blocks, these take care of ours. */
 .dark .cover-bio, .dark .news-list { color: #f4f4f5; }
 .dark .cover-bio__text a, .dark .news-list__more { color: #ffffff; }
 .dark .news-list__body { color: #e4e4e7; }
