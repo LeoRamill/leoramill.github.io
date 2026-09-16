@@ -31,8 +31,9 @@
      distance the layer steps through a sequence of frames of the push-in — `media/<frames>/1280/`
      for wide screens, `/720/` for phones — drawn on a canvas. The last frame is the artwork filling
      the screen, and it lands exactly where the pin lets go and the next section slides over it. On
-     arrival `hold` (with `hold_webm`) starts: the rest of the clip, in which the artwork keeps
-     moving, so the bottom of the page rests on a living picture rather than a still. */}}
+     arrival `hold` (with `hold_webm`) starts and loops for good: the rest of the clip, in which
+     the artwork keeps moving, encoded forward-then-backward so the loop has no cut — the page
+     rests on a living picture rather than a still, like a GIF. */}}
 {{ $scrub := false }}
 {{ $fixed := $block.design.fixed_background }}
 {{ if ne $fixed false }}
@@ -58,7 +59,7 @@
       <canvas class="site-fixed-canvas"
               data-frames="{{ path.Dir (index $frames 0).RelPermalink }}" data-frames-count="{{ len $frames }}"
               {{ with $frames_small }}data-frames-small="{{ path.Dir (index . 0).RelPermalink }}" data-frames-small-count="{{ len . }}"{{ end }}></canvas>
-      {{ if $hold }}<video class="site-fixed-video site-fixed-video--hold" muted playsinline preload="none" disablepictureinpicture
+      {{ if $hold }}<video class="site-fixed-video site-fixed-video--hold" muted playsinline loop preload="none" disablepictureinpicture
              data-video="{{ $hold }}"{{ with $hold_webm }} data-video-webm="{{ . }}"{{ end }}></video>{{ end }}
     </div>
     <script>
