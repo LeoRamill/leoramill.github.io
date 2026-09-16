@@ -192,13 +192,12 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 /* Scroll-scrubbed variant: the camera moves with the scroll, on a canvas of frames. No CSS zoom
    here — the movement is in the frames — and a lighter darkening, since the last frame is where the
    hero text sits longest. The hold clip fades in over that last frame, which is its own first. */
-/* The clip is a dim museum hall, and what reaches the eye through the sections' tint is dimmer
-   still. Lifting it here rather than re-encoding keeps it adjustable; brightness and saturate are
-   composited on the GPU, so a full-screen layer redrawn on scroll does not pay for them. Measured:
-   +20%/+25% lifts the page's colourfulness by 37% and its luminance by 6%, and the worst text on
-   the page still reads at 5.1:1. Pushing the picture to +35% drops that to 4.4:1, under the 4.5:1
-   body text needs — so this is the ceiling, not a taste. */
-.site-fixed-canvas, .site-fixed-video { filter: brightness(1.2) saturate(1.25); }
+/* The +20% brightness and +25% saturation the picture needs — the clip is a dim museum hall, and
+   what reaches the eye through the wash is dimmer still — are baked into the frames, the hold clip
+   and the poster at encode time, not applied here. A CSS filter on a full-screen layer that the
+   scroll redraws makes it a composited layer, which is the kind of thing that shows tile seams on
+   some GPUs; baking costs nothing at runtime and cannot. Re-encode from the source clip to change
+   it: the filter chain is in the commit that introduced this. */
 .site-fixed-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 /* One veil, not two. This layer used to carry a scrim of its own on top of each section's wash, and
    the pair multiplied: measured on bare artwork, the scrim took 55% of the light and the wash 48%,
