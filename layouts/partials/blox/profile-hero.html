@@ -24,7 +24,16 @@
      video arrives, for anyone who asked for reduced motion or data saving, and without JavaScript.
      `video_webm` is a VP9 copy for the odd browser build without an H.264 decoder (some Linux
      Chromiums); everything else plays the MP4. The files sit in `assets/media/` and are copied as
-     they are, never re-encoded by Hugo. */}}
+     they are, never re-encoded by Hugo.
+
+     With `frames` set as well, the camera moves with the scroll instead of on its own: the hero
+     fills the screen and stays pinned for a couple of screens' worth of scrolling, and over that
+     distance the layer steps through a sequence of frames of the push-in — `media/<frames>/1280/`
+     for wide screens, `/720/` for phones — drawn on a canvas. The last frame is the artwork filling
+     the screen, and it lands exactly where the pin lets go and the next section slides over it. On
+     arrival `hold` (with `hold_webm`) starts: the rest of the clip, in which the artwork keeps
+     moving, so the bottom of the page rests on a living picture rather than a still. */}}
+{{ $scrub := false }}
 {{ $fixed := $block.design.fixed_background }}
 {{ if ne $fixed false }}
   {{ $video := "" }}{{ $video_small := "" }}{{ $poster := "" }}
@@ -32,8 +41,120 @@
   {{ with $fixed.video_small }}{{ with resources.Get (path.Join "media" .) }}{{ $video_small = .RelPermalink }}{{ end }}{{ end }}
   {{ $video_webm := "" }}
   {{ with $fixed.video_webm }}{{ with resources.Get (path.Join "media" .) }}{{ $video_webm = .RelPermalink }}{{ end }}{{ end }}
+  {{ $frames := slice }}{{ $frames_small := slice }}{{ $hold := "" }}{{ $hold_webm := "" }}
+  {{ with $fixed.frames }}
+    {{ $frames = resources.Match (printf "media/%s/1280/*.webp" .) }}
+    {{ $frames_small = resources.Match (printf "media/%s/720/*.webp" .) }}
+    {{ if not $frames }}{{ warnf "profile-hero: no frames found in `assets/media/%s/1280/`" . }}{{ end }}
+    {{/* A resource is published when its permalink is asked for; ask for every frame's */}}
+    {{ range $frames }}{{ $_ := .RelPermalink }}{{ end }}{{ range $frames_small }}{{ $_ := .RelPermalink }}{{ end }}
+  {{ end }}
+  {{ with $fixed.hold }}{{ with resources.Get (path.Join "media" .) }}{{ $hold = .RelPermalink }}{{ end }}{{ end }}
+  {{ with $fixed.hold_webm }}{{ with resources.Get (path.Join "media" .) }}{{ $hold_webm = .RelPermalink }}{{ end }}{{ end }}
+  {{ $scrub = and $video $frames }}
   {{ with $fixed.poster }}{{ with resources.Get (path.Join "media" .) }}{{ $poster = (.Resize "1600x webp q80").RelPermalink }}{{ end }}{{ end }}
-  {{ if $video }}
+  {{ if $scrub }}
+    <div class="site-fixed-bg site-fixed-bg--video site-fixed-bg--frames" aria-hidden="true"{{ with $poster }} style="background-image: url('{{ . }}');"{{ end }}>
+      <canvas class="site-fixed-canvas"
+              data-frames="{{ path.Dir (index $frames 0).RelPermalink }}" data-frames-count="{{ len $frames }}"
+              {{ with $frames_small }}data-frames-small="{{ path.Dir (index . 0).RelPermalink }}" data-frames-small-count="{{ len . }}"{{ end }}></canvas>
+      {{ if $hold }}<video class="site-fixed-video site-fixed-video--hold" muted playsinline preload="none" disablepictureinpicture
+             data-video="{{ $hold }}"{{ with $hold_webm }} data-video-webm="{{ . }}"{{ end }}></video>{{ end }}
+    </div>
+    <script>
+      (function () {
+        var canvas = document.querySelector('.site-fixed-canvas');
+        if (!canvas) return;
+        // This script runs before the hero markup below it exists, so the pin is looked up when
+        // first needed, not here.
+        var layer = canvas.parentElement, pin = null;
+        function getPin() { return pin || (pin = document.querySelector('.hero-pin')); }
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+                    (navigator.connection && navigator.connection.saveData);
+        if (still) {
+          // The poster stays, the hero is not pinned, nothing is fetched
+          layer.querySelectorAll('canvas, video').forEach(function (e) { e.remove(); });
+          document.addEventListener('DOMContentLoaded', function () { var p = getPin(); if (p) p.classList.add('is-still'); });
+          return;
+        }
+        var small = canvas.dataset.framesSmall && window.matchMedia('(max-width: 767px)').matches;
+        var base = small ? canvas.dataset.framesSmall : canvas.dataset.frames;
+        var count = Number(small ? canvas.dataset.framesSmallCount : canvas.dataset.framesCount) || 0;
+        if (!count) return;
+        var url = function (i) { return base + '/f' + String(i + 1).padStart(3, '0') + '.webp'; };
+
+        // Frames arrive in order, the first handful before anything else; a scroll that outruns
+        // them shows the last one that has arrived.
+        var frames = new Array(count), loaded = 0, ctx = canvas.getContext('2d', { alpha: false });
+        var shown = -1, wanted = 0;
+        function load(i) {
+          if (i >= count) return;
+          var img = new Image();
+          img.decoding = 'async';
+          img.onload = function () { frames[i] = img; loaded++; if (i <= wanted && i > shown) draw(wanted); load(i + 1); };
+          img.onerror = function () { load(i + 1); };
+          img.src = url(i);
+        }
+        function best(i) { while (i >= 0 && !frames[i]) i--; return i; }
+        function draw(i) {
+          var k = best(i);
+          if (k < 0) return;
+          var img = frames[k], w = canvas.width, h = canvas.height;
+          // cover-fit, anchored a little above centre like the CSS layer was
+          var s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+          var dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+          ctx.drawImage(img, (w - dw) / 2, (h - dh) * 0.45, dw, dh);
+          shown = k;
+        }
+        function size() {
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(window.innerWidth * dpr);
+          canvas.height = Math.round(window.innerHeight * dpr);
+          shown = -1; draw(wanted);
+        }
+
+        // The hold clip: starts the first time the camera arrives, fades over the last frame,
+        // which is the same picture, and stops again if the visitor scrolls back out.
+        var hold = layer.querySelector('.site-fixed-video--hold'), holdReady = false, arrived = false;
+        function prepareHold() {
+          if (!hold || holdReady) return;
+          holdReady = true;
+          var src = hold.dataset.video;
+          if (hold.dataset.videoWebm && !hold.canPlayType('video/mp4; codecs="avc1.64001F"') && hold.canPlayType('video/webm; codecs="vp9"')) src = hold.dataset.videoWebm;
+          hold.src = src; hold.muted = true; hold.load();
+        }
+        function arrive(yes) {
+          if (!hold || yes === arrived) return;
+          arrived = yes;
+          hold.classList.toggle('is-live', yes);
+          if (yes) { prepareHold(); var p = hold.play(); if (p && p.catch) p.catch(function () {}); }
+          else hold.pause();
+        }
+
+        var ticking = false;
+        function update() {
+          ticking = false;
+          // The walk spans the pinned stretch exactly: from where the pin starts (below the
+          // navbar, which is in flow at the top) to where it lets go, one screen before its end.
+          var p = getPin(), t;
+          if (p) {
+            var start = p.getBoundingClientRect().top + window.scrollY;
+            var travel = Math.max(p.offsetHeight - window.innerHeight, 1);
+            t = (window.scrollY - start) / travel;
+          } else t = window.scrollY / window.innerHeight;
+          t = Math.min(Math.max(t, 0), 1);
+          layer.style.setProperty('--zoom-through', t.toFixed(3));
+          wanted = Math.round(t * (count - 1));
+          if (best(wanted) !== shown) draw(wanted);
+          if (t > 0.5) prepareHold();
+          arrive(t >= 0.999);
+        }
+        window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+        window.addEventListener('resize', function () { size(); update(); });
+        size(); load(0); update();
+      })();
+    </script>
+  {{ else if $video }}
     <div class="site-fixed-bg site-fixed-bg--video" aria-hidden="true"{{ with $poster }} style="background-image: url('{{ . }}');"{{ end }}>
       <video class="site-fixed-video" muted playsinline autoplay preload="none" disablepictureinpicture
              data-video="{{ $video }}"{{ with $video_small }} data-video-small="{{ . }}"{{ end }}{{ with $video_webm }} data-video-webm="{{ . }}"{{ end }}{{ with $poster }} poster="{{ . }}"{{ end }}></video>
@@ -82,6 +203,7 @@
   {{ end }}
 {{ end }}
 
+{{ if $scrub }}<div class="hero-pin"><div class="hero-pin__stage">{{ end }}
 <div class="profile-hero">
   {{ if $avatar }}
     {{ $img := $avatar.Fill "360x360 Center webp q90" }}
@@ -123,3 +245,4 @@
     {{ end }}
   </div>
 </div>
+{{ if $scrub }}</div></div>{{ end }}
