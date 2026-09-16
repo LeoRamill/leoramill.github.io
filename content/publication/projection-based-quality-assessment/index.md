@@ -2,6 +2,28 @@
 title: 'Projection-Based Quality Assessment of Cerebrovascular Segmentations'
 date: '2026-07-17'
 summary: 'Localized quality assessment of 3D vessel segmentations recast as detection in canonical 2D projection views: an F1 of 88.31 on 99 TOF-MRA subjects, with a lightweight detector rather than a large vision-language model.'
+# Shown in the list under the title; the first `authors_shown` are named, the rest fold into
+# "N more authors"
+authors:
+  - Bogdan Ion
+  - Xiaoming Zhang
+  - Leonard Vincent Ramil
+  - Alice Boccadifuoco
+  - Sébastien Ourselin
+  - Jon Cleary
+  - Maria A. Zuluaga
+authors_shown: 3
+# Printed in italics as "In <venue>, <year>"
+venue: 'SWITCH+ 2026, MICCAI Workshop on Stroke and Neurovascular Diseases'
+# The coloured line, for an award or an impact factor. Leave it out when there is nothing to say.
+# highlight: '🌟 Best paper award'
+# One button each, in this order: pdf, code, hal, scholar, arxiv, doi, poster, slides, video, web.
+# Named `buttons` and not `links`: `links` is the theme's own key and it expects a different shape.
+buttons:
+  pdf: https://hal.science/hal-05733902v1/file/MICCAI26_Workshop-8.pdf
+  code: https://github.com/erc-caravel/vascular-qc
+  hal: https://hal.science/hal-05733902v1
+  scholar: 'https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0SaJdxQAAAAJ&citation_for_view=0SaJdxQAAAAJ:WZBGuue-350C'
 ---
 
 ![Overview of the proposed multi-view quality assessment framework based on canonical projection views.](figure.webp)

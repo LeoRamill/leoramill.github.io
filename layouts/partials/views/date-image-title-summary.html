@@ -1,14 +1,23 @@
-{{/* The News view, with the entry's own figure under the date, and the text starting level with the
-     figure: date on its own line, then figure and text side by side as one clickable block.
+{{/* The News view, dressed as an academic publication list: date on the left, then the entry's own
+     figure as a thumbnail with title, authors, venue and link buttons beside it.
+
      The figure is the first image of the document — whatever sits right under the title — so an
      entry shows one just by having one. `image:` in the front matter points at another, `image:
-     false` drops it.
-     A figure taken from the document arrives already resized by the theme's markdown image hook; one
-     named in `image:` is served as uploaded, since a figure saved off the web is often not the format
-     its extension claims and processing such a file fails the build. That build failure is still
-     reachable through the hook, so a figure in the body has to be a real file of its own format.
-     The click target is a stretched overlay rather than an <a> wrapped round everything, so a
-     summary containing a markdown link still produces valid HTML (as in the theme's own view). */}}
+     false` drops it. A figure taken from the document arrives already resized by the theme's
+     markdown image hook; one named in `image:` is served as uploaded, since a figure saved off the
+     web is often not the format its extension claims and processing such a file fails the build.
+     That failure is still reachable through the hook, so a figure in the body has to be a real file
+     of its own format.
+
+     Front matter this view reads, all optional: `authors` (a list), `authors_shown` (how many before
+     "N more authors", default 3), `venue`, `highlight` (the coloured line: an award, an impact
+     factor), and `buttons` (a map of label -> URL, rendered in the order below). It is called `buttons`
+     and not `links` because `links` is the theme's own front-matter key, with a different shape.
+
+     The figure, the title and the text are one hit area: the click target is a stretched overlay
+     rather than an <a> wrapped round everything, so a summary containing a markdown link stays
+     valid HTML (as in the theme's own view). The buttons and the authors toggle sit above that
+     overlay, so they keep their own clicks. */}}
 {{ $item := .item }}
 {{ $page := .page }}
 {{ $summary := $item.Params.summary | default $item.Params.description | default $item.Summary }}
@@ -26,6 +35,11 @@
   {{ end }}
 {{ end }}
 
+{{ $authors := $item.Params.authors }}
+{{ $shown := int ($item.Params.authors_shown | default 3) }}
+{{ $hidden := 0 }}
+{{ if and $authors (gt (len $authors) (add $shown 1)) }}{{ $hidden = sub (len $authors) $shown }}{{ end }}
+
 <article class="pub-entry">
   <time class="pub-date" datetime="{{ time.Format "2006-01-02" $item.Date }}">
     {{ time.Format (site.Params.locale.date_format | default ":date_long") $item.Date }}
@@ -38,12 +52,31 @@
       <h2 class="pub-title text-zinc-800 dark:text-zinc-100">
         <a href="{{ $item.RelPermalink }}"><span class="pub-hit"></span><span class="pub-label">{{ $item.Title }}</span></a>
       </h2>
-      <p class="pub-summary text-zinc-600 dark:text-zinc-400">{{ $summary }}</p>
-      <div class="pub-more text-primary-500" aria-hidden="true">
-        {{ T "read_more" | default "Read more" }}
-        <svg aria-hidden="true" class="ml-1 h-4 w-4 stroke-current" fill="none" viewBox="0 0 16 16">
-          <path d="M6.75 5.75 9.25 8l-2.5 2.25" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
-        </svg>
+
+      {{ with $authors }}
+      <p class="pub-authors text-zinc-600 dark:text-zinc-400">
+        {{ if $hidden }}
+          {{ delimit (first $shown .) ", " }}, and <button class="pub-authors-toggle" type="button" data-pub-authors>{{ $hidden }} more authors</button><span class="pub-authors-rest" hidden>{{ delimit (after $shown .) ", " }}</span>
+        {{ else }}
+          {{ $n := len . }}{{ range $i, $a := . }}{{ if $i }}{{ if eq $i (sub $n 1) }}, and {{ else }}, {{ end }}{{ end }}{{ $a }}{{ end }}
+        {{ end }}
+      </p>
+      {{ end }}
+
+      {{ with $item.Params.venue }}
+      <p class="pub-venue text-zinc-600 dark:text-zinc-400"><em>In {{ . }}</em>, {{ $item.Date.Format "2006" }}</p>
+      {{ end }}
+
+      {{ with $item.Params.highlight }}<p class="pub-highlight">{{ . | markdownify }}</p>{{ end }}
+
+      {{ if not $authors }}<p class="pub-summary text-zinc-600 dark:text-zinc-400">{{ $summary }}</p>{{ end }}
+
+      <div class="pub-links">
+        <a class="pub-btn" href="{{ $item.RelPermalink }}#abstract">ABS</a>
+        {{ $buttons := $item.Params.buttons }}
+        {{ range $key := slice "pdf" "code" "hal" "scholar" "arxiv" "doi" "poster" "slides" "video" "web" }}
+          {{ with index $buttons $key }}<a class="pub-btn" href="{{ . }}"{{ if hasPrefix . "http" }} target="_blank" rel="noopener"{{ end }}>{{ upper $key }}</a>{{ end }}
+        {{ end }}
       </div>
     </div>
   </div>
