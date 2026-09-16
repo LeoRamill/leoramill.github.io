@@ -31,13 +31,21 @@ sections:
         video_small: hero-small.mp4
         video_webm: hero.webm
         poster: hero-poster.jpg
+        # With `frames`, the camera walks in with the scroll instead (frames of the push-in in
+        # `assets/media/hero-frames/1280/` and `/720/`), the hero stays pinned for the walk, and
+        # `hold` is the rest of the clip, played once the camera has arrived. Remove these three
+        # lines to go back to the video simply playing on its own.
+        frames: hero-frames
+        hold: hero-hold.mp4
+        hold_webm: hero-hold.webm
       # Light translucent tint: the meteors show through clearly here
       background:
         gradient_start: "rgba(15, 8, 24, 0.30)"
         gradient_end: "rgba(15, 8, 24, 0.50)"
         gradient_angle: 180
       spacing:
-        padding: ["4rem", 0, "4rem", 0]
+        # No padding of its own: in the scroll-scrubbed mode the hero sets its height itself
+        padding: [0, 0, 0, 0]
 
   # 2. Light section: full-width cover photo + italic bio (as on riccardocadei's homepage).
   - block: cover-bio
