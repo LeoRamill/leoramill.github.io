@@ -20,13 +20,14 @@ sections:
         url: /cv/
     design:
       css_class: dark home-no-veil
-      # The lightest wash the text survives: measured, 0.28-0.32 puts every block on the page at or
-      # above the 4.5:1 body text needs (News is the tightest at 4.6:1). It is this light only
-      # because the muted greys were lifted first — see `.home-no-veil` in custom.css; with the
-      # theme's own greys the same reading needed 0.68.
+      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
+      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
+      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
+      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
+      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.28)"
-        gradient_end: "rgba(10, 8, 16, 0.32)"
+        gradient_start: "rgba(10, 8, 16, 0.56)"
+        gradient_end: "rgba(10, 8, 16, 0.56)"
         gradient_angle: 180
       # Fixed background shared by the whole page (see `layouts/partials/blox/profile-hero.html`).
       # With `video` set, the layer is the video: it plays once and rests on its last frame, and
@@ -55,13 +56,14 @@ sections:
     id: about
     design:
       css_class: dark home-no-veil
-      # The lightest wash the text survives: measured, 0.28-0.32 puts every block on the page at or
-      # above the 4.5:1 body text needs (News is the tightest at 4.6:1). It is this light only
-      # because the muted greys were lifted first — see `.home-no-veil` in custom.css; with the
-      # theme's own greys the same reading needed 0.68.
+      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
+      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
+      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
+      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
+      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.28)"
-        gradient_end: "rgba(10, 8, 16, 0.32)"
+        gradient_start: "rgba(10, 8, 16, 0.56)"
+        gradient_end: "rgba(10, 8, 16, 0.56)"
         gradient_angle: 180
     content:
       username: admin
@@ -82,13 +84,14 @@ sections:
         url: /news/
     design:
       css_class: dark home-no-veil
-      # The lightest wash the text survives: measured, 0.28-0.32 puts every block on the page at or
-      # above the 4.5:1 body text needs (News is the tightest at 4.6:1). It is this light only
-      # because the muted greys were lifted first — see `.home-no-veil` in custom.css; with the
-      # theme's own greys the same reading needed 0.68.
+      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
+      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
+      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
+      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
+      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.28)"
-        gradient_end: "rgba(10, 8, 16, 0.32)"
+        gradient_start: "rgba(10, 8, 16, 0.56)"
+        gradient_end: "rgba(10, 8, 16, 0.56)"
         gradient_angle: 180
 
   # 4. Selected projects (cards), dark for now.
@@ -106,13 +109,14 @@ sections:
       view: article-grid
       columns: 2
       css_class: dark home-no-veil
-      # The lightest wash the text survives: measured, 0.28-0.32 puts every block on the page at or
-      # above the 4.5:1 body text needs (News is the tightest at 4.6:1). It is this light only
-      # because the muted greys were lifted first — see `.home-no-veil` in custom.css; with the
-      # theme's own greys the same reading needed 0.68.
+      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
+      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
+      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
+      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
+      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.28)"
-        gradient_end: "rgba(10, 8, 16, 0.32)"
+        gradient_start: "rgba(10, 8, 16, 0.56)"
+        gradient_end: "rgba(10, 8, 16, 0.56)"
         gradient_angle: 180
 
   # 5. Closing dark section (second background of the epalu template) with a call to action.
@@ -128,13 +132,14 @@ sections:
         </div>
     design:
       css_class: dark home-no-veil
-      # The lightest wash the text survives: measured, 0.28-0.32 puts every block on the page at or
-      # above the 4.5:1 body text needs (News is the tightest at 4.6:1). It is this light only
-      # because the muted greys were lifted first — see `.home-no-veil` in custom.css; with the
-      # theme's own greys the same reading needed 0.68.
+      # The page's only veil now — the fixed layer's own scrim is gone, see `.site-fixed-bg--frames`
+      # in custom.css. 0.56 is where a single wash has to sit for the text to read as it did under
+      # the old pair: measured, every block clears the 4.5:1 body text needs, News tightest at
+      # 5.0:1, and 0.46 left it at 3.7:1. Both stops are equal on purpose — a flat wash means a line
+      # reads the same wherever it sits in the window, which the old screen-pinned scrim did not.
       background:
-        gradient_start: "rgba(10, 8, 16, 0.28)"
-        gradient_end: "rgba(10, 8, 16, 0.32)"
+        gradient_start: "rgba(10, 8, 16, 0.56)"
+        gradient_end: "rgba(10, 8, 16, 0.56)"
         gradient_angle: 180
       # Heavier tint than the hero: the same fixed background re-emerges, darker
 ---
