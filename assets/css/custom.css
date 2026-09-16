@@ -207,7 +207,10 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
    sections' wash is now the only veil, at the value that reproduces the old total. The plain-video
    fallback above keeps its scrim, since in that mode there is no per-section wash to lean on. */
 .site-fixed-bg--frames::after { content: none; }
-.site-fixed-video--hold { transform: none; opacity: 0; transition: opacity 0.6s ease; }
+/* The canvas draws its cover-fit anchored a little above centre; `object-fit: cover` on a video
+   anchors dead centre unless told otherwise, so the two framed the picture differently and it
+   shifted the moment the loop faded in over the last frame. */
+.site-fixed-video--hold { transform: none; opacity: 0; object-position: 50% 45%; transition: opacity 0.6s ease; }
 .site-fixed-video--hold.is-live { opacity: 1; }
 
 /* The hero fills the screen and stays put while the page scrolls `--hero-travel` past it; that
