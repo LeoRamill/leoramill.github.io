@@ -7,6 +7,89 @@
 
 /* ----- Navbar: social icons on the left, menu on the right ----- */
 .navbar-left { display: flex; align-items: center; gap: 0.75rem; }
+/* ----- Navbar over the page, not on top of it -----
+   The theme's bar is `bg-white … shadow`: opaque, with a drop shadow, and its bottom edge was by
+   some distance the strongest horizontal line on the site — a full-width white-to-dark step,
+   measured at 0.97 against 0.63 for the next biggest thing on the page, which was a photograph's
+   own edge. It cut the hero in two.
+
+   The solid bar is still the default here, and that is deliberate: `at-top` is added to <html> by
+   the script in `site_head.html`, so a page whose script did not run keeps a bar you can read
+   rather than a see-through one with the article sliding under the links. Only when the page is
+   scrolled to the very top — where there is nothing behind the bar yet — does it disappear. */
+#site-header.header {
+  background-color: rgb(255 255 255 / 0.82);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: none;
+  border-bottom: 1px solid rgb(24 24 27 / 0.07);
+  transition: background-color 250ms ease, border-color 250ms ease, backdrop-filter 250ms ease;
+}
+.dark #site-header.header {
+  background-color: rgb(39 39 42 / 0.82);
+  border-bottom-color: rgb(255 255 255 / 0.08);
+}
+/* The homepage is a dark photograph at every scroll position, not only at the top, so the links
+   need darkening under them wherever they are. But a flat bar over a photograph is the problem this
+   change set out to fix, only darker: it still ends in a line. A gradient does the same job with no
+   edge at all — opaque enough to read white text against at the top of the window, gone by the time
+   it clears the bar — and it is taller than the header so the fade has room to happen. No blur
+   here: blurring a photograph reads as a smudge, where on a page of text it reads as frosted glass. */
+body:has(.hero-pin) #site-header.header,
+.dark body:has(.hero-pin) #site-header.header {
+  position: relative;
+  background-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+body:has(.hero-pin) #site-header.header::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 220%; z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(10 8 16 / 0.88) 0%, rgb(10 8 16 / 0.62) 42%, rgb(10 8 16 / 0) 100%);
+  transition: opacity 250ms ease;
+}
+html.at-top body:has(.hero-pin) #site-header.header::before { opacity: 0; }
+html.at-top #site-header.header {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* The phone menu drops out of the header, so when it is open the header IS the menu — six links
+   down the screen. Transparent there means the links land on whatever the page happens to be
+   showing, which on the homepage is the middle of a painting. Open, the bar is solid again,
+   wherever the page is scrolled to. */
+#site-header.header:has(#nav-toggle:checked) {
+  background-color: rgb(255 255 255 / 0.97);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom-color: rgb(24 24 27 / 0.07);
+}
+.dark #site-header.header:has(#nav-toggle:checked) { background-color: rgb(39 39 42 / 0.97); }
+body:has(.hero-pin) #site-header.header:has(#nav-toggle:checked),
+.dark body:has(.hero-pin) #site-header.header:has(#nav-toggle:checked) {
+  background-color: rgb(10 8 16 / 0.95);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+}
+body:has(.hero-pin) #site-header.header:has(#nav-toggle:checked)::before { opacity: 0; }
+
+/* On the homepage the bar's contents sit on the picture whatever the scroll, so they are light
+   throughout. The theme paints the links and the two buttons near-black in light mode, and the
+   GitHub glyph is near-black in both — invisible over a dim museum hall. */
+body:has(.hero-pin) #site-header,
+body:has(.hero-pin) #site-header .nav-link,
+body:has(.hero-pin) #site-header .text-black,
+body:has(.hero-pin) .navbar-social a[data-icon="brands/github"],
+body:has(.hero-pin) .navbar-social a[data-icon="brands/x"],
+body:has(.hero-pin) .navbar-social a[data-icon="brands/instagram"] { color: #ffffff; }
+/* The same halo the homepage's own text carries, weaker: the bar has no wash of its own now, and
+   the picture behind it is at its brightest right where the links sit. */
+body:has(.hero-pin) #site-header .nav-link,
+body:has(.hero-pin) #site-header .navbar-social a { text-shadow: 0 1px 2px #000000cc, 0 0 12px #00000099; }
+
 .navbar-logo { width: 2.25rem; height: 2.25rem; border-radius: 9999px; object-fit: cover; }
 .navbar-social { display: flex; align-items: center; gap: 0.65rem; list-style: none; margin: 0; padding: 0; }
 .navbar-social a { display: inline-flex; line-height: 0; transition: transform 0.15s ease; }
