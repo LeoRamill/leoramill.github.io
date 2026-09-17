@@ -86,8 +86,8 @@ sections:
       # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
 
   # 4. "Selected Publication" — the newest entries of `content/publication/`, same markup as the
-  #    Publications page (see `layouts/partials/blox/publication-list.html`), dark for now.
-  - block: publication-list
+  #    Publications page (see `layouts/partials/blox/entry-list.html`), dark for now.
+  - block: entry-list
     id: publications
     content:
       title: Selected Publication
@@ -103,20 +103,19 @@ sections:
       # lands on a fractional device pixel is antialiased from both sides — a faint horizontal line
       # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
 
-  # 5. Selected projects (cards), dark for now.
-  - block: collection
+  # 5. "Selected Projects" — the featured entries of `content/project/`, in the same list as
+  #    Publications above rather than the theme's card grid, so the two read as one page.
+  - block: entry-list
     id: projects
     content:
       title: Selected Projects
-      text: 'Browse [all projects](project/).'
+      section: project
       count: 4
-      filters:
-        folders:
-          - project
-        featured_only: true
+      featured_only: true
+      more:
+        text: All projects
+        url: /project/
     design:
-      view: article-grid
-      columns: 2
       css_class: dark home-no-veil
       # No per-section wash here. The veil is one scrim on the fixed layer itself
       # (`.site-fixed-bg--frames::after` in custom.css), at the same 0.56 these five boxes used to

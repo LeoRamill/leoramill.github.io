@@ -1,17 +1,21 @@
-{{/* Custom block: publication-list */}}
-{{/* "Selected Publication" on the homepage: the newest entries of `content/publication/`, rendered
-     with the same markup as the Publications page itself, so the section reads as a short excerpt
-     of that page rather than a second design of the same thing. The view partial is the one source
-     of truth for an entry — `hide_year` drops the year groups, which mean nothing over three rows.
+{{/* Custom block: entry-list */}}
+{{/* A homepage section that shows the newest entries of a content section in the publication-list
+     style — "Selected Publication" from `content/publication/`, "Selected Projects" from
+     `content/project/`. The markup is the same partial those sections' own pages use, so a homepage
+     section reads as a short excerpt of its page rather than a second design of the same thing, and
+     an entry has one definition instead of two that drift. `hide_year` drops the year groups, which
+     mean nothing over three or four rows.
 
-     Heading and "All publications" link borrow the News section's classes: the two sections sit one
-     under the other on the homepage and must line up. */}}
+     `section` picks the folder, `count` how many, `featured_only` narrows to `featured: true`, and
+     `more` is the link at the foot. Heading and that link borrow the News section's classes: these
+     sections sit one under the other on the homepage and must line up. */}}
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 
 {{ $count := $block.content.count | default 3 }}
 {{ $section := $block.content.section | default "publication" }}
 {{ $pages := (where site.RegularPages "Section" $section).ByDate.Reverse }}
+{{ if $block.content.featured_only }}{{ $pages = where $pages "Params.featured" true }}{{ end }}
 {{ if gt $count 0 }}{{ $pages = first $count $pages }}{{ end }}
 
 <div class="news-list">

@@ -1,6 +1,10 @@
 {{/* The News view, dressed as an academic publication list: date on the left, then the entry's own
      figure as a thumbnail with title, authors, venue and link buttons beside it.
 
+     Used by both Publications and Projects, which is why the fields below are all optional: a
+     publication brings authors and a venue, a project brings tags and a summary, and each simply
+     leaves out what it does not have.
+
      The figure is the first image of the document — whatever sits right under the title — so an
      entry shows one just by having one. `image:` in the front matter points at another, `image:
      false` drops it. A figure taken from the document arrives already resized by the theme's
@@ -10,9 +14,11 @@
      of its own format.
 
      Front matter this view reads, all optional: `authors` (a list), `authors_shown` (how many before
-     "N more authors", default 3), `venue`, `highlight` (the coloured line: an award, an impact
-     factor), and `buttons` (a map of label -> URL, rendered in the order below). It is called `buttons`
-     and not `links` because `links` is the theme's own front-matter key, with a different shape.
+     "N more authors", default 3), `venue`, `tags` (the small line above the title), `highlight`
+     (the coloured line: an award, an impact factor), and `buttons` (a map of label -> URL, rendered
+     in the order below). It is called `buttons` and not `links` because `links` is the theme's own
+     front-matter key, with a different shape. The theme's own `url_code`, `url_pdf` and friends are
+     folded in as buttons too, so a project written the theme's way needs no new front matter.
      Names listed in `params.publications.highlight_authors` come out in bold wherever they appear.
 
      Entries are grouped by year: the first of each year carries a rule above it and the year set
@@ -78,6 +84,9 @@
     <div class="pub-hover" aria-hidden="true"></div>
     {{ with $img }}<img class="pub-figure" src="{{ . }}" alt="" loading="lazy" decoding="async">{{ end }}
     <div class="pub-text{{ if not $img }} pub-text--no-figure{{ end }}">
+      {{/* Plain text, not links: the whole entry is one click target, and a link inside it would
+           have to be lifted above that overlay to work, which makes the row a little maze. */}}
+      {{ with $item.Params.tags }}<p class="pub-tags">{{ delimit . " · " }}</p>{{ end }}
       <h2 class="pub-title text-zinc-800 dark:text-zinc-100">
         <a href="{{ $item.RelPermalink }}"><span class="pub-hit"></span><span class="pub-label">{{ $item.Title }}</span></a>
       </h2>
@@ -100,10 +109,22 @@
 
       {{ if not $authors }}<p class="pub-summary text-zinc-600 dark:text-zinc-400">{{ $summary }}</p>{{ end }}
 
+      {{/* The first button goes to the entry's own page. A publication with an `## Abstract` lands on
+           it and says so; anything else — a project, a publication still being written — says MORE
+           and lands at the top, rather than following a link to an anchor that is not there. */}}
+      {{ $has_abstract := findRE `<h[1-6][^>]+id="abstract"` $item.Content 1 }}
+      {{ $buttons := $item.Params.buttons | default dict }}
+      {{/* The theme spells its links `url_code`, `url_pdf` and so on. Fold them in rather than ask
+           eight project files to be rewritten; an explicit `buttons` entry wins. */}}
+      {{ range $key := slice "pdf" "code" "poster" "slides" "video" "dataset" "source" "project" }}
+        {{ with index $item.Params (printf "url_%s" $key) }}
+          {{ if not (index $buttons $key) }}{{ $buttons = merge $buttons (dict $key .) }}{{ end }}
+        {{ end }}
+      {{ end }}
       <div class="pub-links">
-        <a class="pub-btn" href="{{ $item.RelPermalink }}#abstract">ABS</a>
-        {{ $buttons := $item.Params.buttons }}
-        {{ range $key := slice "pdf" "code" "hal" "scholar" "arxiv" "doi" "poster" "slides" "video" "web" }}
+        {{ if $has_abstract }}<a class="pub-btn" href="{{ $item.RelPermalink }}#abstract">ABS</a>
+        {{ else }}<a class="pub-btn" href="{{ $item.RelPermalink }}">MORE</a>{{ end }}
+        {{ range $key := slice "pdf" "code" "hal" "scholar" "arxiv" "doi" "poster" "slides" "video" "dataset" "source" "project" "web" }}
           {{ with index $buttons $key }}<a class="pub-btn" href="{{ . }}"{{ if hasPrefix . "http" }} target="_blank" rel="noopener"{{ end }}>{{ upper $key }}</a>{{ end }}
         {{ end }}
       </div>
