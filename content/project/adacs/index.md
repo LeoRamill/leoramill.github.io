@@ -73,6 +73,8 @@ by a 1×1 that mixes channels — which takes the cost from `O(K²·C_in·C_out)
 `O(K²·C_in + C_in·C_out)`. It was not only cheaper: the DSC discriminator converged to a steadier
 27.36% mIoU against 26.24% for the fully convolutional one, which wandered more from run to run.
 
+![The two steps a depthwise-separable convolution splits a standard one into: a single filter per input channel, then a 1×1 convolution that mixes the channels back together.](dsc.webp)
+
 ## Results
 
 GTAV → Cityscapes, BiSeNet, 19 classes, mIoU on the Cityscapes validation set:
@@ -85,11 +87,25 @@ GTAV → Cityscapes, BiSeNet, 19 classes, mIoU on the Cityscapes validation set:
 | DACS | 23.17 | 27.57 |
 | **ADACS (DSC)** | **29.76** | **37.01** |
 
+![mIoU against training epochs with the ResNet-101 backbone. ADACS stays above both of the methods it combines for the whole run, and DACS on its own swings by three points between neighbouring checkpoints.](curves.webp)
+
 With the ResNet-101 backbone ADACS reaches **37.01% mIoU** — 3.8 points over adversarial adaptation
 alone and 9.4 over DACS alone, so the two mechanisms together beat either on its own by a clear
 margin rather than averaging out. The gains concentrate on the classes that carry the scene: road
-87.51, car 79.44, vegetation 80.93, building 78.60. Qualitatively, ADACS stops confusing sidewalk
-with road, which DACS still does.
+87.51, car 79.44, vegetation 80.93, building 78.60.
+
+The curves add something the final numbers hide: DACS alone does not just end lower, it is *unstable*,
+swinging three points between neighbouring checkpoints, while the adversarial term is what holds the
+run steady. ADACS sits above both from the fifth epoch onwards rather than catching up at the end.
+
+![Three Cityscapes scenes, left to right: the input frame, the ground truth, adversarial adaptation, DACS, and ADACS.](qualitative.webp)
+
+The predictions show the same thing in a way a table cannot. In all three scenes DACS floods the road
+with the magenta of sidewalk — the two classes meet everywhere and look alike from a car — while ADACS
+keeps the road purple and the pavement where it belongs. It is also cleaner at the boundaries: the
+cars in the first row and the pedestrians in the second come out as single objects instead of
+speckle. What none of the three gets is the detail: the traffic lights and signs of the third row are
+in the ground truth and in nobody's prediction.
 
 The supervised baselines on Cityscapes, for reference: DeepLabV2 with ResNet-101 reaches 54.35% mIoU
 at 14.3 FPS, while BiSeNet with the same backbone matches it at 54.30% and 39.1 FPS — and BiSeNet
