@@ -175,7 +175,14 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 /* One photograph large in the middle, its neighbours leaning in from the sides. Every slide is the
    same 3:2 window with the picture cropped to fill it, so the row reads as one frame the pictures
    pass through rather than as photographs of assorted shapes lined up. */
-.photo-carousel { position: relative; }
+.photo-carousel {
+  position: relative;
+  /* Named once because the hover rule below has to repeat it: the strip's own
+     `.photo-item:hover` sets a large lift shadow and carries the same specificity as
+     `.photo-carousel .photo-item`, so being later in the file it wins — and pointing at the
+     middle photograph would put the smudge back under the caption. */
+  --photo-shadow: 0 8px 16px -8px #00000080;
+}
 /* Pulled up under the hero. The section's own 2.5rem of padding is shared by every block on the
    page, so it is this one that gives ground rather than the rhythm everything else keeps. */
 .cover-strip { margin-top: -1.25rem; }
@@ -183,10 +190,13 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   display: flex; gap: clamp(0.6rem, 1.4vw, 1rem);
   /* `mandatory`, not `proximity`: a slide always ends centred, which is the whole shape of this. */
   overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
-  /* Vertical room below only, for the shadow. There is none to spare above: the hero ends on the
-     View CV button and the pictures should follow it closely, and nothing here grows upwards —
-     the centre slide sits at scale 1 and only the neighbours shrink. */
-  padding-block: 0.4rem 2rem;
+  /* Vertical room below only, for the shadow — 0.75rem now that the shadow is a contact one and
+     8px deep. It has to be padding inside the scroller and not margin under it: `overflow-x`
+     makes the other axis a scroll container too, so a shadow outside the padding box is
+     clipped. There is none to spare above: the hero ends on the View CV button and the
+     pictures should follow it closely, and nothing here grows upwards — the centre slide sits
+     at scale 1 and only the neighbours shrink. */
+  padding-block: 0.4rem 0.75rem;
   scrollbar-width: none;
   --slide: 74%;
 }
@@ -202,7 +212,14 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 }
 .photo-carousel .photo-item {
   flex: 0 0 var(--slide); height: auto; aspect-ratio: 3 / 2; scroll-snap-align: center;
-  border-radius: 0.7rem; box-shadow: 0 22px 50px #00000066;
+  border-radius: 0.7rem;
+  /* A contact shadow, not a drop shadow. The soft `0 22px 50px` this replaces peaked 22px
+     below the picture — exactly where the caption's text sits — so the line read as printed
+     on a smudge, and the smudge became the thing you noticed. Spread -8 shrinks the shadow's
+     rectangle inside the picture on every side, so with an 8px drop and an 8px blur radius it
+     reaches 8px below the bottom edge and nowhere else: the picture still sits on the page,
+     and nothing is cast where the caption goes. */
+  box-shadow: var(--photo-shadow);
   /* `--d` is the distance from the middle, 0 to 1, set by the script in `photo_carousel`. */
   transform: scale(calc(1 - 0.12 * var(--d, 1)));
   /* Darkened, not faded. Over a photograph for a background, a half-transparent neighbour lets the
@@ -214,18 +231,22 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 .photo-carousel .photo-item img { width: 100%; height: 100%; object-fit: cover; }
 /* The hover lift belongs to the strip, where every photograph is equal. Here the middle one is
    already the subject, and lifting a dimmed neighbour on the way past reads as a glitch. */
-.photo-carousel .photo-item:hover, .photo-carousel .photo-item:focus-visible { transform: scale(calc(1 - 0.12 * var(--d, 1))); }
+.photo-carousel .photo-item:hover, .photo-carousel .photo-item:focus-visible {
+  transform: scale(calc(1 - 0.12 * var(--d, 1))); box-shadow: var(--photo-shadow);
+}
 .photo-carousel .photo-item:active { transform: scale(calc(0.98 - 0.12 * var(--d, 1))); }
 @media (max-width: 767px) {
   /* A phone has no room for two neighbours and a big middle: the slide takes most of the width and
      the sides become an edge rather than a picture. */
-  .photo-carousel__track { padding-block: 0.3rem 1.4rem; --slide: 86%; }
+  .photo-carousel__track { padding-block: 0.3rem 0.6rem; --slide: 86%; }
 }
 /* The line under the row, for whichever photograph is in the middle. It fades out and back in as
    the middle changes, and when a photograph has no caption the line has no text and takes no
-   height — `min-height` would hold a gap open on a row where only some are described. */
+   height — `min-height` would hold a gap open on a row where only some are described.
+   It sits 16px under the picture, which is close enough to read as belonging to it and clear
+   of the 8px the contact shadow reaches. */
 .photo-carousel__caption {
-  margin: -0.6rem 0 0; padding: 0 12%;
+  margin: 0.25rem 0 0; padding: 0 12%;
   color: var(--muted, #d4d4d8); font-size: 0.9rem; font-style: italic; line-height: 1.45;
   text-align: center; text-wrap: balance;
   opacity: 0; transition: opacity 0.35s ease;
