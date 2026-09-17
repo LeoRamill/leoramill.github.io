@@ -69,6 +69,10 @@ sections:
       folder: covers
       # The fallback, and what shows while the folder holds fewer than two photographs.
       image: covers/01-cover.JPG
+      # A line shown under whichever photograph is in the middle, keyed by file name. Leave a file
+      # out and it simply has no caption — the line collapses rather than holding a gap open.
+      captions:
+        01-cover.JPG: 'Per Aspera Ad Astra'
       alt: Per Aspera Ad Astra
       # Leave `text` empty to use the biography written in `content/authors/admin/_index.md`
       text: ""

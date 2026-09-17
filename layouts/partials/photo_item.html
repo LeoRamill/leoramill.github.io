@@ -2,12 +2,17 @@
      swaps in. Shared by the scrolling strip and the carousel so the two never drift apart.
 
      dict: `photo` (an image resource), `height` (thumbnail height in pixels, default 560 — this
-     only decides how much detail is fetched; the CSS decides how big it is drawn). */}}
+     only decides how much detail is fetched; the CSS decides how big it is drawn), `caption`
+     (optional; it becomes the alt text too, which is the one place a photograph on this site has
+     ever had any). */}}
 {{ $p := .photo }}
 {{ $h := .height | default 560 }}
+{{ $cap := .caption | default "" }}
 {{ $thumb := $p.Resize (printf "x%v webp q80" $h) }}
 {{ $full := $p }}
 {{ if gt $p.Width 1800 }}{{ $full = $p.Resize "1800x webp q82" }}{{ end }}
-<button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}" aria-label="Open photo">
-  <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy" decoding="async">
+<button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}"
+        {{ with $cap }}data-photo-caption="{{ . }}"{{ end }}
+        aria-label="{{ with $cap }}Open photo: {{ . }}{{ else }}Open photo{{ end }}">
+  <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ $cap }}" loading="lazy" decoding="async">
 </button>

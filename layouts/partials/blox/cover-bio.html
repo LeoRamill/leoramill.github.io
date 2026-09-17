@@ -7,7 +7,10 @@
 
      It needs at least two photographs to be a carousel — with one, a slide that cannot advance and
      arrows that cannot move are worse than the single picture, so it falls back to `image`. Which
-     means the switch is made by putting files in the folder, not by editing anything here. */}}
+     means the switch is made by putting files in the folder, not by editing anything here.
+
+     `captions` maps a file name to a line shown under whichever photograph is in the middle. A file
+     with no entry has no caption, so the map only needs the ones worth describing. */}}
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 
@@ -27,7 +30,8 @@
     <div class="cover-strip" data-photo-scope>
       {{ partial "photo_nav" (dict "label" "cover photos") }}
       {{ partial "photo_carousel" (dict "photos" $covers "label" "Cover photos"
-                                        "interval" ($block.content.interval | default 5000)) }}
+                                        "interval" ($block.content.interval | default 5000)
+                                        "captions" ($block.content.captions | default dict)) }}
     </div>
   {{ else }}
     {{ with $block.content.image }}

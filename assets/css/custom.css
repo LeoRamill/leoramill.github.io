@@ -221,8 +221,21 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
      the sides become an edge rather than a picture. */
   .photo-carousel__track { padding-block: 0.3rem 1.4rem; --slide: 86%; }
 }
+/* The line under the row, for whichever photograph is in the middle. It fades out and back in as
+   the middle changes, and when a photograph has no caption the line has no text and takes no
+   height — `min-height` would hold a gap open on a row where only some are described. */
+.photo-carousel__caption {
+  margin: -0.6rem 0 0; padding: 0 12%;
+  color: var(--muted, #d4d4d8); font-size: 0.9rem; font-style: italic; line-height: 1.45;
+  text-align: center; text-wrap: balance;
+  opacity: 0; transition: opacity 0.35s ease;
+}
+.photo-carousel__caption.is-in { opacity: 1; }
+@media (max-width: 767px) {
+  .photo-carousel__caption { padding: 0 1rem; font-size: 0.85rem; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .photo-carousel .photo-item { transition: none; }
+  .photo-carousel .photo-item, .photo-carousel__caption { transition: none; }
 }
 .cover-bio__text { max-width: none; margin-top: 2rem; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
 .cover-bio__text strong { font-style: italic; }
