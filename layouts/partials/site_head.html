@@ -1,5 +1,6 @@
-{{/* Copied from the theme (blox-tailwind, pinned in go.mod) so that one block can change: how
-     custom.css is linked — see the comment at that block. Everything else is the theme's own. */}}
+{{/* Copied from the theme (blox-tailwind, pinned in go.mod) so that two things can change: how
+     custom.css is linked, and the `at-top` flag the transparent navbar needs — see the comments at
+     those two blocks. Everything else is the theme's own. */}}
 {{ $scr := .Scratch }}
 <head>
   <meta charset="utf-8" />
@@ -92,6 +93,23 @@
     {{ $version := substr (md5 $styles.Content) 0 12 }}
     <link href="{{ $styles.RelPermalink }}?v={{ $version }}" rel="stylesheet" />
   {{ end }}
+
+  {{/* `at-top` on <html> while the page has not been scrolled, which is what makes the navbar
+       transparent (see `#site-header.header` in custom.css). It is set this way round on purpose:
+       the stylesheet's default is the solid bar, so a page whose script never runs keeps a readable
+       navbar rather than a see-through one with the article sliding under the links. Set here, in
+       the head, so the first paint already has it and the bar does not flash solid then vanish. */}}
+  <script>
+    (function () {
+      var root = document.documentElement;
+      function sync() { root.classList.toggle('at-top', window.scrollY <= 8); }
+      sync();
+      // A restored scroll position is applied after this runs, so re-check once the page is up.
+      addEventListener('scroll', sync, { passive: true });
+      addEventListener('load', sync);
+      document.addEventListener('DOMContentLoaded', sync);
+    })();
+  </script>
 
   <script>
     /* Hugo Blox JS Global Init */
