@@ -1,6 +1,6 @@
 ---
 # Display name
-title: Leonard Vincent Ramil
+title: Leonard Vincent Ramil 🏄🏾‍♂️
 
 # Full name (for SEO) - also used by the hero block: bold first name, light last name
 first_name: Leonard Vincent
@@ -54,10 +54,9 @@ education:
     institution: Sapienza Università di Roma, Italy
 ---
 
-Hello World,
+Hello World 🌍🌏🌎,
 
-I am Leonard, a Computer Science student passionate about merging artificial intelligence with artistic expression. After a Bachelor's degree in [Applied Computer Science and Artificial Intelligence](https://corsidilaurea.uniroma1.it/en/corso/2023/31734/home) at [Sapienza Università di Roma](https://www.uniroma1.it/), I am now pursuing a Master's degree in Computer Science (Data Science track) at [EURECOM](https://www.eurecom.fr/). My current focus is on **machine learning and deep learning**, with hands-on projects spanning computer vision, domain adaptation, medical imaging and explainable AI.
+I am Leonard, a Computer Science student passionate about merging artificial intelligence with artistic expression. After a Bachelor's degree in Applied Computer Science and Artificial Intelligence at [Sapienza Università di Roma](https://www.uniroma1.it/), I am now pursuing a Double Master's degree in Data Science and Engineering at [Politecnico di Torino](https://www.polito.it/) and Computer Science (Data Science track) at [EURECOM](https://www.eurecom.fr/). In addition, I am undertaking a new role as a research intern at [Inria](https://www.inria.fr/en). My current focus is on **machine learning and deep learning**, with hands-on projects spanning computer vision, multimodal learning, medical imaging and explainable AI. 🧑🏾‍💻
 
-Outside of code, I love travelling and exploring the world through photography, trying to capture my own perspective of reality. I am always happy to talk about technology, art, cinema, TV series and photography.
+Outside of code, I love travelling and exploring the world through photography, trying to capture my own perspective of reality. I am always happy to talk about technology, art, cinema, TV series and photography. Besides that, I run, swim, go to the gym, and sometimes play badminton, basketball, and volleyball. I need to get back into surfing and improve! 🌊
 
-This is my personal website where you can browse my projects and keep up with what I am working on. Enjoy your reading, and do not hesitate to reach out for any constructive discussion.
