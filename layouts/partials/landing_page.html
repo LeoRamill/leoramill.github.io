@@ -16,43 +16,66 @@
     if (!('IntersectionObserver' in window)) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // The hero is left out on purpose: it already moves, the camera walks in as you scroll, and a
-    // second animation over the name would fight it. Everything below the first screen is fair game.
-    var sections = [].filter.call(document.querySelectorAll('.hbb-section'), function (s) {
-      return !s.querySelector('.hero-pin, .profile-hero');
-    });
+    // The pieces that reveal one at a time rather than as a block. Without this list a section
+    // fades as one big lump, which on a tall block means it has finished long before you reach the
+    // text — the effect exists but nobody sees it. With it, the page arrives as you read it.
+    var PARTS = [
+      '.profile-hero__avatar', '.profile-hero__name', '.profile-hero__role',
+      '.profile-hero__orgs', '.profile-hero__social', '.profile-hero__btn',
+      '.cover-bio__cover', '.cover-bio__text > p',
+      '.news-list__title', '.news-list__item', '.news-list__more',
+      '.pub-entry',
+      '.grid > .group',        // project cards
+      '.contact-cta > *'
+    ].join(', ');
+
+    // Never these: they are the picture, not the page. Fading the fixed layer would fade the
+    // background itself, and the per-section wash is a colour, not content.
+    function isChrome(el) {
+      return el.classList.contains('home-section-bg') || el.classList.contains('site-fixed-bg');
+    }
 
     var units = [];
-    sections.forEach(function (sec) {
-      var order = 0;
+    [].forEach.call(document.querySelectorAll('.hbb-section'), function (sec) {
+      var group = [].slice.call(sec.querySelectorAll(PARTS));
+      // Anything in the section that holds none of those pieces still reveals, as one block: the
+      // Selected Projects heading, for instance, which the theme gives no class of its own.
       [].forEach.call(sec.children, function (child) {
-        if (child.classList.contains('home-section-bg')) return;
-        // A list reveals row by row; anything else reveals as one block. Fading six news rows
-        // together reads as a slide changing, one after another reads as the page arriving.
-        var rows = child.querySelectorAll('.news-list__item, .pub-entry');
-        var group = rows.length
-          ? [child.querySelector('.news-list__title')].concat([].slice.call(rows), [child.querySelector('.news-list__more')])
-          : [child];
-        group.forEach(function (el) {
+        if (isChrome(child) || child.querySelector(PARTS)) return;
+        group.push(child);
+      });
+      group
+        .filter(function (el) {
           // No box, nothing to fade: a <script> sitting in a block is a child like any other, and
           // an observer never fires for something with no area, so it would stay classed forever.
-          if (!el || !el.getClientRects().length) return;
+          return el.getClientRects().length;
+        })
+        .sort(function (a, b) {
+          return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+        })
+        .forEach(function (el, i) {
           el.classList.add('reveal');
-          // The stagger is per section, so each one starts its own count rather than inheriting a
-          // delay from how far down the page it sits.
-          el.style.transitionDelay = Math.min(order++ * 70, 350) + 'ms';
+          // The stagger is a custom property rather than `transition-delay` directly, because the
+          // stylesheet applies it only on the way in. Leaving has to be immediate: a row that waits
+          // 350ms to start fading out is a row that is still there when it should be gone.
+          el.style.setProperty('--reveal-delay', Math.min(i * 70, 350) + 'ms');
           units.push(el);
         });
+    });
+
+    // Only now, a frame after the resting state has been applied, does the stylesheet get
+    // permission to animate. Without this the first paint would show the page and then fade it out.
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        document.documentElement.classList.add('reveal-ready');
       });
     });
 
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('is-in');
-        io.unobserve(e.target);   // once, on the way down; scrolling back up does not replay it
+        e.target.classList.toggle('is-in', e.isIntersecting);
       });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
 
     units.forEach(function (el) { io.observe(el); });
   })();
