@@ -23,6 +23,8 @@ organizations:
     url: https://www.eurecom.fr/
   - name: Politecnico di Torino 
     url: https://www.polito.it/
+  - name: Sapienza Università di Roma
+    url: https://www.uniroma1.it/
 
 # Social network links (shown in the navbar and in the hero)
 profiles:
