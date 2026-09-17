@@ -2,7 +2,7 @@
 title: 'ProfessorAdvisor'
 summary: 'Human-centered design project helping Sapienza students discover courses and internal internships, with a focus on students'' opinions about professors.'
 date: '2024-03-01'
-featured: true
+featured: false
 tags:
   - Human-Computer Interaction
 url_code: 'https://github.com/LeoRamill/Human-Computer-Interaction-Project'
