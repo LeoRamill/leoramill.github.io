@@ -1,0 +1,13 @@
+{{/* One photograph in a row: the thumbnail that is shown, and the full-size copy the lightbox
+     swaps in. Shared by the scrolling strip and the carousel so the two never drift apart.
+
+     dict: `photo` (an image resource), `height` (thumbnail height in pixels, default 560 — this
+     only decides how much detail is fetched; the CSS decides how big it is drawn). */}}
+{{ $p := .photo }}
+{{ $h := .height | default 560 }}
+{{ $thumb := $p.Resize (printf "x%v webp q80" $h) }}
+{{ $full := $p }}
+{{ if gt $p.Width 1800 }}{{ $full = $p.Resize "1800x webp q82" }}{{ end }}
+<button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}" aria-label="Open photo">
+  <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy" decoding="async">
+</button>

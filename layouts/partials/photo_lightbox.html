@@ -15,7 +15,8 @@
     btn.addEventListener('click', function () {
       var scope = btn.closest('[data-photo-scope]');
       var strip = scope && scope.querySelector('[data-photo-strip]');
-      if (!strip) return;
+      // A carousel binds these buttons itself, to advance a slide rather than a screenful.
+      if (!strip || (scope && scope.querySelector('[data-photo-carousel]'))) return;
       strip.scrollBy({ left: Number(btn.dataset.photoScroll) * strip.clientWidth * 0.82, behavior: 'smooth' });
     });
   });

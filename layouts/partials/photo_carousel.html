@@ -1,0 +1,91 @@
+{{/* One photograph held large in the middle with its neighbours peeking in at the sides, advancing
+     on its own. Built on the same `photo_item` the strip uses, so a photograph behaves the same in
+     both: click to open it full size.
+
+     dict: `photos`, `label`, `height` (thumbnail height, default 720 — a centre slide is large),
+     `interval` (milliseconds between advances, default 7000).
+
+     Put `data-photo-scope` on the wrapper, as for the strip, so the nav arrows find the track. */}}
+{{ $label := .label | default "Photos" }}
+{{ $h := .height | default 720 }}
+{{ $interval := .interval | default 7000 }}
+<div class="photo-carousel" data-photo-carousel data-photo-interval="{{ $interval }}">
+  <div class="photo-carousel__track" data-photo-strip tabindex="0" role="group" aria-label="{{ $label }}, scroll horizontally">
+    {{ range .photos }}{{ partial "photo_item" (dict "photo" . "height" $h) }}{{ end }}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('[data-photo-carousel]').forEach(function (root) {
+    var track = root.querySelector('[data-photo-strip]');
+    if (!track) return;
+    // By class, not by children: the track's two end spacers are flex children as well.
+    var items = Array.prototype.slice.call(track.querySelectorAll('.photo-item'));
+    if (items.length < 2) return;
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // How far each slide is from the middle of the track, 0 at dead centre and 1 a slide-width
+    // away. The stylesheet reads it: the centre one is full size and full strength, the rest shrink
+    // and dim, which is what makes the middle read as the picture and the others as its edges.
+    var queued = false;
+    function paint() {
+      queued = false;
+      var mid = track.scrollLeft + track.clientWidth / 2;
+      items.forEach(function (el) {
+        var d = Math.abs(el.offsetLeft + el.offsetWidth / 2 - mid) / (el.offsetWidth || 1);
+        el.style.setProperty('--d', Math.min(d, 1).toFixed(3));
+      });
+    }
+    function schedule() { if (!queued) { queued = true; requestAnimationFrame(paint); } }
+    track.addEventListener('scroll', schedule, { passive: true });
+    addEventListener('resize', schedule);
+    schedule();
+
+    // Which slide is nearest the middle right now — the answer to "advance from where?", asked at
+    // the moment of advancing rather than tracked, so dragging the row by hand never desynchronises
+    // it from a counter it does not know about.
+    function centred() {
+      var mid = track.scrollLeft + track.clientWidth / 2, best = 0, bestD = Infinity;
+      items.forEach(function (el, i) {
+        var d = Math.abs(el.offsetLeft + el.offsetWidth / 2 - mid);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      return best;
+    }
+    function go(i) {
+      var el = items[(i + items.length) % items.length];
+      track.scrollTo({ left: el.offsetLeft - (track.clientWidth - el.offsetWidth) / 2,
+                       behavior: calm.matches ? 'auto' : 'smooth' });
+    }
+
+    // It advances only while it is worth watching: not under reduced motion, not while a pointer is
+    // on it or the keyboard is in it, not while the section is off screen — an interval ticking
+    // against a row nobody can see is work for nothing, and it would also mean coming back to the
+    // section and finding it somewhere else.
+    var timer = null, visible = false, held = false;
+    function tick() { go(centred() + 1); }
+    function sync() {
+      var run = visible && !held && !calm.matches;
+      if (run && !timer) timer = setInterval(tick, Number(root.dataset.photoInterval) || 7000);
+      if (!run && timer) { clearInterval(timer); timer = null; }
+    }
+    ['pointerenter', 'focusin', 'pointerdown'].forEach(function (e) {
+      root.addEventListener(e, function () { held = true; sync(); });
+    });
+    ['pointerleave', 'focusout'].forEach(function (e) {
+      root.addEventListener(e, function () { held = false; sync(); });
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; sync(); },
+                               { threshold: 0.25 }).observe(root);
+    } else { visible = true; }
+    if (calm.addEventListener) calm.addEventListener('change', sync);
+    sync();
+
+    // The arrows move one slide, not one screenful — the shared handler leaves a carousel alone.
+    var scope = root.closest('[data-photo-scope]') || root;
+    scope.querySelectorAll('[data-photo-scroll]').forEach(function (btn) {
+      btn.addEventListener('click', function () { go(centred() + Number(btn.dataset.photoScroll)); });
+    });
+  });
+</script>
