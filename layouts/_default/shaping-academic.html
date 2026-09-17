@@ -2,7 +2,6 @@
 {{/* Vertical roadmap of studies. Stops come from `stops` in the front matter. */}}
 <section class="shaping-scope shaping-page academic-page">
   <div class="academic-shell">
-    {{ partial "shaping_breadcrumbs" . }}
     <h1 id="academic-title" class="shaping-title">{{ .Title }}</h1>
     {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
     <div class="academic-roadmap">

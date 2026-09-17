@@ -50,7 +50,6 @@
 {{ if $undated }}{{ $groups = $groups | append "" }}{{ end }}
 
 <section class="shaping-scope shaping-page shaping-photo-page">
-  {{ partial "shaping_breadcrumbs" . }}
   <h1 class="shaping-title">{{ .Title }}</h1>
   {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
   {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
