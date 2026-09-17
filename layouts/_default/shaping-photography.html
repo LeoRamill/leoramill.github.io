@@ -68,30 +68,14 @@
   {{ $photos := sort ($page.Resources.Match (printf "%s/*" $folder)) "Name" }}
   {{/* The album's own name, without the year folder in front of it */}}
   {{ $title := index $titles $folder | default (path.Base $folder) }}
-  <section class="photo-album" aria-labelledby="album-{{ anchorize $folder }}">
+  <section class="photo-album" data-photo-scope aria-labelledby="album-{{ anchorize $folder }}">
     <div class="photo-album-head">
       <h2 class="photo-album-title" id="album-{{ anchorize $folder }}">{{ $title }}</h2>
       <span class="photo-album-count">{{ len $photos }} {{ cond (eq (len $photos) 1) "photo" "photos" }}</span>
-      <div class="photo-nav">
-        <button type="button" class="photo-nav-btn" data-photo-scroll="-1" aria-label="Scroll {{ $title }} left">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button type="button" class="photo-nav-btn" data-photo-scroll="1" aria-label="Scroll {{ $title }} right">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
+      {{ partial "photo_nav" (dict "label" $title) }}
     </div>
     {{ with $notes }}{{ with index . $folder }}<p class="photo-album-note">{{ . | markdownify }}</p>{{ end }}{{ end }}
-    <div class="photo-strip" data-photo-strip tabindex="0" role="group" aria-label="{{ $title }} photos, scroll horizontally">
-      {{ range $photos }}
-        {{ $thumb := .Resize "x560 webp q80" }}
-        {{ $full := . }}
-        {{ if gt .Width 1800 }}{{ $full = .Resize "1800x webp q82" }}{{ end }}
-        <button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}" aria-label="Open photo">
-          <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy" decoding="async">
-        </button>
-      {{ end }}
-    </div>
+    {{ partial "photo_strip" (dict "photos" $photos "label" (printf "%s photos" $title)) }}
   </section>
   {{ end }}
   {{ end }}
@@ -102,56 +86,5 @@
   {{ end }}
 </section>
 
-{{ if $ordered }}
-<dialog id="photo-lightbox" class="photo-lightbox" aria-label="Photo">
-  <button type="button" class="photo-lightbox-close" data-photo-close aria-label="Close photo">×</button>
-  <img alt="">
-</dialog>
-{{ end }}
-
-{{ partial "morph_dialog" . }}
-<script>
-  // Arrow buttons scroll a strip by most of its visible width (trackpad and touch already work).
-  document.querySelectorAll('[data-photo-scroll]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var album = btn.closest('.photo-album');
-      var strip = album && album.querySelector('[data-photo-strip]');
-      if (!strip) return;
-      strip.scrollBy({ left: Number(btn.dataset.photoScroll) * strip.clientWidth * 0.82, behavior: 'smooth' });
-    });
-  });
-
-  // A photo grows out of the strip into the full-size view, and drops back into it on close.
-  (function () {
-    var dlg = document.getElementById('photo-lightbox');
-    if (!dlg) return;
-    var img = dlg.querySelector('img');
-    var pending = null;
-    window.hbMorph({
-      dialog: dlg,
-      triggers: Array.prototype.slice.call(document.querySelectorAll('[data-photo-full]')),
-      closers: Array.prototype.slice.call(dlg.querySelectorAll('[data-photo-close]')),
-      closeOnClick: function (e) { return e.target === dlg || e.target === img; },
-      source: function (btn) { return btn ? btn.querySelector('img') : null; },
-      target: function () { return img; },
-      extras: function () { return [dlg.querySelector('[data-photo-close]')]; },
-      beforeOpen: function (btn) {
-        // Intrinsic size first so the panel is laid out before the photo arrives, then show the
-        // thumbnail straight away and swap in the full size once it has loaded.
-        img.width = Number(btn.dataset.photoW) || 0;
-        img.height = Number(btn.dataset.photoH) || 0;
-        var thumb = btn.querySelector('img');
-        img.src = (thumb && (thumb.currentSrc || thumb.src)) || btn.dataset.photoFull;
-        pending = new Image();
-        pending.decoding = 'sync';
-        pending.onload = function () { if (dlg.open) img.src = btn.dataset.photoFull; };
-        pending.src = btn.dataset.photoFull;
-      },
-      afterClose: function () {
-        if (pending) { pending.onload = null; pending = null; }
-        img.removeAttribute('src');
-      }
-    });
-  })();
-</script>
+{{ if $ordered }}{{ partial "photo_lightbox" . }}{{ end }}
 {{ end }}

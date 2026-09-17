@@ -152,6 +152,19 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   display: block; width: 100%; height: auto; border-radius: 0.75rem;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
 }
+/* The cover as a row instead of a single picture. The strip, the arrows and the full-size view are
+   the photography page's, unchanged — what has to be supplied here are the four custom properties
+   they read, which on that page come from `.shaping-scope` and on a homepage section come from
+   nowhere. Values for a dark photograph rather than a white page: a pale ink, a translucent card so
+   a gap between photographs shows the backdrop instead of a grey block, and the arrows in the same
+   white as the rest of the section. */
+.cover-strip {
+  --ink: #f4f4f5; --muted: #d4d4d8; --line: #ffffff59; --paper: #ffffff1f; --blue: #cbb8ff;
+  position: relative;
+}
+.cover-strip .photo-nav { justify-content: flex-end; margin-bottom: 0.75rem; }
+.cover-strip .photo-nav-btn { backdrop-filter: blur(6px); }
+.cover-strip .photo-item { box-shadow: 0 18px 40px #00000059; }
 .cover-bio__text { max-width: none; margin-top: 2rem; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
 .cover-bio__text strong { font-style: italic; }
 @media (min-width: 768px) {
