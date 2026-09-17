@@ -240,20 +240,27 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
    `layouts/partials/landing_page.html`, never by this stylesheet — so a page whose script did not
    run is a page with nothing hidden, rather than a blank one.
 
-   The transition lives on `.is-in` and not on `.reveal`: the resting state then applies instantly
-   when the class lands, with nothing to animate from, and only the arrival is animated.
+   It plays both ways: scrolling back up hides what leaves the window again, and coming down
+   brings it back. That is what was asked for; the quieter alternative is to drop the `false` branch
+   of the `toggle` in `landing_page.html`, which reveals once and leaves it revealed.
 
    14px of rise, not more. Over a photograph the eye reads the fade; the movement is there to give
    the fade a direction, and a long slide would turn a page into a slideshow. */
-.reveal { opacity: 0; transform: translateY(14px); will-change: opacity, transform; }
-.reveal.is-in {
-  opacity: 1; transform: none;
+.reveal { opacity: 0; transform: translateY(14px); }
+/* The transition is switched on a frame after the resting state lands, by the same script. Putting
+   it on `.reveal` from the start would make the first paint show the page and then fade it out. */
+html.reveal-ready .reveal {
   transition: opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1), transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: 0ms;
 }
+.reveal.is-in { opacity: 1; transform: none; }
+/* The stagger applies on the way in only. Leaving is immediate: a row that waits 350ms to start
+   fading out is a row still on screen when it should be gone. */
+html.reveal-ready .reveal.is-in { transition-delay: var(--reveal-delay, 0ms); }
 /* Belt and braces: the script already returns early under reduced motion, but if the preference is
    switched on after the classes are set, this puts everything back. */
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .reveal.is-in { opacity: 1; transform: none; transition: none; }
+  .reveal, .reveal.is-in, html.reveal-ready .reveal { opacity: 1; transform: none; transition: none; }
 }
 
 /* ----- Homepage over the picture -----
