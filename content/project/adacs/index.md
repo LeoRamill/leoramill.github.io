@@ -8,7 +8,7 @@ tags:
 url_code: 'https://github.com/LeoRamill/ADACS'
 ---
 
-![Overview of the ADACS pipeline: a shared backbone produces source predictions and target pseudo-labels, cross-domain mixing builds hybrid samples from them, and an adversarial module aligns the two domains.](figure.webp)
+![Overview of the ADACS pipeline: a shared backbone produces source predictions and target pseudo-labels, cross-domain mixing builds hybrid samples from them, and an adversarial module aligns the two domains.](figure.png)
 
 **Authors** — Alice Banaudi, Carla Finocchiaro, Alessandra Marchese, Leonard Vincent Ramil
 
@@ -73,7 +73,7 @@ by a 1×1 that mixes channels — which takes the cost from `O(K²·C_in·C_out)
 `O(K²·C_in + C_in·C_out)`. It was not only cheaper: the DSC discriminator converged to a steadier
 27.36% mIoU against 26.24% for the fully convolutional one, which wandered more from run to run.
 
-![The two steps a depthwise-separable convolution splits a standard one into: a single filter per input channel, then a 1×1 convolution that mixes the channels back together.](dsc.webp)
+![The two steps a depthwise-separable convolution splits a standard one into: a single filter per input channel, then a 1×1 convolution that mixes the channels back together.](dsc.png)
 
 ## Results
 
@@ -87,7 +87,7 @@ GTAV → Cityscapes, BiSeNet, 19 classes, mIoU on the Cityscapes validation set:
 | DACS | 23.17 | 27.57 |
 | **ADACS (DSC)** | **29.76** | **37.01** |
 
-![mIoU against training epochs with the ResNet-101 backbone. ADACS stays above both of the methods it combines for the whole run, and DACS on its own swings by three points between neighbouring checkpoints.](curves.webp)
+![mIoU against training epochs with the ResNet-101 backbone. ADACS stays above both of the methods it combines for the whole run, and DACS on its own swings by three points between neighbouring checkpoints.](curves.png)
 
 With the ResNet-101 backbone ADACS reaches **37.01% mIoU** — 3.8 points over adversarial adaptation
 alone and 9.4 over DACS alone, so the two mechanisms together beat either on its own by a clear
@@ -98,7 +98,7 @@ The curves add something the final numbers hide: DACS alone does not just end lo
 swinging three points between neighbouring checkpoints, while the adversarial term is what holds the
 run steady. ADACS sits above both from the fifth epoch onwards rather than catching up at the end.
 
-![Three Cityscapes scenes, left to right: the input frame, the ground truth, adversarial adaptation, DACS, and ADACS.](qualitative.webp)
+![Three Cityscapes scenes, left to right: the input frame, the ground truth, adversarial adaptation, DACS, and ADACS.](qualitative.jpg)
 
 The predictions show the same thing in a way a table cannot. In all three scenes DACS floods the road
 with the magenta of sidewalk — the two classes meet everywhere and look alike from a car — while ADACS

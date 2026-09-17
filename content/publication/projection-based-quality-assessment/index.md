@@ -26,7 +26,7 @@ buttons:
   scholar: 'https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0SaJdxQAAAAJ&citation_for_view=0SaJdxQAAAAJ:WZBGuue-350C'
 ---
 
-![Overview of the proposed multi-view quality assessment framework based on canonical projection views.](figure.webp)
+![Overview of the proposed multi-view quality assessment framework based on canonical projection views.](figure.jpg)
 
 **Authors** — Bogdan Ion, Xiaoming Zhang, Leonard Vincent Ramil, Alice Boccadifuoco, Sébastien Ourselin, Jon Cleary, Maria A. Zuluaga
 
