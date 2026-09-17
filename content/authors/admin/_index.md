@@ -4,7 +4,7 @@ title: Leonard Vincent Ramil 🏄🏾‍♂️
 
 # Full name (for SEO) - also used by the hero block: bold first name, light last name
 first_name: Leonard Vincent
-last_name: Ramil
+last_name: Ramil 🏄🏾‍♂️
 
 # Is this the primary user of the site?
 superuser: true
