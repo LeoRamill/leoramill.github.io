@@ -8,7 +8,7 @@ tags:
 url_code: 'https://github.com/LeoRamill/VesselVerse-QualityControl'
 ---
 
-![The multimodal pipeline. One segmented volume becomes three maximum-intensity projections, each read by its own ResNet, and a vector of graph metrics read by an MLP; the four representations are concatenated into a single logit, and GradCAM sends the gradient back through each projection branch to show where the decision was made.](figure.webp)
+![The multimodal pipeline. One segmented volume becomes three maximum-intensity projections, each read by its own ResNet, and a vector of graph metrics read by an MLP; the four representations are concatenated into a single logit, and GradCAM sends the gradient back through each projection branch to show where the decision was made.](figure.png)
 
 **Author** — Leonard Vincent Ramil
 
@@ -26,13 +26,13 @@ So: **given a segmentation, predict whether it is good enough**. A binary decisi
 
 A segmentation is a 3D volume. A convolutional network could read it as one, but that is expensive and the dataset is small. Instead each volume is flattened into three **maximum intensity projections** — axial, sagittal and coronal, each pixel taking the brightest voxel along its line of sight. Three ordinary images, one per anatomical plane, from which a vessel tree is still legible.
 
-![Maximum intensity projections of one segmented volume: axial, sagittal and coronal.](mip.webp)
+![Maximum intensity projections of one segmented volume: axial, sagittal and coronal.](mip.jpg)
 
 ## Labelling
 
 The two ends of the scale were fixed with the same subject annotated two ways — automatically by SPOCKMIP, and by hand.
 
-![The same subject, Normal002-MRA, in three projections each: the automatic annotation above, the manual one below.](labels.webp)
+![The same subject, Normal002-MRA, in three projections each: the automatic annotation above, the manual one below.](labels.jpg)
 
 The difference is the kind of thing the classifier has to learn to see, and the project wrote it down as explicit criteria rather than leaving it to taste. A segmentation is marked bad for: **abnormal ramifications**, **noise** at the edges of the volume, **fragmented** vessels where a continuous one should be, and **distal cortical branches** — pial vessels resolved in a projection where they should not be, which is a sign the mask has picked up more than the arteries.
 
@@ -51,7 +51,7 @@ The interesting part of the project is that a segmentation gets described twice,
 
 That last family is the one a projection cannot give you: curvature is a property of a 3D curve, and flattening the volume destroys it. Which is the argument for carrying both descriptions rather than picking one.
 
-![Correlation matrix over the extracted features.](correlation.webp)
+![Correlation matrix over the extracted features.](correlation.png)
 
 ## Three models
 
@@ -67,7 +67,7 @@ The MLP is the honest baseline: **solid and stable, and stuck**. It hits about 7
 
 The MultiModal model clearly beats it, reaching about **83%** with Adam. But the optimizer is not a detail here, and the curves say more than the peak does.
 
-![MultiModal training over 50 epochs, one column per optimizer: SGD, RMSprop, Adam. Loss above, accuracy below, training against validation.](training.webp)
+![MultiModal training over 50 epochs, one column per optimizer: SGD, RMSprop, Adam. Loss above, accuracy below, training against validation.](training.png)
 
 Read left to right: **SGD** is stable and underfits — validation accuracy plateaus around 0.775 and the two curves stay together. **RMSprop** reaches a similar level but is violently unstable: at epoch 10 validation loss spikes to 1.55 and accuracy collapses to 0.45 before recovering, and it keeps swinging afterwards. **Adam** gives the best validation figure and the widest gap: training accuracy climbs past 0.94 while validation stalls near 0.83, and validation loss turns around and starts rising. That is overfitting, plainly, and it is why the conclusion is that the multimodal architecture has the best potential *and* needs careful optimization management — not that it is simply better.
 
@@ -75,11 +75,11 @@ Read left to right: **SGD** is stable and underfits — validation accuracy plat
 
 The model's decision is sent back through each projection branch with [GradCAM](https://link.springer.com/article/10.1007/s11263-019-01228-7), which produces a heatmap over each projection showing where the evidence was.
 
-![Correct predictions: the heat sits on the vessel tree itself.](gradcam-good.webp)
+![Correct predictions: the heat sits on the vessel tree itself.](gradcam-good.jpg)
 
 When the model is right, it is right for the right reason — the heat is centred on the vasculature, in all three planes.
 
-![Incorrect predictions: the heat sits on empty background, in corners and along the edges of the frame.](gradcam-bad.webp)
+![Incorrect predictions: the heat sits on empty background, in corners and along the edges of the frame.](gradcam-bad.jpg)
 
 When it is wrong, look at where it was looking. The heat sits in the **corners and along the edges** — on empty background, outside the vessels entirely. One case predicts class 0 with probability 0.000, as confident as it gets, with the heat in the bottom-left corner of an image whose vessels are in the middle.
 

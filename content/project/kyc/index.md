@@ -8,7 +8,7 @@ tags:
 url_code: 'https://github.com/u-siri-ous/KYC'
 ---
 
-![The KYC window after analysing a card: Beckett marks on the left, the identified Pokémon and its attacks on the right, the palette taken from the card's type.](figure.webp)
+![The KYC window after analysing a card: Beckett marks on the left, the identified Pokémon and its attacks on the right, the palette taken from the card's type.](figure.jpg)
 
 **Authors** — Christian Bianchi, Nicola Mastrorilli, Leonard Vincent Ramil, Siria Sannino
 
@@ -40,7 +40,7 @@ mask = cv.inRange(hsv_image, lower_yellow, upper_yellow)
 
 That mask does double duty: it locates the card so it can be cropped out of the background, and once binarised it is what the three geometric factors are measured on — the proportion of white pixels in each region gives centering, corner wear and edge chipping.
 
-![Left, the photograph the grader is given. Right, the binarised mask it actually measures: the proportion of white in each region becomes the centering, corner and edge scores.](grader.webp)
+![Left, the photograph the grader is given. Right, the binarised mask it actually measures: the proportion of white in each region becomes the centering, corner and edge scores.](grader.jpg)
 
 **Surface is the one that cannot be done this way**, and the paper says so rather than pretending otherwise: surface flaws — gloss, fine scratches, print spots — are mostly invisible in a photograph. It is averaged from the other three instead, which is an approximation and is labelled as one.
 
@@ -61,7 +61,7 @@ Training stops early: if an epoch's loss comes out above the previous one, train
 
 ## Results
 
-![Accuracy and loss for the first model over its 30 epochs, training against validation.](training.webp)
+![Accuracy and loss for the first model over its 30 epochs, training against validation.](training.png)
 
 | Model | Input | Train accuracy | Train loss | Val accuracy | Val loss |
 |---|---|---|---|---|---|
