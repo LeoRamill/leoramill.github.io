@@ -14,7 +14,7 @@ url_code: 'https://github.com/LeoRamill/ADACS'
 
 **Course** — Machine Learning and Deep Learning course project, 2025
 
-**Code** — [github.com/LeoRamill/ADACS](https://github.com/LeoRamill/ADACS)
+**Paper** — [ADACS.pdf](adacs.pdf) · **Code** — [github.com/LeoRamill/ADACS](https://github.com/LeoRamill/ADACS)
 
 ## Abstract
 
