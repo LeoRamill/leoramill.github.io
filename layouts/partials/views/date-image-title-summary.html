@@ -18,7 +18,8 @@
      (the coloured line: an award, an impact factor), and `buttons` (a map of label -> URL, rendered
      in the order below). It is called `buttons` and not `links` because `links` is the theme's own
      front-matter key, with a different shape. The theme's own `url_code`, `url_pdf` and friends are
-     folded in as buttons too, so a project written the theme's way needs no new front matter.
+     folded in as buttons too, so a project written the theme's way needs no new front matter. A
+     `.pdf` or a `.pptx` sitting in the entry's own folder becomes a button by being there.
      Names listed in `params.publications.highlight_authors` come out in bold wherever they appear.
 
      Entries are grouped by year: the first of each year carries a rule above it and the year set
@@ -109,25 +110,38 @@
 
       {{ if not $authors }}<p class="pub-summary text-zinc-600 dark:text-zinc-400">{{ $summary }}</p>{{ end }}
 
-      {{/* The first button goes to the entry's own page. A publication with an `## Abstract` lands on
-           it and says so; anything else — a project, a publication still being written — says MORE
-           and lands at the top, rather than following a link to an anchor that is not there. */}}
+      {{/* No button for the entry's own page: the whole block is already one click target, so a
+           button saying so is the same link twice. ABS is the exception and only when there is an
+           abstract to land on — it goes somewhere the block does not, straight to the section. */}}
       {{ $has_abstract := findRE `<h[1-6][^>]+id="abstract"` $item.Content 1 }}
       {{ $buttons := $item.Params.buttons | default dict }}
       {{/* The theme spells its links `url_code`, `url_pdf` and so on. Fold them in rather than ask
            eight project files to be rewritten; an explicit `buttons` entry wins. */}}
-      {{ range $key := slice "pdf" "code" "poster" "slides" "video" "dataset" "source" "project" }}
+      {{ range $key := slice "pdf" "pptx" "code" "poster" "slides" "video" "dataset" "source" "project" }}
         {{ with index $item.Params (printf "url_%s" $key) }}
           {{ if not (index $buttons $key) }}{{ $buttons = merge $buttons (dict $key .) }}{{ end }}
         {{ end }}
       {{ end }}
+      {{/* A paper or a deck sitting in the entry's own folder is linked by being there — drop a
+           `report.pdf` or `slides.pptx` next to the index and the button appears, with no front
+           matter to write. A `buttons` entry or a `url_*` still wins, so an external copy beats a
+           local one. Only the first of each kind: a folder is not a file list. */}}
+      {{ range $pair := slice (slice "pdf" "**.pdf") (slice "pptx" "**.{pptx,ppt,key}") }}
+        {{ $key := index $pair 0 }}
+        {{ if not (index $buttons $key) }}
+          {{ with index ($item.Resources.Match (index $pair 1)) 0 }}
+            {{ $buttons = merge $buttons (dict $key .RelPermalink) }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{ if or $has_abstract $buttons }}
       <div class="pub-links">
-        {{ if $has_abstract }}<a class="pub-btn" href="{{ $item.RelPermalink }}#abstract">ABS</a>
-        {{ else }}<a class="pub-btn" href="{{ $item.RelPermalink }}">MORE</a>{{ end }}
-        {{ range $key := slice "pdf" "code" "hal" "scholar" "arxiv" "doi" "poster" "slides" "video" "dataset" "source" "project" "web" }}
+        {{ if $has_abstract }}<a class="pub-btn" href="{{ $item.RelPermalink }}#abstract">ABS</a>{{ end }}
+        {{ range $key := slice "pdf" "pptx" "code" "hal" "scholar" "arxiv" "doi" "poster" "slides" "video" "dataset" "source" "project" "web" }}
           {{ with index $buttons $key }}<a class="pub-btn" href="{{ . }}"{{ if hasPrefix . "http" }} target="_blank" rel="noopener"{{ end }}>{{ upper $key }}</a>{{ end }}
         {{ end }}
       </div>
+      {{ end }}
     </div>
   </div>
 </article>
