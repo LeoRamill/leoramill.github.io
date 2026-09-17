@@ -3,16 +3,27 @@
      both: click to open it full size.
 
      dict: `photos`, `label`, `height` (thumbnail height, default 720 — a centre slide is large),
-     `interval` (milliseconds between advances, default 7000).
+     `interval` (milliseconds between advances, default 7000), `captions` (optional map of file name
+     to text).
+
+     The caption belongs to the middle photograph and is written once under the row rather than once
+     per slide: a line on a dimmed neighbour is noise, and three lines at once contradict the whole
+     point of holding one picture in the middle. A photograph with no entry in the map simply has no
+     caption, and the line collapses rather than leaving a gap.
 
      Put `data-photo-scope` on the wrapper, as for the strip, so the nav arrows find the track. */}}
 {{ $label := .label | default "Photos" }}
 {{ $h := .height | default 720 }}
 {{ $interval := .interval | default 7000 }}
+{{ $caps := .captions | default dict }}
 <div class="photo-carousel" data-photo-carousel data-photo-interval="{{ $interval }}">
   <div class="photo-carousel__track" data-photo-strip tabindex="0" role="group" aria-label="{{ $label }}, scroll horizontally">
-    {{ range .photos }}{{ partial "photo_item" (dict "photo" . "height" $h) }}{{ end }}
+    {{ range .photos }}
+      {{ partial "photo_item" (dict "photo" . "height" $h "caption" (index $caps (path.Base .Name))) }}
+    {{ end }}
   </div>
+  {{/* `polite`, so a screen reader is told which photograph is showing without being interrupted. */}}
+  <p class="photo-carousel__caption" data-photo-caption-out aria-live="polite"></p>
 </div>
 
 <script>
@@ -27,6 +38,24 @@
     // How far each slide is from the middle of the track, 0 at dead centre and 1 a slide-width
     // away. The stylesheet reads it: the centre one is full size and full strength, the rest shrink
     // and dim, which is what makes the middle read as the picture and the others as its edges.
+    // The caption follows whatever reaches the middle, written only when the middle actually
+    // changes — `paint` runs on every scroll frame, and rewriting the same text sixty times a
+    // second would restart its fade continuously and keep a screen reader talking.
+    var out = root.querySelector('[data-photo-caption-out]'), shownIdx = -1;
+    function caption(i) {
+      if (!out || i === shownIdx) return;
+      shownIdx = i;
+      var text = (items[i] && items[i].dataset.photoCaption) || '';
+      out.classList.remove('is-in');
+      // One frame with the old text faded out, then the new text fades in.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          out.textContent = text;
+          if (text) out.classList.add('is-in');
+        });
+      });
+    }
+
     var queued = false;
     function paint() {
       queued = false;
@@ -35,6 +64,7 @@
         var d = Math.abs(el.offsetLeft + el.offsetWidth / 2 - mid) / (el.offsetWidth || 1);
         el.style.setProperty('--d', Math.min(d, 1).toFixed(3));
       });
+      caption(centred());
     }
     function schedule() { if (!queued) { queued = true; requestAnimationFrame(paint); } }
     track.addEventListener('scroll', schedule, { passive: true });
