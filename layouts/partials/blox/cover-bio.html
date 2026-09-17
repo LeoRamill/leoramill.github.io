@@ -3,7 +3,7 @@
 
      The cover is either one full-width photograph (`image`) or a carousel of them: one held large
      in the middle with its neighbours peeking in at the sides, advancing on its own every
-     `interval` milliseconds (default 7000). `folder` is a directory under `assets/media/`.
+     `interval` milliseconds (default 5000). `folder` is a directory under `assets/media/`.
 
      It needs at least two photographs to be a carousel — with one, a slide that cannot advance and
      arrows that cannot move are worse than the single picture, so it falls back to `image`. Which
@@ -27,7 +27,7 @@
     <div class="cover-strip" data-photo-scope>
       {{ partial "photo_nav" (dict "label" "cover photos") }}
       {{ partial "photo_carousel" (dict "photos" $covers "label" "Cover photos"
-                                        "interval" ($block.content.interval | default 7000)) }}
+                                        "interval" ($block.content.interval | default 5000)) }}
     </div>
   {{ else }}
     {{ with $block.content.image }}
