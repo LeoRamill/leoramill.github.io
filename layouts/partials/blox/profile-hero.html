@@ -97,12 +97,17 @@
           img.src = url(i);
         }
         function best(i) { while (i >= 0 && !frames[i]) i--; return i; }
+        // A little tighter than cover, to crop the dim gallery walls out of the two edges of the
+        // frame. Applied when drawing rather than by scaling the canvas afterwards: the crop then
+        // comes out of the source frame at its own resolution instead of resampling a bitmap that
+        // was already fitted once. The hold clip carries the same number in the stylesheet.
+        var ZOOM = 1.1;
         function draw(i) {
           var k = best(i);
           if (k < 0) return;
           var img = frames[k], w = canvas.width, h = canvas.height;
           // cover-fit, anchored a little above centre like the CSS layer was
-          var s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+          var s = Math.max(w / img.naturalWidth, h / img.naturalHeight) * ZOOM;
           var dw = img.naturalWidth * s, dh = img.naturalHeight * s;
           ctx.drawImage(img, (w - dw) / 2, (h - dh) * 0.45, dw, dh);
           shown = k;
