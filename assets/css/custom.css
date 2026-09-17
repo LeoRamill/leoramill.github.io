@@ -365,6 +365,20 @@ html.reveal-ready .reveal.is-in { transition-delay: var(--reveal-delay, 0ms); }
 .home-no-veil .text-gray-500, .home-no-veil .dark\:text-gray-400, .home-no-veil p.text-sm,
 .home-no-veil time, .dark .home-no-veil .text-gray-500, .dark .home-no-veil .dark\:text-gray-400 { color: rgb(226 232 240); }
 .home-no-veil .news-list__body { color: #f8fafc; }
+/* The entry list's own greys. They come from the theme's `text-zinc-600 dark:text-zinc-400`, which
+   the rule above does not reach, and over a photograph zinc-400 measured 4.25:1 — under what body
+   text needs. Same lesson as the wash: what decides whether this page reads is the colour of the
+   muted text, not how dark the veil is.
+
+   `.dark.home-no-veil`, joined and not spaced: a homepage section carries BOTH classes on the one
+   element, so `.dark .home-no-veil` — which asks for one inside the other — never matches it. The
+   date needs that extra weight because `.dark .pub-date` does match (the section is the ancestor of
+   the date) and ties with a plain `.home-no-veil .pub-date`, which then loses on source order; the
+   date stayed at 2.1:1 until the selector was right. */
+.home-no-veil .pub-authors, .home-no-veil .pub-venue, .home-no-veil .pub-summary,
+.dark.home-no-veil .pub-authors, .dark.home-no-veil .pub-venue,
+.dark.home-no-veil .pub-summary { color: rgb(226 232 240); }
+.dark.home-no-veil .pub-date, .home-no-veil .pub-entry .pub-date { color: rgb(203 213 225); }
 /* The bio is set in italic slate-300 by the theme, and italics over a picture lose more than
    upright text does: at white it needs a third less tint for the same reading. */
 .home-no-veil .cover-bio__text, .home-no-veil .cover-bio__text p, .dark .home-no-veil .cover-bio__text p { color: #ffffff; }
@@ -824,6 +838,14 @@ html.has-open-dialog { overflow: hidden; }
 .dark .pub-figure { border-color: rgb(63 63 70); background-color: rgb(24 24 27); box-shadow: none; }
 
 .pub-text { z-index: 10; }
+/* The small line above the title, where a project puts its tags. Set the way the theme sets a card's
+   kicker — uppercase, tracked out, in the accent — so a project reads as a project even in a list
+   built for papers. */
+.pub-tags {
+  margin: 0 0 0.25rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgb(67 56 202);
+}
+.dark .pub-tags { color: rgb(165 180 252); }
 .pub-title { margin: 0; font-size: 1.05rem; line-height: 1.45; font-weight: 500; letter-spacing: -0.005em; }
 .pub-authors, .pub-venue, .pub-summary { margin: 0.15rem 0 0; font-size: 0.9rem; line-height: 1.45; }
 /* Your own name, wherever it shows up in an author list */
