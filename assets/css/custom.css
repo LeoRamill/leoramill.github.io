@@ -236,6 +236,26 @@ body.page-wrapper, .dark body.page-wrapper { background-color: transparent; }
 /* The theme's section wrapper must not clip, or `sticky` inside it cannot hold */
 #hero { overflow: visible; }
 
+/* Scroll reveal on the homepage. The `reveal` class is put on by the script in
+   `layouts/partials/landing_page.html`, never by this stylesheet — so a page whose script did not
+   run is a page with nothing hidden, rather than a blank one.
+
+   The transition lives on `.is-in` and not on `.reveal`: the resting state then applies instantly
+   when the class lands, with nothing to animate from, and only the arrival is animated.
+
+   14px of rise, not more. Over a photograph the eye reads the fade; the movement is there to give
+   the fade a direction, and a long slide would turn a page into a slideshow. */
+.reveal { opacity: 0; transform: translateY(14px); will-change: opacity, transform; }
+.reveal.is-in {
+  opacity: 1; transform: none;
+  transition: opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1), transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* Belt and braces: the script already returns early under reduced motion, but if the preference is
+   switched on after the classes are set, this puts everything back. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.is-in { opacity: 1; transform: none; transition: none; }
+}
+
 /* ----- Homepage over the picture -----
    The page carries the lightest single wash its text survives, 0.56, on the fixed layer above.
    Two things buy that, and without them the same reading needed 0.68. First a halo on the text:

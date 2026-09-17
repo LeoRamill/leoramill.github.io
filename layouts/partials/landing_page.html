@@ -1,0 +1,59 @@
+{{/* Copy of the theme's `landing_page.html` with the scroll reveal appended. */}}
+{{/* Load Hugo Blox */}}
+{{ range $index, $block := .Params.sections }}
+  {{/* Do not show sections intended only for the demo site. */}}
+  {{ if or (not $block.demo) ($block.demo | and (eq (os.Getenv "HUGO_BLOX_DEMO") "true")) }}
+    {{ partial "functions/parse_block_v2" (dict "page" $ "block" $block) }}
+  {{ end }}
+{{ end }}
+
+{{/* Scroll reveal. Nothing is hidden by the stylesheet: the script puts the `reveal` class on the
+     elements itself, so if it never runs — no JavaScript, an error, an old browser without
+     IntersectionObserver — the page is simply the page, fully readable. That is the whole reason
+     the hiding is not in the CSS where it would be shorter to write. */}}
+<script>
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // The hero is left out on purpose: it already moves, the camera walks in as you scroll, and a
+    // second animation over the name would fight it. Everything below the first screen is fair game.
+    var sections = [].filter.call(document.querySelectorAll('.hbb-section'), function (s) {
+      return !s.querySelector('.hero-pin, .profile-hero');
+    });
+
+    var units = [];
+    sections.forEach(function (sec) {
+      var order = 0;
+      [].forEach.call(sec.children, function (child) {
+        if (child.classList.contains('home-section-bg')) return;
+        // A list reveals row by row; anything else reveals as one block. Fading six news rows
+        // together reads as a slide changing, one after another reads as the page arriving.
+        var rows = child.querySelectorAll('.news-list__item, .pub-entry');
+        var group = rows.length
+          ? [child.querySelector('.news-list__title')].concat([].slice.call(rows), [child.querySelector('.news-list__more')])
+          : [child];
+        group.forEach(function (el) {
+          // No box, nothing to fade: a <script> sitting in a block is a child like any other, and
+          // an observer never fires for something with no area, so it would stay classed forever.
+          if (!el || !el.getClientRects().length) return;
+          el.classList.add('reveal');
+          // The stagger is per section, so each one starts its own count rather than inheriting a
+          // delay from how far down the page it sits.
+          el.style.transitionDelay = Math.min(order++ * 70, 350) + 'ms';
+          units.push(el);
+        });
+      });
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);   // once, on the way down; scrolling back up does not replay it
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+
+    units.forEach(function (el) { io.observe(el); });
+  })();
+</script>
