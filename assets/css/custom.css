@@ -176,14 +176,19 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
    same 3:2 window with the picture cropped to fill it, so the row reads as one frame the pictures
    pass through rather than as photographs of assorted shapes lined up. */
 .photo-carousel { position: relative; }
+/* Pulled up under the hero. The section's own 2.5rem of padding is shared by every block on the
+   page, so it is this one that gives ground rather than the rhythm everything else keeps. */
+.cover-strip { margin-top: -1.25rem; }
 .photo-carousel__track {
   display: flex; gap: clamp(0.6rem, 1.4vw, 1rem);
   /* `mandatory`, not `proximity`: a slide always ends centred, which is the whole shape of this. */
   overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
-  /* Vertical room only: the centre slide is scaled up and its shadow would be clipped without it. */
-  padding-block: 1.6rem 2.2rem;
+  /* Vertical room below only, for the shadow. There is none to spare above: the hero ends on the
+     View CV button and the pictures should follow it closely, and nothing here grows upwards —
+     the centre slide sits at scale 1 and only the neighbours shrink. */
+  padding-block: 0.4rem 2rem;
   scrollbar-width: none;
-  --slide: 62%;
+  --slide: 74%;
 }
 .photo-carousel__track::-webkit-scrollbar { display: none; }
 /* The room at the two ends, so the first and last photograph can reach the middle like the others.
@@ -214,7 +219,7 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 @media (max-width: 767px) {
   /* A phone has no room for two neighbours and a big middle: the slide takes most of the width and
      the sides become an edge rather than a picture. */
-  .photo-carousel__track { padding-block: 1rem 1.6rem; --slide: 78%; }
+  .photo-carousel__track { padding-block: 0.3rem 1.4rem; --slide: 86%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .photo-carousel .photo-item { transition: none; }
