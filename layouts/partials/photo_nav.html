@@ -1,0 +1,13 @@
+{{/* The two arrows that scroll a strip. They find their strip by walking up to the nearest
+     `data-photo-scope`, so they can sit anywhere inside it — in an album's title row on the
+     photography page, above the row on the homepage. Hidden on touch, where a finger is better
+     than a button (see `@media (pointer: coarse)` in custom.css). */}}
+{{ $label := .label | default "photos" }}
+<div class="photo-nav">
+  <button type="button" class="photo-nav-btn" data-photo-scroll="-1" aria-label="Scroll {{ $label }} left">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button type="button" class="photo-nav-btn" data-photo-scroll="1" aria-label="Scroll {{ $label }} right">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>

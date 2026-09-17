@@ -1,19 +1,40 @@
 {{/* Custom block: cover-bio */}}
-{{/* Full-width cover photo followed by an italic biography (riccardocadei-style "About"). */}}
+{{/* Cover photography followed by an italic biography.
+
+     The cover is either one full-width photograph (`image`) or a row of them that scrolls sideways,
+     the same row the photography page uses (`folder`, a directory under `assets/media/`). The row
+     needs at least two photographs to be a row: with one, arrows that cannot move and a strip that
+     cannot scroll are worse than the single picture, so it falls back to `image`. Which means the
+     switch is made by putting files in the folder, not by editing anything here. */}}
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 
 {{ $author := $block.content.username | default "admin" }}
 {{ $person_page := site.GetPage (printf "/authors/%s" $author) }}
 
+{{ $covers := slice }}
+{{ with $block.content.folder }}
+  {{ range resources.Match (printf "media/%s/*" .) }}
+    {{ if in (slice "jpeg" "png" "webp" "tiff") .MediaType.SubType }}{{ $covers = $covers | append . }}{{ end }}
+  {{ end }}
+  {{ $covers = sort $covers "Name" }}
+{{ end }}
+
 <div class="cover-bio">
-  {{ with $block.content.image }}
-    {{ $img := resources.Get (path.Join "media" .) }}
-    {{ if $img }}
-      {{ if ne $img.MediaType.SubType "svg" }}{{ $img = $img.Fit "1800x1800 webp q85" }}{{ end }}
-      <img class="cover-bio__cover" src="{{ $img.RelPermalink }}"{{ if ne $img.MediaType.SubType "svg" }} width="{{ $img.Width }}" height="{{ $img.Height }}"{{ end }} alt="{{ $block.content.alt | default "" }}" loading="lazy">
-    {{ else }}
-      {{ warnf "cover-bio: image `%s` not found in `assets/media/`" . }}
+  {{ if ge (len $covers) 2 }}
+    <div class="cover-strip" data-photo-scope>
+      {{ partial "photo_nav" (dict "label" "cover photos") }}
+      {{ partial "photo_strip" (dict "photos" $covers "label" "Cover photos" "height" 640) }}
+    </div>
+  {{ else }}
+    {{ with $block.content.image }}
+      {{ $img := resources.Get (path.Join "media" .) }}
+      {{ if $img }}
+        {{ if ne $img.MediaType.SubType "svg" }}{{ $img = $img.Fit "1800x1800 webp q85" }}{{ end }}
+        <img class="cover-bio__cover" src="{{ $img.RelPermalink }}"{{ if ne $img.MediaType.SubType "svg" }} width="{{ $img.Width }}" height="{{ $img.Height }}"{{ end }} alt="{{ $block.content.alt | default "" }}" loading="lazy">
+      {{ else }}
+        {{ warnf "cover-bio: image `%s` not found in `assets/media/`" . }}
+      {{ end }}
     {{ end }}
   {{ end }}
 
@@ -25,3 +46,5 @@
     {{ end }}
   </div>
 </div>
+
+{{ if ge (len $covers) 2 }}{{ partial "photo_lightbox" $page }}{{ end }}

@@ -62,8 +62,13 @@ sections:
       # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
     content:
       username: admin
-      # Placeholder cover (generated). Replace with your own photo, e.g. `cover.jpg` in `assets/media/`.
-      image: cover.JPG
+      # A folder under `assets/media/` turns the cover into a row that scrolls sideways, the same
+      # row the photography page uses. It needs two photographs to become one — with fewer, the
+      # block falls back to `image` below, because a strip that cannot scroll is worse than a
+      # single picture. So the switch is made by dropping files in `assets/media/covers/`.
+      folder: covers
+      # The fallback, and what shows while the folder holds fewer than two photographs.
+      image: covers/01-cover.JPG
       alt: Per Aspera Ad Astra
       # Leave `text` empty to use the biography written in `content/authors/admin/_index.md`
       text: ""
