@@ -29,27 +29,28 @@
   background-color: rgb(39 39 42 / 0.82);
   border-bottom-color: rgb(255 255 255 / 0.08);
 }
-/* The homepage is a dark photograph at every scroll position, not only at the top, so the links
+/* A page with a fixed backdrop — the homepage, and every review or gallery that carries a
+   `background.*` — is a dark photograph at every scroll position, not only at the top, so the links
    need darkening under them wherever they are. But a flat bar over a photograph is the problem this
    change set out to fix, only darker: it still ends in a line. A gradient does the same job with no
    edge at all — opaque enough to read white text against at the top of the window, gone by the time
    it clears the bar — and it is taller than the header so the fade has room to happen. No blur
    here: blurring a photograph reads as a smudge, where on a page of text it reads as frosted glass. */
-body:has(.hero-pin) #site-header.header,
-.dark body:has(.hero-pin) #site-header.header {
+body:has(.site-fixed-bg) #site-header.header,
+.dark body:has(.site-fixed-bg) #site-header.header {
   position: relative;
   background-color: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-bottom-color: transparent;
 }
-body:has(.hero-pin) #site-header.header::before {
+body:has(.site-fixed-bg) #site-header.header::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 220%; z-index: -1;
   pointer-events: none;
   background: linear-gradient(to bottom, rgb(10 8 16 / 0.88) 0%, rgb(10 8 16 / 0.62) 42%, rgb(10 8 16 / 0) 100%);
   transition: opacity 250ms ease;
 }
-html.at-top body:has(.hero-pin) #site-header.header::before { opacity: 0; }
+html.at-top body:has(.site-fixed-bg) #site-header.header::before { opacity: 0; }
 html.at-top #site-header.header {
   background-color: transparent;
   border-bottom-color: transparent;
@@ -68,27 +69,29 @@ html.at-top #site-header.header {
   border-bottom-color: rgb(24 24 27 / 0.07);
 }
 .dark #site-header.header:has(#nav-toggle:checked) { background-color: rgb(39 39 42 / 0.97); }
-body:has(.hero-pin) #site-header.header:has(#nav-toggle:checked),
-.dark body:has(.hero-pin) #site-header.header:has(#nav-toggle:checked) {
+body:has(.site-fixed-bg) #site-header.header:has(#nav-toggle:checked),
+.dark body:has(.site-fixed-bg) #site-header.header:has(#nav-toggle:checked) {
   background-color: rgb(10 8 16 / 0.95);
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
 }
-body:has(.hero-pin) #site-header.header:has(#nav-toggle:checked)::before { opacity: 0; }
+body:has(.site-fixed-bg) #site-header.header:has(#nav-toggle:checked)::before { opacity: 0; }
 
-/* On the homepage the bar's contents sit on the picture whatever the scroll, so they are light
+/* On such a page the bar's contents sit on the picture whatever the scroll, so they are light
    throughout. The theme paints the links and the two buttons near-black in light mode, and the
-   GitHub glyph is near-black in both — invisible over a dim museum hall. */
-body:has(.hero-pin) #site-header,
-body:has(.hero-pin) #site-header .nav-link,
-body:has(.hero-pin) #site-header .text-black,
-body:has(.hero-pin) .navbar-social a[data-icon="brands/github"],
-body:has(.hero-pin) .navbar-social a[data-icon="brands/x"],
-body:has(.hero-pin) .navbar-social a[data-icon="brands/instagram"] { color: #ffffff; }
+   GitHub glyph is near-black in both — invisible over a dim museum hall or a night-time film still.
+   Keyed on the backdrop layer and not on the homepage's pin: a review page carries the same layer
+   and the same problem, and keying it on the pin left its navbar black on black. */
+body:has(.site-fixed-bg) #site-header,
+body:has(.site-fixed-bg) #site-header .nav-link,
+body:has(.site-fixed-bg) #site-header .text-black,
+body:has(.site-fixed-bg) .navbar-social a[data-icon="brands/github"],
+body:has(.site-fixed-bg) .navbar-social a[data-icon="brands/x"],
+body:has(.site-fixed-bg) .navbar-social a[data-icon="brands/instagram"] { color: #ffffff; }
 /* The same halo the homepage's own text carries, weaker: the bar has no wash of its own now, and
    the picture behind it is at its brightest right where the links sit. */
-body:has(.hero-pin) #site-header .nav-link,
-body:has(.hero-pin) #site-header .navbar-social a { text-shadow: 0 1px 2px #000000cc, 0 0 12px #00000099; }
+body:has(.site-fixed-bg) #site-header .nav-link,
+body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px #000000cc, 0 0 12px #00000099; }
 
 .navbar-logo { width: 2.25rem; height: 2.25rem; border-radius: 9999px; object-fit: cover; }
 .navbar-social { display: flex; align-items: center; gap: 0.65rem; list-style: none; margin: 0; padding: 0; }
@@ -408,15 +411,6 @@ body:has(.hero-pin) .page-footer a { color: #ffffff; }
 .dark .shaping-scope { --ink: #f4f4f5; --muted: #a1a1aa; --line: #3f3f46; --paper: #27272a; --green: #6ee7a8; --blue: #b9a5f0; --yellow: #f2c46b; }
 .shaping-scope h1, .shaping-scope h2 { margin: 0; line-height: 0.92; letter-spacing: 0; font-weight: 800; }
 .shaping-page { width: 100%; min-height: 80svh; padding-block: clamp(1rem, 2vw, 2rem) 6rem; }
-.shaping-breadcrumbs {
-  display: flex; align-items: center; justify-content: center; gap: 0.55rem;
-  width: min(100% - 1.25rem, var(--max)); margin: 0 auto 1.5rem; color: var(--muted); font-size: 1.2rem; font-weight: 800;
-}
-.shaping-breadcrumbs .breadcrumb-link, .shaping-breadcrumbs .breadcrumb-current { display: inline-flex; align-items: center; min-height: 2.1rem; text-decoration: none; }
-.shaping-breadcrumbs .breadcrumb-link:first-child { font-size: 1.35em; line-height: 1; }
-.shaping-breadcrumbs .breadcrumb-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
-.shaping-breadcrumbs .is-current { color: var(--ink); }
-.shaping-breadcrumbs .breadcrumb-separator { opacity: 0.7; }
 .shaping-title, .shaping-description, .shaping-title-hint, .focus-section { width: min(100% - 1.25rem, var(--max)); margin-inline: auto; }
 .shaping-scope .shaping-title { max-width: 960px; margin-inline: auto; font-size: clamp(3rem, 5.45vw, 5.35rem); line-height: 1; text-align: center; }
 .shaping-description { max-width: 29rem; margin-block: clamp(0.25rem, 0.6vw, 0.45rem) 0; font-size: clamp(0.98rem, 1.28vw, 1.12rem); font-weight: 500; line-height: 1.12; text-align: center; }
@@ -709,13 +703,10 @@ html.has-open-dialog { overflow: hidden; }
   color: #f6f6f8;
 }
 .has-backdrop .review-hero { padding-block: clamp(1.25rem, 3vw, 2.5rem) clamp(2.5rem, 6vw, 4.5rem); }
-.has-backdrop .shaping-breadcrumbs .breadcrumb-link,
-.has-backdrop .shaping-breadcrumbs .is-current { color: #ffffff; }
 .has-backdrop .review-title,
 .has-backdrop .shaping-card-meta,
 .has-backdrop .shaping-dialog-catchphrase,
-.has-backdrop .shaping-rating-text,
-.has-backdrop .shaping-breadcrumbs { text-shadow: 0 1px 6px #00000096; }
+.has-backdrop .shaping-rating-text { text-shadow: 0 1px 6px #00000096; }
 .has-backdrop .shaping-star { color: #ffffff4d; }
 .has-backdrop .review-cover { border-color: #ffffff59; box-shadow: 0 26px 60px #00000080; }
 /* A review with a backdrop but no cover yet: keep the lettered placeholder dark, so it reads as part

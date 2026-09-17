@@ -19,8 +19,6 @@
 
   <div class="review-hero">
     <div class="review-hero-inner">
-      {{ partial "shaping_breadcrumbs" . }}
-
       <div class="review-head">
         <div class="review-cover" style="--card-accent: {{ $accent }}">
           {{ with $cover }}<img src="{{ . }}" alt="" loading="eager" decoding="async">{{ else }}<span>{{ $.Title }}</span>{{ end }}
