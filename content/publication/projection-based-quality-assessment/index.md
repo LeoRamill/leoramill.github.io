@@ -1,6 +1,6 @@
 ---
 title: 'Projection-Based Quality Assessment of Cerebrovascular Segmentations'
-date: '2026-07-17'
+date: '2026-09-01'
 summary: 'Localized quality assessment of 3D vessel segmentations recast as detection in canonical 2D projection views: an F1 of 88.31 on 99 TOF-MRA subjects, with a lightweight detector rather than a large vision-language model.'
 # Shown in the list under the title; the first `authors_shown` are named, the rest fold into
 # "N more authors"
@@ -30,7 +30,7 @@ buttons:
 
 **Authors** — Bogdan Ion, Xiaoming Zhang, Leonard Vincent Ramil, Alice Boccadifuoco, Sébastien Ourselin, Jon Cleary, Maria A. Zuluaga
 
-**Venue** — SWITCH+ 2026, MICCAI Workshop on Stroke and neurovascular diseases: Imaging and Treatment CHallenges. Strasbourg, France, July 2026.
+**Venue** — SWITCH+ 2026, MICCAI Workshop on Stroke and neurovascular diseases: Imaging and Treatment CHallenges. Strasbourg, France, September 2026.
 
 **Affiliations** — EURECOM, Sophia Antipolis, France · Politecnico di Torino, Turin, Italy · School of Biomedical Engineering & Imaging Sciences, King's College London, UK
 
