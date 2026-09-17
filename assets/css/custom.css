@@ -162,9 +162,63 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   --ink: #f4f4f5; --muted: #d4d4d8; --line: #ffffff59; --paper: #ffffff1f; --blue: #cbb8ff;
   position: relative;
 }
-.cover-strip .photo-nav { justify-content: flex-end; margin-bottom: 0.75rem; }
-.cover-strip .photo-nav-btn { backdrop-filter: blur(6px); }
-.cover-strip .photo-item { box-shadow: 0 18px 40px #00000059; }
+/* The arrows ride on the track's two edges, vertically centred, the way a carousel's always have —
+   above it they sat at the very top of the section, close enough to the navbar to read as part of
+   it. The row itself takes no clicks so the photographs underneath stay reachable. */
+.cover-strip .photo-nav {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 0; padding: 0 0.4rem; pointer-events: none;
+}
+.cover-strip .photo-nav-btn { pointer-events: auto; backdrop-filter: blur(6px); }
+
+/* One photograph large in the middle, its neighbours leaning in from the sides. Every slide is the
+   same 3:2 window with the picture cropped to fill it, so the row reads as one frame the pictures
+   pass through rather than as photographs of assorted shapes lined up. */
+.photo-carousel { position: relative; }
+.photo-carousel__track {
+  display: flex; gap: clamp(0.6rem, 1.4vw, 1rem);
+  /* `mandatory`, not `proximity`: a slide always ends centred, which is the whole shape of this. */
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  /* Vertical room only: the centre slide is scaled up and its shadow would be clipped without it. */
+  padding-block: 1.6rem 2.2rem;
+  scrollbar-width: none;
+  --slide: 62%;
+}
+.photo-carousel__track::-webkit-scrollbar { display: none; }
+/* The room at the two ends, so the first and last photograph can reach the middle like the others.
+   Flex spacers and not padding, and the reason is a trap worth naming: a percentage padding resolves
+   against the containing block's width, a percentage flex-basis against the flex container's CONTENT
+   box — which the padding has already narrowed. Sized the two ways, the sums do not close and the
+   first slide sits off centre by exactly the padding. As spacers, both resolve against the same box
+   and `(100% - slide) / 2` is exactly right. */
+.photo-carousel__track::before, .photo-carousel__track::after {
+  content: ""; flex: 0 0 calc((100% - var(--slide)) / 2);
+}
+.photo-carousel .photo-item {
+  flex: 0 0 var(--slide); height: auto; aspect-ratio: 3 / 2; scroll-snap-align: center;
+  border-radius: 0.7rem; box-shadow: 0 22px 50px #00000066;
+  /* `--d` is the distance from the middle, 0 to 1, set by the script in `photo_carousel`. */
+  transform: scale(calc(1 - 0.12 * var(--d, 1)));
+  /* Darkened, not faded. Over a photograph for a background, a half-transparent neighbour lets the
+     picture behind it show through and the two mix into a smear; a darker but solid one still reads
+     as a photograph standing next in line. */
+  filter: brightness(calc(1 - 0.42 * var(--d, 1)));
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+.photo-carousel .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+/* The hover lift belongs to the strip, where every photograph is equal. Here the middle one is
+   already the subject, and lifting a dimmed neighbour on the way past reads as a glitch. */
+.photo-carousel .photo-item:hover, .photo-carousel .photo-item:focus-visible { transform: scale(calc(1 - 0.12 * var(--d, 1))); }
+.photo-carousel .photo-item:active { transform: scale(calc(0.98 - 0.12 * var(--d, 1))); }
+@media (max-width: 767px) {
+  /* A phone has no room for two neighbours and a big middle: the slide takes most of the width and
+     the sides become an edge rather than a picture. */
+  .photo-carousel__track { padding-block: 1rem 1.6rem; --slide: 78%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo-carousel .photo-item { transition: none; }
+}
 .cover-bio__text { max-width: none; margin-top: 2rem; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
 .cover-bio__text strong { font-style: italic; }
 @media (min-width: 768px) {
@@ -636,7 +690,11 @@ html.has-open-dialog { overflow: hidden; }
 .photo-item img { display: block; width: auto; height: 100%; }
 .photo-item:hover, .photo-item:focus-visible { transform: translateY(-0.28rem); box-shadow: 0 22px 46px #16201b2e; }
 .photo-item:focus-visible { outline: 2px solid var(--blue); outline-offset: 0.25rem; }
-@media (pointer: coarse) { .photo-nav { display: none; } }
+/* A finger beats a button, and the arrows would sit over the picture. `.cover-strip .photo-nav` is
+   named too: the rule that positions it on the track's edges is more specific than a bare
+   `.photo-nav`, and a media query adds no specificity of its own, so without it the carousel kept
+   its arrows on a phone while every other strip lost them. */
+@media (pointer: coarse) { .photo-nav, .cover-strip .photo-nav { display: none; } }
 
 /* Full-size photo */
 .photo-lightbox { width: min(100% - 1.5rem, 1400px); max-height: calc(100svh - 1.5rem); padding: 0; border: 0; background: transparent; overflow: visible; }

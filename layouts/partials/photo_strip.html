@@ -1,22 +1,14 @@
-{{/* A row of photos that scrolls sideways. Shared by the photography page's albums and the
-     homepage cover, so an item has one definition rather than two that drift.
+{{/* A row of photos that scrolls sideways, every one at the same height, as many visible as fit.
+     Used by the photography page's albums. The homepage cover uses `photo_carousel` instead, which
+     centres one and is built on the same item.
 
      dict: `photos` (image resources), `label` (what a screen reader is told the row is),
-     `height` (thumbnail height in pixels, default 560 — the CSS decides the displayed size, this
-     only sets how much detail is fetched).
+     `height` (thumbnail height in pixels, default 560).
 
      The caller supplies the scrolling context: put `data-photo-scope` on whatever wraps this strip
      and the nav buttons, because that is what the arrow script walks up to find. */}}
-{{ $photos := .photos }}
 {{ $label := .label | default "Photos" }}
 {{ $h := .height | default 560 }}
 <div class="photo-strip" data-photo-strip tabindex="0" role="group" aria-label="{{ $label }}, scroll horizontally">
-  {{ range $photos }}
-    {{ $thumb := .Resize (printf "x%v webp q80" $h) }}
-    {{ $full := . }}
-    {{ if gt .Width 1800 }}{{ $full = .Resize "1800x webp q82" }}{{ end }}
-    <button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}" aria-label="Open photo">
-      <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy" decoding="async">
-    </button>
-  {{ end }}
+  {{ range .photos }}{{ partial "photo_item" (dict "photo" . "height" $h) }}{{ end }}
 </div>
