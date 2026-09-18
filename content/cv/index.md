@@ -18,7 +18,7 @@ commentable: false
 
 ### Double M.Sc. in Computer Science — EURECOM
 
-*Sophia Antipolis, France · 2025 – 2026 · 17.36/20*
+*Sophia Antipolis, France · 2025 – 2026*
 
 Major in Data Science. Coursework in digital image and sound/music processing, optimization,
 reinforcement learning and cloud computing. Semester project on quality control of annotations in a
@@ -77,57 +77,6 @@ collaboration with Intesa Sanpaolo.
   of 3D vessel segmentations recast as detection in canonical 2D projection views, for an F1 of 88.31
   on 99 TOF-MRA subjects.
 
-## Selected Projects
-
-### [VesselVerse Quality Control](/project/vesselverse-quality-control/)
-
-*2025 – 2026 · Python, PyTorch*
-
-Multimodal deep learning pipeline — multi-view ResNet on maximum-intensity projections, an MLP on
-nineteen graph metrics of the vessel tree, and GradCAM for explanation — for automated quality control
-of cerebrovascular segmentations. About 83% validation accuracy.
-
-### [ADACS: Adversarial Domain Adaptation via Cross-domain Mixed Sampling](/project/adacs/)
-
-*May 2025 – July 2025 · Python, PyTorch, Wandb*
-
-Unsupervised domain adaptation framework aligning synthetic (GTAV) to real-world (Cityscapes) data for
-semantic segmentation. Improved mIoU from 26.38% to 37.01% with ResNet-101, and from 23.80% to 29.76%
-with ResNet-18.
-
-### CARLA — Counterfactual And Recourse LibrAry
-
-*May 2024 – October 2024 · Python, PyTorch · [GitHub](https://github.com/hercolelab/CARLA)*
-
-Extended the CARLA benchmarking library with graph-based counterfactual explainability methods, as part
-of the bachelor's thesis. See also [CF-GNNExplainer](/project/cf-gnnexplainer/).
-
-### [WASAPhoto](/project/wasaphoto/)
-
-*2024 · Go, Vue.js, Docker*
-
-Photo-sharing web application, backend to frontend, containerised and documented with OpenAPI.
-
-### [ProfessorAdvisor](/project/professor-advisor/)
-
-*2024 · Figma*
-
-Human-centered design project, from needfinding and interviews through to a tested digital prototype.
-
-### [KYC — Know Your Cards](/project/kyc/)
-
-*July 2023 – September 2023 · Python, TensorFlow, OpenCV*
-
-Computer vision pipeline using bitmasking and a CNN to identify and grade first-generation Pokémon
-trading cards on the Beckett scale.
-
-### [Analyzing Tradeoffs between Activation Functions and Optimizers](/project/pokemon-activation-optimizers/)
-
-*2023 · Python, TensorFlow*
-
-Deep learning study of activation-function and optimizer pairings, on first-generation Pokémon
-classification.
-
 ## Extracurricular Activity
 
 ### BOOST'24 Summer School — ELICSIR Foundation
@@ -155,7 +104,7 @@ Managed a group of tutors assisting more than 200 students, improving administra
 
 ## Languages
 
-- **Italian** — native
-- **English** — professional
-- **Filipino** — basic
+- **Italian** — Native
+- **English** — Professional
+- **Filipino** — Basic
 - **French** — A2
