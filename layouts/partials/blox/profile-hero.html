@@ -219,7 +219,7 @@
 {{ if $scrub }}<div class="hero-pin"><div class="hero-pin__stage">{{ end }}
 <div class="profile-hero">
   {{ if $avatar }}
-    {{ $img := $avatar.Fill "360x360 Center webp q90" }}
+    {{ $img := $avatar2.Fill "360x360 Center webp q90" }}
     <img class="profile-hero__avatar" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $person_page.Title }}" fetchpriority="high">
   {{ end }}
 
