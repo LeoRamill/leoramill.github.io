@@ -62,6 +62,10 @@ sections:
       # across the page. One viewport-sized fixed box has no boundaries to land anywhere.
     content:
       username: admin
+      # The line that sits in the gap between the hero and the photographs, typed out one character
+      # at a time as that gap is scrolled through — and untyped scrolling back up, since what is
+      # shown is a function of the scroll position and not of a timer.
+      motto: "🌌 Per Aspera Ad Astra 🔭"
       # A folder under `assets/media/` turns the cover into a row that scrolls sideways, the same
       # row the photography page uses. It needs two photographs to become one — with fewer, the
       # block falls back to `image` below, because a strip that cannot scroll is worse than a

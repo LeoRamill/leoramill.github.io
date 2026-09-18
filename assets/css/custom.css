@@ -186,6 +186,39 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 /* Pulled up under the hero. The section's own 2.5rem of padding is shared by every block on the
    page, so it is this one that gives ground rather than the rhythm everything else keeps. */
 .cover-strip { margin-top: -1.25rem; }
+
+/* The line in the gap between the hero and the photographs. It takes over the pull upwards, so the
+   sentence sits where the empty space was and the photographs keep their distance from it. */
+.cover-bio__motto {
+  margin: -1.25rem 0 1.1rem; padding: 0 1rem;
+  /* The spaces are characters like the others and each sits in its own span, so they have to
+     survive as written rather than be collapsed away between two inline elements. */
+  white-space: pre-wrap;
+  text-align: center; text-wrap: balance;
+  font-size: clamp(1.05rem, 2vw, 1.45rem); font-weight: 500; letter-spacing: 0.07em;
+  color: #f4f4f5;
+}
+.cover-bio__motto + .cover-strip { margin-top: 0; }
+/* Hidden only once the script has taken charge: before that the sentence is the sentence. */
+.cover-bio__motto.is-typing .cover-bio__motto-c { opacity: 0; transition: opacity 0.16s ease; }
+.cover-bio__motto.is-typing .cover-bio__motto-c.is-on { opacity: 1; }
+.cover-bio__motto-c { position: relative; }
+/* The caret is drawn beside the last character written, not in the flow, so nothing moves when it
+   arrives or leaves. It keeps blinking while the page is still: that is the one part of this that
+   is not the scroll's to decide. */
+.cover-bio__motto.is-typing .cover-bio__motto-c.is-caret::after {
+  content: ""; position: absolute; left: 100%; top: 0.06em; bottom: 0.06em;
+  width: 2px; margin-left: 0.1em; background: currentColor;
+  animation: motto-caret 1.06s step-end infinite;
+}
+@keyframes motto-caret { 0%, 50% { opacity: 0.9; } 50.01%, 100% { opacity: 0; } }
+@media (max-width: 767px) {
+  .cover-bio__motto { margin-bottom: 0.85rem; letter-spacing: 0.05em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover-bio__motto-c { transition: none; }
+  .cover-bio__motto.is-typing .cover-bio__motto-c.is-caret::after { animation: none; }
+}
 .photo-carousel__track {
   display: flex; gap: clamp(0.6rem, 1.4vw, 1rem);
   /* `mandatory`, not `proximity`: a slide always ends centred, which is the whole shape of this. */
