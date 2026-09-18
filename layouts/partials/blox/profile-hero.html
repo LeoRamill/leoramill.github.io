@@ -256,21 +256,24 @@
     {{ with $block.content.button }}
     <a class="profile-hero__btn" href="{{ strings.TrimPrefix "/" .url | relURL }}" target="_blank" rel="noopener">{{ .text }}</a>
     {{ end }}
-
-    {{/* The epigraph under the button, written one character at a time as the camera pushes in.
-         One span per character, all of them in the layout from the start — that is what keeps the
-         line from growing as it types and dragging its own centre sideways on the phone, where the
-         hero is centred. The characters are plain text with no `aria-hidden` and no second copy for
-         screen readers: the spans are inline, so what a reader announces is the sentence, and text
-         at `opacity: 0` is still in the accessibility tree, which here is exactly right. `split` on
-         an empty separator gives runes, so an emoji comes out whole; one built from several code
-         points joined by a zero-width joiner would not, and would want its own splitting. */}}
-    {{ with $block.content.motto }}
-      {{ $text := . | emojify }}
-      <p class="profile-hero__quote" data-motto>{{ range $c := split $text "" }}<span class="profile-hero__quote-c">{{ $c }}</span>{{ end }}</p>
-    {{ end }}
   </div>
 </div>
+{{/* The epigraph: centred on the page, and halfway between the button above it and the photographs
+     that arrive from below. It is a sibling of the hero rather than a line inside its text column
+     because that is the only way to have both — the hero stays exactly centred in the screen and
+     the sentence sits in the middle of what is left under it (see `.hero-pin__stage`).
+
+     One span per character, all of them in the layout from the start: that is what keeps the line
+     from growing as it types and dragging its own centre sideways. The characters are plain text
+     with no `aria-hidden` and no second copy for screen readers — the spans are inline, so what a
+     reader announces is the sentence, and text at `opacity: 0` is still in the accessibility tree,
+     which here is exactly right. `split` on an empty separator gives runes, so an emoji comes out
+     whole; one built from several code points joined by a zero-width joiner would not, and would
+     want its own splitting. */}}
+{{ with $block.content.motto }}
+  {{ $text := . | emojify }}
+  <p class="profile-hero__quote" data-motto>{{ range $c := split $text "" }}<span class="profile-hero__quote-c">{{ $c }}</span>{{ end }}</p>
+{{ end }}
 {{ if $scrub }}</div></div>{{ end }}
 
 {{ with $block.content.motto }}
