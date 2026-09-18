@@ -40,7 +40,7 @@ header:
       # Leave `text` empty to show only the social icons on the left of the navbar
       text: ""
       # Logo filename in `assets/media/` folder (shown as a small round avatar)
-      filename: "icon.jpg"
+      filename: "icon2.jpeg"
 
 # Site footer
 footer:
