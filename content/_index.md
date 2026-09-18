@@ -77,7 +77,7 @@ sections:
       # out and it simply has no caption — the line collapses rather than holding a gap open.
       captions:
         01_Luminosità.JPG: 'Oslo, Norway. 2023: First trip outside Italy, First Photo'
-        02_surf.jpeg: 'San Juan, Philiphines. 2024: First Surf Lesson'
+        02_surf.jpeg: 'San Juan, Philippines. 2024: First Surf Lesson'
         03_cover.JPG: 'Corfù, Greece. 2024: The Sea of Thoughts, Best Pic'
         04_sapienza_grad.JPG: 'Rome, Italy. 2024: Bachelor Graduation'
         05_Turin.jpg: 'Turin, Italy. 2024: New chapter, new friendships'
