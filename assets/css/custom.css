@@ -144,7 +144,14 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
    its own band rather than sharing the text column, so it can carry that size and that weight
    without competing with anything. */
 .profile-hero__quote {
-  margin: 2.5rem auto 0; max-width: 56rem; padding: 0 1.25rem; text-align: center;
+  /* `width: 100%` and not the auto width a block would take on its own, and it is load-bearing:
+     auto margins on a grid item turn off stretching, so the box was sized to fit its text — and a
+     fit-content box under `text-wrap: balance` is a feedback loop. The balancer looks for a
+     narrower measure, the box follows it, the narrower box makes the line wrap, and the sentence
+     jumped half a line up and back down as it was written. Measured at a quarter of the character
+     counts, and 0.198 of layout shift over the pinned stretch. A width that does not depend on the
+     text cannot move. */
+  margin: 2.5rem auto 0; width: 100%; max-width: 56rem; padding: 0 1.25rem; text-align: center;
   /* Ordinary wrapping, not `pre-wrap`. Each space sits in its own span but never next to another
      space, so nothing collapses that should not — and at a line break the space is dropped, which
      is what keeps a wrapped line centred on its words rather than on a trailing blank. A motto
