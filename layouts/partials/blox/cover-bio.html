@@ -10,7 +10,10 @@
      means the switch is made by putting files in the folder, not by editing anything here.
 
      `captions` maps a file name to a line shown under whichever photograph is in the middle. A file
-     with no entry has no caption, so the map only needs the ones worth describing. */}}
+     with no entry has no caption, so the map only needs the ones worth describing.
+
+     `motto` is a line that sits in the gap between the hero and the photographs and types itself
+     out one character at a time as that gap is scrolled through. */}}
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 
@@ -26,6 +29,18 @@
 {{ end }}
 
 <div class="cover-bio">
+  {{/* One span per character, all of them in the layout from the start — that is what keeps the
+       line from growing as it types and dragging its own centre sideways. The characters are plain
+       text with no `aria-hidden` and no second copy for screen readers: the spans are inline, so
+       what a reader announces is the sentence, and text at `opacity: 0` is still in the
+       accessibility tree, which here is exactly right. `split` on an empty separator gives runes,
+       so the two emoji come out whole; an emoji built out of several code points joined by a
+       zero-width joiner would not, and would want its own splitting. */}}
+  {{ with $block.content.motto }}
+    {{ $text := . | emojify }}
+    <p class="cover-bio__motto" data-motto>{{ range $c := split $text "" }}<span class="cover-bio__motto-c">{{ $c }}</span>{{ end }}</p>
+  {{ end }}
+
   {{ if ge (len $covers) 2 }}
     <div class="cover-strip" data-photo-scope>
       {{ partial "photo_nav" (dict "label" "cover photos") }}
@@ -55,3 +70,45 @@
 </div>
 
 {{ if ge (len $covers) 2 }}{{ partial "photo_lightbox" $page }}{{ end }}
+
+{{ with $block.content.motto }}
+<script>
+  // The line types itself with the scroll rather than with a timer: the number of characters shown
+  // is a function of where the line is in the window, so scrolling back up untypes it, and a
+  // visitor who lands halfway down the page finds it in the state that position deserves instead of
+  // watching it start over.
+  (function () {
+    var el = document.querySelector('[data-motto]');
+    if (!el) return;
+    // Nothing is hidden by the stylesheet until this line runs, so without JavaScript, or for
+    // anyone who asked for less motion, the sentence is simply there.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var chars = [].slice.call(el.querySelectorAll('.cover-bio__motto-c'));
+    if (!chars.length) return;
+    el.classList.add('is-typing');
+
+    var shown = -1, ticking = false;
+    function paint() {
+      ticking = false;
+      // Typed across the stretch where the line climbs from just above the fold to a little past
+      // the middle of the window — the same stretch in which the hero lets go and the photographs
+      // arrive, which is the gap the sentence is meant to fill.
+      var top = el.getBoundingClientRect().top, h = window.innerHeight || 1;
+      var from = h * 0.92, to = h * 0.55;
+      var t = Math.min(Math.max((from - top) / (from - to), 0), 1);
+      var n = Math.round(t * chars.length);
+      if (n === shown) return;
+      shown = n;
+      for (var i = 0; i < chars.length; i++) {
+        chars[i].classList.toggle('is-on', i < n);
+        // The caret rides the last character written, and only while there is more to write.
+        chars[i].classList.toggle('is-caret', i === n - 1 && n < chars.length);
+      }
+    }
+    function tick() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
+    addEventListener('scroll', tick, { passive: true });
+    addEventListener('resize', tick);
+    paint();
+  })();
+</script>
+{{ end }}
