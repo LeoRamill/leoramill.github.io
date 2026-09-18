@@ -187,16 +187,18 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
    page, so it is this one that gives ground rather than the rhythm everything else keeps. */
 .cover-strip { margin-top: -1.25rem; }
 
-/* The line in the gap between the hero and the photographs. It takes over the pull upwards, so the
-   sentence sits where the empty space was and the photographs keep their distance from it. */
+/* The sentence in the gap between the hero and the photographs, at the size of the name in the
+   hero above it. The empty band underneath is not spacing left over: it is the distance the
+   sentence is written across, and the script reads it to know how fast to write. Shorten it and the
+   sentence types faster; there is no separate number to keep in step. */
 .cover-bio__motto {
-  margin: -1.25rem 0 1.1rem; padding: 0 1rem;
+  margin: 0 0 clamp(12rem, 44vh, 26rem); padding: 0 1rem;
   /* The spaces are characters like the others and each sits in its own span, so they have to
      survive as written rather than be collapsed away between two inline elements. */
   white-space: pre-wrap;
   text-align: center; text-wrap: balance;
-  font-size: clamp(1.05rem, 2vw, 1.45rem); font-weight: 500; letter-spacing: 0.07em;
-  color: #f4f4f5;
+  font-size: clamp(2.1rem, 5vw, 4rem); font-weight: 300; line-height: 1.15;
+  letter-spacing: -0.005em; color: #f4f4f5;
 }
 .cover-bio__motto + .cover-strip { margin-top: 0; }
 /* Hidden only once the script has taken charge: before that the sentence is the sentence. */
@@ -207,13 +209,13 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
    arrives or leaves. It keeps blinking while the page is still: that is the one part of this that
    is not the scroll's to decide. */
 .cover-bio__motto.is-typing .cover-bio__motto-c.is-caret::after {
-  content: ""; position: absolute; left: 100%; top: 0.06em; bottom: 0.06em;
-  width: 2px; margin-left: 0.1em; background: currentColor;
+  content: ""; position: absolute; left: 100%; top: 0.08em; bottom: 0.08em;
+  width: 0.05em; margin-left: 0.09em; background: currentColor;
   animation: motto-caret 1.06s step-end infinite;
 }
 @keyframes motto-caret { 0%, 50% { opacity: 0.9; } 50.01%, 100% { opacity: 0; } }
 @media (max-width: 767px) {
-  .cover-bio__motto { margin-bottom: 0.85rem; letter-spacing: 0.05em; }
+  .cover-bio__motto { margin-bottom: clamp(9rem, 34vh, 16rem); }
 }
 @media (prefers-reduced-motion: reduce) {
   .cover-bio__motto-c { transition: none; }
@@ -544,7 +546,7 @@ html.reveal-ready .reveal.is-in { transition-delay: var(--reveal-delay, 0ms); }
 .section-solid { background-color: #ffffff; }
 .dark .section-solid { background-color: rgb(24 24 27); }
 /* Text on the translucent hero: a soft shadow keeps it readable over the meteors */
-.profile-hero__name, .profile-hero__role, .profile-hero__orgs { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85); }
+.profile-hero__name, .profile-hero__role, .profile-hero__orgs, .cover-bio__motto { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85); }
 .profile-hero__avatar { box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6); }
 .contact-cta h2, .contact-cta p { text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9); }
 /* The footer is a light "window" too: opaque so its text stays readable */

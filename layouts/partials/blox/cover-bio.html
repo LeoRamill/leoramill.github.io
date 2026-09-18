@@ -87,15 +87,22 @@
     if (!chars.length) return;
     el.classList.add('is-typing');
 
+    // What comes after the sentence: the row of photographs, or the single cover it falls back to.
+    var next = document.querySelector('.cover-strip, .cover-bio__cover');
+
     var shown = -1, ticking = false;
     function paint() {
       ticking = false;
-      // Typed across the stretch where the line climbs from just above the fold to a little past
-      // the middle of the window — the same stretch in which the hero lets go and the photographs
-      // arrive, which is the gap the sentence is meant to fill.
-      var top = el.getBoundingClientRect().top, h = window.innerHeight || 1;
-      var from = h * 0.92, to = h * 0.55;
-      var t = Math.min(Math.max((from - top) / (from - to), 0), 1);
+      // The run is the empty band between the sentence and the photographs, and it is measured
+      // rather than chosen: the first character is written when the sentence has just cleared the
+      // bottom of the window, the last when the photographs reach that same edge. Nothing below the
+      // hero can be on screen while the hero is still pinned, so this begins at the moment the pin
+      // lets go and the push-in lands, and ends as the photographs arrive.
+      var r = el.getBoundingClientRect(), h = window.innerHeight || 1;
+      var band = next ? next.getBoundingClientRect().top - r.bottom : h * 0.4;
+      // Nine tenths of the band, so the last character is down a moment before the photographs
+      // edge into the window rather than at the same instant as them.
+      var t = Math.min(Math.max((h - r.bottom) / Math.max(band * 0.9, 1), 0), 1);
       var n = Math.round(t * chars.length);
       if (n === shown) return;
       shown = n;
