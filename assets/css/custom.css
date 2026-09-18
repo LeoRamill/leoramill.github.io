@@ -140,9 +140,9 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   font-weight: 600; font-size: 0.9rem; transition: background-color 0.15s ease;
 }
 .profile-hero__btn:hover { background-color: rgba(255, 255, 255, 0.14); }
-/* The epigraph below the hero: a quotation, so it is set in italic inside quotation marks, at
-   roughly the size of the name — it is alone in its own band now rather than sharing the text
-   column, so it can carry that size without competing with anything. */
+/* The epigraph below the hero: italic and bold, at roughly the size of the name — it is alone in
+   its own band rather than sharing the text column, so it can carry that size and that weight
+   without competing with anything. */
 .profile-hero__quote {
   margin: 2.5rem auto 0; max-width: 56rem; padding: 0 1.25rem; text-align: center;
   /* Ordinary wrapping, not `pre-wrap`. Each space sits in its own span but never next to another
@@ -150,20 +150,9 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
      is what keeps a wrapped line centred on its words rather than on a trailing blank. A motto
      written with two spaces in a row would collapse them; one space is all this needs. */
   text-wrap: balance;
-  font-size: clamp(2rem, 5vw, 3.75rem); font-weight: 300; font-style: italic;
+  font-size: clamp(2rem, 5vw, 3.75rem); font-weight: 700; font-style: italic;
   line-height: 1.3; letter-spacing: -0.005em; color: #f4f4f5;
 }
-/* The marks are always in the layout and only their ink comes and goes: appearing in the flow would
-   shove the sentence sideways at the two moments it is least welcome. */
-.profile-hero__quote::before, .profile-hero__quote::after {
-  opacity: 0.55; transition: opacity 0.4s ease;
-}
-.profile-hero__quote::before { content: "\201C"; }
-.profile-hero__quote::after { content: "\201D"; }
-.profile-hero__quote.is-typing::before, .profile-hero__quote.is-typing::after { opacity: 0; }
-/* The quotation opens on the first character written and closes on the last. */
-.profile-hero__quote.is-typing.is-open::before,
-.profile-hero__quote.is-typing.is-closed::after { opacity: 0.55; }
 /* Hidden only once the script has taken charge: before that the sentence is the sentence. */
 .profile-hero__quote.is-typing .profile-hero__quote-c { opacity: 0; transition: opacity 0.16s ease; }
 .profile-hero__quote.is-typing .profile-hero__quote-c.is-on { opacity: 1; }
@@ -178,7 +167,7 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 }
 @keyframes motto-caret { 0%, 50% { opacity: 0.9; } 50.01%, 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .profile-hero__quote-c, .profile-hero__quote::before, .profile-hero__quote::after { transition: none; }
+  .profile-hero__quote-c { transition: none; }
 }
 @media (max-width: 767px) {
   .profile-hero { flex-direction: column; text-align: center; gap: 1.5rem; }

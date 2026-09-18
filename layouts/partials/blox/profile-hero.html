@@ -320,9 +320,6 @@
         // The caret rides the last character written, and only while there is more to write.
         chars[i].classList.toggle('is-caret', n > 0 && i === n - 1 && n < chars.length);
       }
-      // The quotation opens on the first character and closes on the last.
-      el.classList.toggle('is-open', n > 0);
-      el.classList.toggle('is-closed', n === chars.length);
     }
     function tick() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
     addEventListener('scroll', tick, { passive: true });
