@@ -3,8 +3,8 @@ title: Forrest Gump
 meta: Robert Zemeckis
 gallery: movie
 rating: 9.5
-catchphrase: A timeless one.
-summary: "Lo hai visto da bambino e migliora ogni volta che lo rivedi."
+catchphrase: Run.
+summary: "You saw it as a kid, and it gets better every time: same film, different person watching."
 ---
 
 Sostituisci questo testo con la tua recensione completa.
