@@ -917,7 +917,10 @@ html.has-open-dialog { overflow: hidden; }
 .shaping-more-link:hover { color: var(--ink); }
 
 .shaping-review-page { width: 100%; }
-.review-hero-inner, .review-sheet-inner { width: min(100% - 1.25rem, var(--max)); margin-inline: auto; }
+/* A wider gutter than the rest of Shaping uses, because these are reading pages: on a phone the
+   text was running to within 10px of the screen edge, where a project page leaves 24. The hero
+   takes the same box so the poster's left edge and the first line of the writing agree. */
+.review-hero-inner, .review-sheet-inner { width: min(100% - 3rem, var(--max)); margin-inline: auto; }
 .review-hero { padding-block: clamp(1.25rem, 3vw, 2.5rem); }
 .review-sheet { padding-block: 0 clamp(3rem, 8vw, 6rem); }
 .review-head { display: grid; grid-template-columns: minmax(0, 21rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.25rem); align-items: center; }
@@ -931,13 +934,16 @@ html.has-open-dialog { overflow: hidden; }
 .review-cover img { width: 100%; height: 100%; object-fit: cover; }
 .review-cover span { max-width: 12ch; padding: 0.5rem; color: color-mix(in srgb, var(--card-accent), var(--ink) 34%); font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 900; line-height: 0.95; text-align: center; text-transform: lowercase; hyphens: auto; }
 .review-intro { display: grid; gap: 1rem; }
-.review-title { margin: 0; color: var(--ink); font-size: clamp(2.35rem, 6.5vw, 5.25rem); font-weight: 900; line-height: 0.95; }
+/* Still a poster title, but no longer three times the size of anything else on the page: an 83px
+   head over a 20px body is the jump that made these read as a different template. */
+.review-title { margin: 0; color: var(--ink); font-size: clamp(2.2rem, 4.6vw, 3.6rem); font-weight: 800; line-height: 1; }
 
-.review-body { max-width: 44rem; padding-top: clamp(2rem, 5vw, 3.5rem); color: var(--ink); }
-.review-body p, .review-body li { font-size: clamp(1rem, 1.55vw, 1.16rem); line-height: 1.6; }
-.review-body p { margin-block: 0 1.1em; }
-.review-body h2 { margin-block: 1.8em 0.5em; color: var(--ink); font-size: clamp(1.5rem, 2.8vw, 2.1rem); font-weight: 900; line-height: 1.05; }
-.review-body h3 { margin-block: 1.5em 0.4em; color: var(--ink); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 800; }
+/* The writing is set by `prose` and `lg:prose-xl` in the markup — the project pages' own classes —
+   so the sizes, the line height and the space between paragraphs and headings are not written here
+   a second time and cannot drift from them. What stays is what belongs to a review rather than to
+   an article: the column width, the accent colours, and a full-width image.
+   The column is 42rem, the width a project page's text runs at, rather than `prose`'s own 65ch. */
+.review-body { max-width: 42rem; padding-top: clamp(2rem, 5vw, 3.5rem); color: var(--ink); }
 .review-body a { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 0.16em; }
 .review-body blockquote { margin: 1.4em 0; padding-left: 1.1rem; border-left: 0.22rem solid var(--card-accent, var(--blue)); color: var(--muted); font-style: italic; }
 .review-body img { width: 100%; height: auto; }
