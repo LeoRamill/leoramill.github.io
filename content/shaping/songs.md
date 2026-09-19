@@ -1,7 +1,9 @@
 ---
 title: Spotify
 layout: shaping-gallery
-description: "Songs on repeat."
+lead:
+  text: "Songs on repeat."
+  url: ""
 galleries:
   - title: Songs
     kind: song

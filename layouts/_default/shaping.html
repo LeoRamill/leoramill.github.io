@@ -12,6 +12,11 @@
 <section class="shaping-scope shaping-page" aria-labelledby="shaping-title">
   <h1 id="shaping-title" class="shaping-title">{{ .Title }}</h1>
   {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
+  {{/* `lead` is the big line under the title, the same one the gallery pages use; give it a `url`
+       to turn it into a link */}}
+  {{ with .Params.lead }}
+  <p class="shaping-source-note shaping-source-note--lead">{{ if .url }}<a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .text }}</a>{{ else }}{{ .text }}{{ end }}</p>
+  {{ end }}
   {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
 
   <div class="shaping-hero">
@@ -33,12 +38,19 @@
     </nav>
   </div>
 
+  {{/* The big link under the hero. One `label` is a plain heading; adding `old` brings back the
+       two-word version, where the label is struck through on hover and `old` rises in its place. */}}
   {{ with .Params.focus }}
+  {{ $label := .label | default .current }}
   <section class="focus-section" aria-labelledby="focus-title">
-    <a class="focus-time-link" href="{{ .url | relURL }}" aria-label="{{ .aria | default (printf "Open %s" .old) }}">
+    <a class="focus-time-link" href="{{ .url | relURL }}" aria-label="{{ .aria | default (printf "Open %s" $label) }}">
       <h2 id="focus-title">
-        <span class="focus-current">{{ .current }}</span>
+        {{ if .old }}
+        <span class="focus-current">{{ $label }}</span>
         <span class="focus-old" aria-hidden="true">{{ .old }}</span>
+        {{ else }}
+        <span class="focus-label">{{ $label }}</span>
+        {{ end }}
       </h2>
     </a>
     {{ with .hint }}<p class="focus-title-hint">{{ . }}</p>{{ end }}

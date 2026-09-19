@@ -1,7 +1,9 @@
 ---
 title: YouTube
 layout: shaping-gallery
-description: "Videos and channels worth the time."
+lead:
+  text: "Videos and channels worth the time."
+  url: ""
 galleries:
   - title: Channels
     kind: compact

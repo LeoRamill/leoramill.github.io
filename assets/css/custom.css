@@ -669,6 +669,10 @@ body:has(.site-fixed-bg) .page-footer a { color: #ffffff; }
 .focus-old { opacity: 0; transform: translateY(-0.72em) rotate(-2deg); }
 .focus-time-link:hover .focus-current, .focus-time-link:focus-visible .focus-current { opacity: 0.36; text-decoration-color: currentColor; transform: translateY(0.18em); }
 .focus-time-link:hover .focus-old, .focus-time-link:focus-visible .focus-old { opacity: 1; transform: translateY(-0.52em) rotate(-2deg); }
+/* Single-label version of the same link: the underline draws in on hover, so a heading that big
+   still reads as something you can click */
+.focus-label { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 0.06em; text-underline-offset: 0.12em; transition: color 0.18s ease, text-decoration-color 0.18s ease; }
+.focus-time-link:hover .focus-label, .focus-time-link:focus-visible .focus-label { color: var(--blue); text-decoration-color: currentColor; }
 .focus-time-link:focus-visible { outline: 2px solid currentColor; outline-offset: 0.35rem; }
 .focus-title-hint { margin-block: 0.9rem 0; color: var(--blue); font-size: clamp(1.08rem, 1.75vw, 1.3rem); font-weight: 600; text-align: center; text-transform: lowercase; }
 .focus-writing-area { max-width: 42rem; margin: 2rem auto 0; padding-inline: 1rem; }

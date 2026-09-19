@@ -30,7 +30,7 @@ hugo server
 
 ## Sezione "Shaping"
 
-un mini-me fluttuante circondato da quattro icone che portano alle sotto-pagine (libri, film, YouTube, Spotify) e la scritta "currently" che al passaggio del mouse diventa "old" e porta alla pagina degli studi.
+un mini-me fluttuante circondato dalle icone che portano alle sotto-pagine (libri, film, YouTube, Spotify, fotografia) e la scritta "My Timeline" che porta alla pagina del percorso di studi.
 
 | Cosa | File |
 |---|---|

@@ -1,5 +1,5 @@
 ---
-title: Studies
+title: My Timeline
 layout: shaping-academic
 description: "Where I have been studying, oldest first."
 stops:

@@ -1,7 +1,9 @@
 ---
 title: Shaping
 layout: shaping
-description: "Not a favorites list, a trace of what stayed. What I return to when I want to remember what I care about."
+lead:
+  text: "What I return to when I want to remember what I care about."
+  url: ""
 hint: click on the icons
 # The four floating icons around the mini-me (max 4, positioned clockwise from top-left)
 orbits:
@@ -20,10 +22,9 @@ orbits:
   - label: Photography
     emoji: "📸"
     url: /shaping/photography/
-# "currently" turns into "old" on hover and links to the studies roadmap
+# The big link under the mini-me. Add `old:` back to get the two-word version, where the label is
+# struck through on hover and that word rises in its place.
 focus:
-  current: currently
-  old: old
+  label: My Timeline
   url: /shaping/academic/
-  hint: click on me
 ---
