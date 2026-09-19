@@ -99,7 +99,10 @@
     // screen, which is most of the time anyone spends looking at it: it read as a picture, not as a
     // row that turns, and whoever scrolled on never learnt otherwise. One early move says what it
     // is, and the calmer pace takes over from there.
-    var FIRST = 1800;
+    //
+    // For that first move to be seen, the clock has to start when the row is in front of the
+    // visitor and not when its top edge appears — see the observer below.
+    var FIRST = 600;
     var every = Number(root.dataset.photoInterval) || 7000;
     var timer = null, visible = false, held = false, opened = false;
     function tick() { go(centred() + 1); }
@@ -119,8 +122,13 @@
       root.addEventListener(e, function () { held = false; sync(); });
     });
     if ('IntersectionObserver' in window) {
+      // Not a fraction of the row, but whether it crosses the middle of the window: a margin of
+      // -50% on both edges shrinks the root to that one line. A fraction would have meant a
+      // different moment for every window — a quarter of this row is most of a short screen and a
+      // strip along the bottom of a tall one — and on a window shorter than the row it can be a
+      // fraction that is never reached, leaving a carousel that never turns at all.
       new IntersectionObserver(function (es) { visible = es[0].isIntersecting; sync(); },
-                               { threshold: 0.25 }).observe(root);
+                               { rootMargin: '-50% 0px -50% 0px', threshold: 0 }).observe(root);
     } else { visible = true; }
     if (calm.addEventListener) calm.addEventListener('change', sync);
     sync();
