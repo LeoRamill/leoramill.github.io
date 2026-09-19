@@ -3,7 +3,8 @@
      both: click to open it full size.
 
      dict: `photos`, `label`, `height` (thumbnail height, default 720 — a centre slide is large),
-     `interval` (milliseconds between advances, default 7000), `captions` (optional map of file name
+     `interval` (milliseconds between advances, default 7000 — the first advance after the row comes
+     into view is sooner, so that it is seen to move at all), `captions` (optional map of file name
      to text).
 
      The caption belongs to the middle photograph and is written once under the row rather than once
@@ -89,15 +90,27 @@
     }
 
     // It advances only while it is worth watching: not under reduced motion, not while a pointer is
-    // on it or the keyboard is in it, not while the section is off screen — an interval ticking
-    // against a row nobody can see is work for nothing, and it would also mean coming back to the
-    // section and finding it somewhere else.
-    var timer = null, visible = false, held = false;
+    // on it or the keyboard is in it, not while the section is off screen — a timer ticking against
+    // a row nobody can see is work for nothing, and it would also mean coming back to the section
+    // and finding it somewhere else.
+    //
+    // The first move comes sooner than the rest, and that is the whole point of the pair. Waiting a
+    // full interval for it meant the row sat perfectly still for the first seconds it was on
+    // screen, which is most of the time anyone spends looking at it: it read as a picture, not as a
+    // row that turns, and whoever scrolled on never learnt otherwise. One early move says what it
+    // is, and the calmer pace takes over from there.
+    var FIRST = 1800;
+    var every = Number(root.dataset.photoInterval) || 7000;
+    var timer = null, visible = false, held = false, opened = false;
     function tick() { go(centred() + 1); }
+    function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+    function arm(ms) {
+      timer = setTimeout(function () { timer = null; opened = true; tick(); arm(every); }, ms);
+    }
     function sync() {
       var run = visible && !held && !calm.matches;
-      if (run && !timer) timer = setInterval(tick, Number(root.dataset.photoInterval) || 7000);
-      if (!run && timer) { clearInterval(timer); timer = null; }
+      if (run && !timer) arm(opened ? every : Math.min(FIRST, every));
+      if (!run) stop();
     }
     ['pointerenter', 'focusin', 'pointerdown'].forEach(function (e) {
       root.addEventListener(e, function () { held = true; sync(); });
