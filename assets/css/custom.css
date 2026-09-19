@@ -1146,12 +1146,15 @@ html.has-open-dialog { overflow: hidden; }
    section label with a rule running off it, then `###` as one entry with its place and date on the
    line underneath. The meta line is the paragraph right after a `###`, which is how every entry in
    the page is written. */
-.cv-page { --cv-w: 54rem; }
+/* Glacier for the section labels: deep enough to read on the near-white paper (5.3:1), and a pale
+   ice for the dark theme (10.4:1). The Shaping palette has no cyan, so it is defined here. */
+.cv-page { --cv-w: 54rem; --glacier: #2b7286; }
+.dark .cv-page { --glacier: #7fd3e3; }
 .cv-page .cv-head, .cv-page .cv-body { width: min(100% - 2rem, var(--cv-w)); margin-inline: auto; }
 .cv-page .cv-title { margin: 0; font-size: clamp(2.3rem, 4.6vw, 3.4rem); font-weight: 900; line-height: 1.02; letter-spacing: -0.01em; }
 .cv-page .cv-subtitle { margin: 0.7rem 0 0; color: var(--muted); font-size: clamp(1rem, 1.4vw, 1.12rem); font-weight: 600; line-height: 1.4; }
 .cv-page .cv-body { margin-top: clamp(1.25rem, 3vw, 2rem); }
-.cv-page .cv-body h2 { display: flex; align-items: center; gap: 0.85rem; margin: clamp(2.2rem, 4.5vw, 3.1rem) 0 1.15rem; color: var(--green); font-size: clamp(0.9rem, 1.2vw, 1rem); font-weight: 900; letter-spacing: 0.13em; line-height: 1; text-transform: uppercase; }
+.cv-page .cv-body h2 { display: flex; align-items: center; gap: 0.85rem; margin: clamp(2.2rem, 4.5vw, 3.1rem) 0 1.15rem; color: var(--glacier); font-size: clamp(0.9rem, 1.2vw, 1rem); font-weight: 900; letter-spacing: 0.13em; line-height: 1; text-transform: uppercase; }
 .cv-page .cv-body h2::after { content: ""; flex: 1 1 auto; height: 2px; background: currentColor; opacity: 0.3; }
 .cv-page .cv-body > h2:first-child { margin-top: 0; }
 .cv-page .cv-body h3 { margin: clamp(1.4rem, 2.6vw, 1.9rem) 0 0.2rem; color: var(--ink); font-size: clamp(1.05rem, 1.5vw, 1.22rem); font-weight: 800; line-height: 1.3; }
