@@ -102,7 +102,7 @@
     //
     // For that first move to be seen, the clock has to start when the row is in front of the
     // visitor and not when its top edge appears — see the observer below.
-    var FIRST = 600;
+    var FIRST = 400;
     var every = Number(root.dataset.photoInterval) || 7000;
     var timer = null, visible = false, held = false, opened = false;
     function tick() { go(centred() + 1); }
@@ -122,13 +122,18 @@
       root.addEventListener(e, function () { held = false; sync(); });
     });
     if ('IntersectionObserver' in window) {
-      // Not a fraction of the row, but whether it crosses the middle of the window: a margin of
-      // -50% on both edges shrinks the root to that one line. A fraction would have meant a
-      // different moment for every window — a quarter of this row is most of a short screen and a
-      // strip along the bottom of a tall one — and on a window shorter than the row it can be a
-      // fraction that is never reached, leaving a carousel that never turns at all.
+      // Not a fraction of the row, but whether its top has reached the middle of the window: the
+      // -50% on the bottom edge shrinks the root to everything above that line. A fraction would
+      // have meant a different moment for every window — a quarter of this row is most of a short
+      // screen and a strip along the bottom of a tall one — and on a window shorter than the row it
+      // can be a fraction that is never reached, leaving a carousel that never turns at all.
+      //
+      // That line is where the text above the row finishes: by the time the top of the row is
+      // halfway up the window, the last line of the biography is just above it and still in sight.
+      // So the row turns as the reading ends, which is what makes the second photograph land on
+      // the sentence that introduces it.
       new IntersectionObserver(function (es) { visible = es[0].isIntersecting; sync(); },
-                               { rootMargin: '-50% 0px -50% 0px', threshold: 0 }).observe(root);
+                               { rootMargin: '0px 0px -50% 0px', threshold: 0 }).observe(root);
     } else { visible = true; }
     if (calm.addEventListener) calm.addEventListener('change', sync);
     sync();
