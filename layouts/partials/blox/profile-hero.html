@@ -285,7 +285,9 @@
      below, so it works before any script has run, the keyboard gets it for free, and the offset for
      the header is `scroll-margin-top` in the stylesheet rather than arithmetic here. */}}
 {{ with $block.content.scroll_hint }}
-  <a class="scroll-hint" href="#about" data-scroll-hint aria-label="{{ . }} to the content">
+  {{/* The label opens with the words that are on screen, so someone driving by voice can say what
+       they read, and only then says where it goes. */}}
+  <a class="scroll-hint" href="#about" data-scroll-hint aria-label="{{ . }} — jump to the page content">
     <span class="scroll-hint__word">{{ . }}</span>
     <svg class="scroll-hint__chevron" viewBox="0 0 24 14" aria-hidden="true" focusable="false">
       <path d="M2 2 L12 12 L22 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
