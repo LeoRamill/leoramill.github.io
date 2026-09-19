@@ -276,54 +276,90 @@
 {{ end }}
 {{ if $scrub }}</div></div>{{ end }}
 
-{{ with $block.content.motto }}
+{{/* The invitation to scroll. It has to be fixed to the window rather than placed at the foot of
+     the hero, and the reason is easy to miss: at the top of the page the pinned stage starts below
+     the navbar, which is still in the flow there, so its last 73px (61 on a phone) are already past
+     the bottom of the window — exactly the strip a hint would sit in, at exactly the moment it is
+     needed. It is a link and not a flourish because it looks clickable, and because otherwise the
+     only way past the push-in is to scroll through all of it — an ordinary link to the section
+     below, so it works before any script has run, the keyboard gets it for free, and the offset for
+     the header is `scroll-margin-top` in the stylesheet rather than arithmetic here. */}}
+{{ with $block.content.scroll_hint }}
+  <a class="scroll-hint" href="#about" data-scroll-hint aria-label="{{ . }} to the content">
+    <span class="scroll-hint__word">{{ . }}</span>
+    <svg class="scroll-hint__chevron" viewBox="0 0 24 14" aria-hidden="true" focusable="false">
+      <path d="M2 2 L12 12 L22 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+{{ end }}
+
+{{ if or $block.content.motto $block.content.scroll_hint }}
 <script>
-  // The sentence is written by the scroll, not by a timer, and over the same stretch the push-in
-  // uses: the pinned hero's own progress, from a third of the way in to the end. So the last
-  // character lands exactly where the camera lands and the pin lets go — and scrolling back up
-  // unwrites it, and a visitor who arrives halfway down finds it in the state that position
-  // deserves instead of watching it start over.
+  // One reading of where the push-in has got to, driving both things that answer the scroll: the
+  // invitation, which fades out as soon as the scroll it asked for begins, and the sentence, which
+  // is written over the rest of the way. Both are functions of the scroll position rather than of a
+  // timer, so going back up undoes them, and a visitor who arrives halfway down the page finds them
+  // in the state that position deserves instead of watching them start over.
   (function () {
-    var el = document.querySelector('[data-motto]');
-    if (!el) return;
-    // Nothing is hidden by the stylesheet until this line runs, so without JavaScript, or for
-    // anyone who asked for less motion, the sentence is simply there, quotation marks and all.
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var chars = [].slice.call(el.querySelectorAll('.profile-hero__quote-c'));
-    if (!chars.length) return;
-    el.classList.add('is-typing');
+    var quote = document.querySelector('[data-motto]');
+    var hint = document.querySelector('[data-scroll-hint]');
+    if (!quote && !hint) return;
+
+    // The invitation is spent by a tenth of the way in — a gesture of the hand, not a fixture.
+    var HINT_OUT = 0.1;
+    // And the sentence starts just after it, so the page answers the first scroll almost at once.
+    var TYPE_FROM = 0.1;
+
+    // Nothing is hidden by the stylesheet until this runs, so without JavaScript, or for anyone who
+    // asked for less motion, the sentence is simply there. The invitation still fades on the scroll
+    // for them: one that never leaves would end up pointing down at a page already scrolled.
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var chars = quote && !still ? [].slice.call(quote.querySelectorAll('.profile-hero__quote-c')) : [];
+    if (chars.length) quote.classList.add('is-typing');
 
     var pin = document.querySelector('.hero-pin');
-    // Where the writing starts, as a fraction of the pinned stretch. The rest of it is the hero
-    // being read before anything is said.
-    var FROM = 0.3;
     function progress() {
       if (pin && !pin.classList.contains('is-still')) {
         var start = pin.getBoundingClientRect().top + window.scrollY;
         var travel = Math.max(pin.offsetHeight - window.innerHeight, 1);
-        return ((window.scrollY - start) / travel - FROM) / (1 - FROM);
+        return (window.scrollY - start) / travel;
       }
-      // No pin — reduced data, or a hero without a frame sequence. Then the only clock available
-      // is the sentence's own climb through the window.
-      var r = el.getBoundingClientRect(), h = window.innerHeight || 1;
-      return (h * 0.92 - r.top) / (h * 0.42);
+      // No pin — reduced data, or a hero without a frame sequence. Then the only clock available is
+      // how far down the first screen the page has come.
+      return window.scrollY / Math.max(window.innerHeight, 1);
     }
+    function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
-    var shown = -1, ticking = false;
+    var shown = -1, gone = null, ticking = false;
     function paint() {
       ticking = false;
-      var n = Math.round(Math.min(Math.max(progress(), 0), 1) * chars.length);
-      if (n === shown) return;
-      shown = n;
-      for (var i = 0; i < chars.length; i++) {
-        chars[i].classList.toggle('is-on', i < n);
-        // The caret rides the last character written, and only while there is more to write.
-        chars[i].classList.toggle('is-caret', n > 0 && i === n - 1 && n < chars.length);
+      var t = clamp(progress());
+
+      if (hint) {
+        var o = clamp(1 - t / HINT_OUT);
+        hint.style.setProperty('--hint-o', o.toFixed(3));
+        // Out of reach as well as out of sight once it is spent: an invisible button is still
+        // clickable and still in the tab order, and this one covers the middle of the page.
+        var g = o === 0;
+        if (g !== gone) { gone = g; hint.classList.toggle('is-spent', g); }
+      }
+
+      if (chars.length) {
+        var n = Math.round(clamp((t - TYPE_FROM) / (1 - TYPE_FROM)) * chars.length);
+        if (n !== shown) {
+          shown = n;
+          for (var i = 0; i < chars.length; i++) {
+            chars[i].classList.toggle('is-on', i < n);
+            // The caret rides the last character written, and only while there is more to write.
+            chars[i].classList.toggle('is-caret', n > 0 && i === n - 1 && n < chars.length);
+          }
+        }
       }
     }
     function tick() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
     addEventListener('scroll', tick, { passive: true });
     addEventListener('resize', tick);
+
     paint();
   })();
 </script>
