@@ -251,9 +251,9 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
      middle photograph would put the smudge back under the caption. */
   --photo-shadow: 0 8px 16px -8px #00000080;
 }
-/* Pulled up under the hero. The section's own 2.5rem of padding is shared by every block on the
-   page, so it is this one that gives ground rather than the rhythm everything else keeps. */
-.cover-strip { margin-top: -1.25rem; }
+/* The row now follows the biography rather than opening the block, so it is spaced from the
+   paragraph above it instead of being pulled up under the hero. */
+.cover-strip, .cover-bio__cover { margin-top: clamp(2.25rem, 3vw, 2.75rem); }
 
 .photo-carousel__track {
   display: flex; gap: clamp(0.6rem, 1.4vw, 1rem);
@@ -327,7 +327,8 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 @media (prefers-reduced-motion: reduce) {
   .photo-carousel .photo-item, .photo-carousel__caption { transition: none; }
 }
-.cover-bio__text { max-width: none; margin-top: 2rem; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
+/* First in the block now, so the section's own padding is the space above it. */
+.cover-bio__text { max-width: none; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
 .cover-bio__text strong { font-style: italic; }
 @media (min-width: 768px) {
   .cover-bio__text { text-align: justify; font-size: 1.15rem; }
