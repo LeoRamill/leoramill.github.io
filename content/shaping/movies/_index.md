@@ -17,14 +17,14 @@ galleries:
     label: Movie
     items:
       # `page:` takes everything from the folder of the same name: title, cover, rating and text
-      - page: interstellar
       - page: forrest-gump
       - page: foe
 
   - title: TV Series
     kind: series
     label: TV Series
-    items:
-      - page: black-mirror
+    # Nothing listed here by name: every folder in this one whose `gallery` is `series` joins the
+    # wall on its own, which is how Osmosis arrives.
+    items: []
 
 ---
