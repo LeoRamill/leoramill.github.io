@@ -4,7 +4,6 @@ type: page
 # `##` is a section of the CV, `###` one entry inside it, and the line right under an entry is its
 # place and date, in italics. The layout that draws the three levels is `layouts/page/cv.html`.
 layout: cv
-subtitle: "Data science and artificial intelligence, between Rome, Turin and Sophia Antipolis."
 share: false
 reading_time: false
 commentable: false
@@ -13,7 +12,7 @@ commentable: false
 ## General Information
 
 - **Full name:** Leonard Vincent Ramil
-- **Based in:** Rome, Italy (studying in Sophia Antipolis, France)
+- **Based in:** Rome, Italy
 - **E-mail:** [leonardvincentramil@icloud.com](mailto:leonardvincentramil@icloud.com)
 - **Links:** [GitHub](https://github.com/LeoRamill), [LinkedIn](https://www.linkedin.com/in/leonard-vincent-ramil), [Instagram](https://www.instagram.com/leo.ramill)
 - **Interests:** artificial intelligence, art, photography, travel, cinema and TV series
