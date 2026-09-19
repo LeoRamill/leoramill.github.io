@@ -27,6 +27,18 @@
 {{ end }}
 
 <div class="cover-bio">
+  {{/* The biography first and the photographs after it, and that order is the argument: the last
+       thing the biography says is that he travels and photographs, and the row underneath is that
+       sentence's evidence — six pictures whose captions run from Oslo in 2023 to the defence in
+       2026. Arriving first they were a cover, and a reader met them before being told why. */}}
+  <div class="cover-bio__text prose prose-slate dark:prose-invert">
+    {{ with $block.content.text }}
+      {{ . | emojify | $page.RenderString }}
+    {{ else }}
+      {{ with $person_page }}{{ .Content }}{{ end }}
+    {{ end }}
+  </div>
+
   {{ if ge (len $covers) 2 }}
     <div class="cover-strip" data-photo-scope>
       {{ partial "photo_nav" (dict "label" "cover photos") }}
@@ -45,14 +57,6 @@
       {{ end }}
     {{ end }}
   {{ end }}
-
-  <div class="cover-bio__text prose prose-slate dark:prose-invert">
-    {{ with $block.content.text }}
-      {{ . | emojify | $page.RenderString }}
-    {{ else }}
-      {{ with $person_page }}{{ .Content }}{{ end }}
-    {{ end }}
-  </div>
 </div>
 
 {{ if ge (len $covers) 2 }}{{ partial "photo_lightbox" $page }}{{ end }}
