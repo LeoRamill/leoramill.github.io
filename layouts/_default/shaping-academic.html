@@ -4,6 +4,11 @@
   <div class="academic-shell">
     <h1 id="academic-title" class="shaping-title">{{ .Title }}</h1>
     {{ with .Params.description }}<p class="shaping-description">{{ . | markdownify }}</p>{{ end }}
+    {{/* `lead` is the big line under the title, the same one the other Shaping pages use; give it a
+         `url` to turn it into a link */}}
+    {{ with .Params.lead }}
+    <p class="shaping-source-note shaping-source-note--lead">{{ if .url }}<a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .text }}</a>{{ else }}{{ .text }}{{ end }}</p>
+    {{ end }}
     <div class="academic-roadmap">
       <ol class="academic-stops">
         {{ range .Params.stops }}
