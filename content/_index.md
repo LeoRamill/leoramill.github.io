@@ -96,7 +96,7 @@ sections:
   - block: news-list
     id: news
     content:
-      title: Selected News
+      title: News
       count: 6
       more:
         text: All news
