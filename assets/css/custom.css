@@ -327,8 +327,14 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 @media (prefers-reduced-motion: reduce) {
   .photo-carousel .photo-item, .photo-carousel__caption { transition: none; }
 }
-/* First in the block now, so the section's own padding is the space above it. */
-.cover-bio__text { max-width: none; font-style: italic; font-size: 1.05rem; line-height: 1.8; }
+/* First in the block now, and pulled up towards the sentence that ends the hero above it. The
+   section's own padding is an inline style the theme writes on every `<section>`, so no stylesheet
+   can reach it — this margin is what is left to give. It only eats the gap: the empty stage under
+   the sentence is the hero's own, and belongs to keeping the sentence exactly halfway down. */
+.cover-bio__text {
+  max-width: none; margin-top: clamp(-3.5rem, -4vw, -2.25rem);
+  font-style: italic; font-size: 1.05rem; line-height: 1.8;
+}
 .cover-bio__text strong { font-style: italic; }
 @media (min-width: 768px) {
   .cover-bio__text { text-align: justify; font-size: 1.15rem; }
