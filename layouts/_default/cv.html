@@ -1,0 +1,13 @@
+{{ define "main" }}
+{{/* Curriculum vitae. The body is plain markdown, but it runs under its own styles instead of the
+     theme's `prose`, so the three levels read as three different things: the page title, then `##`
+     as a section rule, then `###` as one entry with its place and date on the line underneath.
+     `subtitle` in the front matter adds a line under the title. */}}
+<section class="shaping-scope shaping-page cv-page">
+  <header class="cv-head">
+    <h1 class="cv-title">{{ .Title }}</h1>
+    {{ with .Params.subtitle }}<p class="cv-subtitle">{{ . | markdownify }}</p>{{ end }}
+  </header>
+  <div class="cv-body">{{ .Content }}</div>
+</section>
+{{ end }}

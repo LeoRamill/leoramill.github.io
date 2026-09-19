@@ -1,6 +1,10 @@
 ---
 title: Curriculum Vitae
 type: page
+# `##` is a section of the CV, `###` one entry inside it, and the line right under an entry is its
+# place and date, in italics. The layout that draws the three levels is `layouts/_default/cv.html`.
+layout: cv
+subtitle: "Data science and artificial intelligence, between Rome, Turin and Sophia Antipolis."
 share: false
 reading_time: false
 commentable: false
@@ -72,10 +76,12 @@ collaboration with Intesa Sanpaolo.
 
 ## Publications
 
-- **[Projection-Based Quality Assessment of Cerebrovascular Segmentations](/publication/projection-based-quality-assessment/)**
-  — SWITCH+ 2026, MICCAI Workshop on Stroke and Neurovascular Diseases. Localized quality assessment
-  of 3D vessel segmentations recast as detection in canonical 2D projection views, for an F1 of 88.31
-  on 99 TOF-MRA subjects.
+### [Projection-Based Quality Assessment of Cerebrovascular Segmentations](/publication/projection-based-quality-assessment/)
+
+*SWITCH+ 2026 · MICCAI Workshop on Stroke and Neurovascular Diseases*
+
+Localized quality assessment of 3D vessel segmentations recast as detection in canonical 2D
+projection views, for an F1 of 88.31 on 99 TOF-MRA subjects.
 
 ## Extracurricular Activity
 
