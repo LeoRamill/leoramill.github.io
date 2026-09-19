@@ -24,7 +24,7 @@ galleries:
     # wall on its own, which is how Osmosis arrives.
     items: []
 
-# Link shown after the first gallery (e.g. your Letterboxd list)
+# Link that closes the page, under every gallery (e.g. your Letterboxd list)
 more:
   text: if you want more
   url: https://letterboxd.com/

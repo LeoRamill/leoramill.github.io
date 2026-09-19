@@ -101,9 +101,10 @@
       {{ end }}
     </div>
   </section>
-  {{ if and (eq $gi 0) $page.Params.more }}
-  <p class="shaping-source-note shaping-source-note--bottom"><a href="{{ $page.Params.more.url }}" target="_blank" rel="noopener noreferrer">{{ $page.Params.more.text }}</a></p>
   {{ end }}
+  {{/* The "if you want more" link closes the page, below every gallery */}}
+  {{ with .Params.more }}
+  <p class="shaping-source-note shaping-source-note--bottom"><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .text }}</a></p>
   {{ end }}
 </section>
 
