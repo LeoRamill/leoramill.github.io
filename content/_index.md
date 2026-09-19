@@ -22,10 +22,12 @@ sections:
       # finished exactly where the push-in lands — and unwritten scrolling back up, since what is
       # shown is a function of the scroll position and not of a timer.
       motto: "🌌 Per Aspera Ad Astra 🔭"
-      # The word on the invitation to scroll at the foot of the first screen. It fades out as soon
-      # as the scroll it asks for begins, and clicking it goes straight to the content. Remove the
-      # line and the invitation goes with it.
-      scroll_hint: scroll
+      # The invitation at the foot of the first screen. The chevron under it already says which way
+      # to scroll, so the words are free to say something else — and this pair is what the scroll
+      # literally does, since the camera moves into the picture. It fades out as soon as the scroll
+      # it asks for begins, and clicking it goes straight to the content. Remove the line and the
+      # invitation goes with it.
+      scroll_hint: come closer
       button:
         text: View CV
         url: /cv/
