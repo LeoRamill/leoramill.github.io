@@ -30,9 +30,12 @@
     ].join(', ');
 
     // Never these: they are the picture, not the page. Fading the fixed layer would fade the
-    // background itself, and the per-section wash is a colour, not content.
+    // background itself, the per-section wash is a colour and not content, and the scroll hint
+    // already owns its own opacity — handing it to the reveal as well left it at nought, plus the
+    // reveal's 14px of slide, which is a hint nobody could see at the one moment it is for.
     function isChrome(el) {
-      return el.classList.contains('home-section-bg') || el.classList.contains('site-fixed-bg');
+      return el.classList.contains('home-section-bg') || el.classList.contains('site-fixed-bg') ||
+             el.classList.contains('scroll-hint');
     }
 
     var units = [];

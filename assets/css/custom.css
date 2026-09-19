@@ -140,6 +140,38 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   font-weight: 600; font-size: 0.9rem; transition: background-color 0.15s ease;
 }
 .profile-hero__btn:hover { background-color: rgba(255, 255, 255, 0.14); }
+/* The invitation to scroll, in the same voice the Shaping page uses for its hints: small, lower
+   case, the same lilac. Fixed to the window and not to the hero — at the top of the page the last
+   stretch of the pinned stage is already below the fold, which is precisely where this would sit.
+   Its ink is set by the script from how far the push-in has come. */
+.scroll-hint {
+  position: fixed; z-index: 5;
+  inset-inline: 0; margin-inline: auto; width: max-content;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1.1rem);
+  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  padding: 0.5rem 0.9rem; border: 0; background: none; cursor: pointer; text-decoration: none;
+  color: #cbb8ff; font-size: clamp(0.86rem, 1vw, 0.96rem); font-weight: 600;
+  text-transform: lowercase; letter-spacing: 0.04em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
+  opacity: var(--hint-o, 1); transition: opacity 0.25s ease, visibility 0s;
+}
+/* Spent: out of reach as well as out of sight. An invisible button still takes clicks and still
+   takes focus, and this one sits across the middle of the page. The delay on `visibility` lets the
+   fade finish first — without it a scroll fast enough to spend the hint in one frame would make it
+   disappear rather than leave. Coming back it is instant, as it should be. */
+.scroll-hint.is-spent { visibility: hidden; transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+.scroll-hint__chevron { width: 1.35rem; height: auto; display: block; animation: scroll-hint-nudge 3s ease-in-out infinite; }
+/* The travel is on the chevron and not on the button, which is centred by its own margins — an
+   animated transform there would cancel them. */
+@keyframes scroll-hint-nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+.scroll-hint:hover, .scroll-hint:focus-visible { color: #e0d5ff; }
+.scroll-hint:focus-visible { outline: 2px solid #cbb8ff; outline-offset: 0.35rem; border-radius: 0.4rem; }
+@media (prefers-reduced-motion: reduce) {
+  /* Still shown, just still. */
+  .scroll-hint__chevron { animation: none; }
+  .scroll-hint { transition: none; }
+}
+
 /* The epigraph below the hero: italic and bold, at roughly the size of the name — it is alone in
    its own band rather than sharing the text column, so it can carry that size and that weight
    without competing with anything. */
@@ -347,6 +379,9 @@ img { max-width: 100%; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 article h2[id], article h3[id], article h4[id] { scroll-margin-top: 1.25rem; }
+/* The same courtesy for the homepage section the scroll hint points at: the header is fixed
+   once the page has moved, and a bare anchor would land the section underneath it. */
+#about { scroll-margin-top: 5rem; }
 
 .hb-toc ul { position: relative; margin-left: 0.15rem; border-left: 2px solid #e5e7eb; }
 .dark .hb-toc ul { border-left-color: #3f3f46; }
