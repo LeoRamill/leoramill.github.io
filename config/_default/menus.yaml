@@ -1,22 +1,25 @@
 # Navigation Links
 #   The weight parameter defines the order that the links will appear in.
+#   The order follows the homepage: the same sections in the same sequence, so that scrolling the
+#   front page and reading the bar left to right tell the same story. CV closes the professional
+#   run it summarises, and Shaping — the books, films, music and photographs — is the coda.
 
 main:
   - name: About
     url: /
     weight: 10
-  - name: Shaping
-    url: /shaping/
-    weight: 15
-  - name: Projects
-    url: /project/
+  - name: News
+    url: /news/
     weight: 20
   - name: Publications
     url: /publication/
-    weight: 25
-  - name: News
-    url: /news/
     weight: 30
+  - name: Projects
+    url: /project/
+    weight: 40
   - name: CV
     url: /cv/
-    weight: 40
+    weight: 50
+  - name: Shaping
+    url: /shaping/
+    weight: 60

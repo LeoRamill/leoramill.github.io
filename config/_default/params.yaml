@@ -32,7 +32,7 @@ header:
     blox: "navbar"
     show_logo: true
     fixed_to_top: true
-    show_search: true
+    show_search: false
     show_theme_chooser: true
     # Push the menu to the right, like the original site (social icons stay on the left)
     align: right
