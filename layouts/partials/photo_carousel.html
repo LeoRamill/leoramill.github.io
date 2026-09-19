@@ -115,11 +115,18 @@
       if (run && !timer) arm(opened ? every : Math.min(FIRST, every));
       if (!run) stop();
     }
-    ['pointerenter', 'focusin', 'pointerdown'].forEach(function (e) {
-      root.addEventListener(e, function () { held = true; sync(); });
+    // `pointermove` and not `pointerenter`, and the difference is the whole of a bug worth naming:
+    // while you scroll, the cursor sits wherever it was last left, which is usually the middle of
+    // the window — and the row comes up the screen and arrives underneath it. `pointerenter` fires
+    // on that, the row counts itself held, and it never turns at all for anyone who scrolls with a
+    // wheel or a trackpad without moving the mouse. A pointer that has not moved is not someone
+    // looking at a photograph; one that moves over the row is, and it still stops for them.
+    function hold(on) { if (on !== held) { held = on; sync(); } }
+    ['pointermove', 'pointerdown', 'focusin'].forEach(function (e) {
+      root.addEventListener(e, function () { hold(true); });
     });
     ['pointerleave', 'focusout'].forEach(function (e) {
-      root.addEventListener(e, function () { held = false; sync(); });
+      root.addEventListener(e, function () { hold(false); });
     });
     if ('IntersectionObserver' in window) {
       // Not a fraction of the row, but whether its top has reached the middle of the window: the
