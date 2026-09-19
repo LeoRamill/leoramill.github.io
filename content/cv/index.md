@@ -2,7 +2,7 @@
 title: Curriculum Vitae
 type: page
 # `##` is a section of the CV, `###` one entry inside it, and the line right under an entry is its
-# place and date, in italics. The layout that draws the three levels is `layouts/_default/cv.html`.
+# place and date, in italics. The layout that draws the three levels is `layouts/page/cv.html`.
 layout: cv
 subtitle: "Data science and artificial intelligence, between Rome, Turin and Sophia Antipolis."
 share: false
