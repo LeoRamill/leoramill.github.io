@@ -27,7 +27,7 @@ sections:
       # literally does, since the camera moves into the picture. It fades out as soon as the scroll
       # it asks for begins, and clicking it goes straight to the content. Remove the line and the
       # invitation goes with it.
-      scroll_hint: come closer
+      scroll_hint: Come Closer...🌌
       button:
         text: View CV
         url: /cv/
