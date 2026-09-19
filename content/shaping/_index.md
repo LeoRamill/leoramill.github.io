@@ -25,6 +25,6 @@ orbits:
 # The big link under the mini-me. Add `old:` back to get the two-word version, where the label is
 # struck through on hover and that word rises in its place.
 focus:
-  label: My Timeline
+  label: My Timeline ⏳
   url: /shaping/academic/
 ---
