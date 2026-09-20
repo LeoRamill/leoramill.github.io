@@ -53,14 +53,37 @@
   {{ with $fixed.hold }}{{ with resources.Get (path.Join "media" .) }}{{ $hold = .RelPermalink }}{{ end }}{{ end }}
   {{ with $fixed.hold_webm }}{{ with resources.Get (path.Join "media" .) }}{{ $hold_webm = .RelPermalink }}{{ end }}{{ end }}
   {{ $scrub = and $video $frames }}
+
+  {{/* The frames and the clips are served at fixed paths — `/media/hero-frames/1280/f001.webp`,
+       `/media/hero-hold.mp4` — so replacing the footage leaves every URL exactly as it was and a
+       browser that already has the old bytes keeps showing them. Safari holds on to video and to
+       images like these for a long time, and "it still looks the same after the deploy" is the
+       result. `?v=` fixes that: the token is derived from the content itself (the first and last
+       frame and the hold clip, which all change together when the footage does), so a new cut gets
+       new URLs and an unchanged one keeps the cached copies. The poster needs none of this — it
+       goes through `.Resize`, and Hugo already writes it under a content-hashed name. */}}
+  {{ $v := "" }}
+  {{ if $frames }}
+    {{ $sig := "" }}
+    {{ range (slice (index $frames 0) (index $frames (sub (len $frames) 1))) }}
+      {{ $sig = print $sig (. | fingerprint "md5").Data.Integrity }}
+    {{ end }}
+    {{ with $fixed.hold }}{{ with resources.Get (path.Join "media" .) }}{{ $sig = print $sig (. | fingerprint "md5").Data.Integrity }}{{ end }}{{ end }}
+    {{ $v = printf "?v=%s" (substr (md5 $sig) 0 10) }}
+  {{ else if $video }}
+    {{ with $fixed.video }}{{ with resources.Get (path.Join "media" .) }}
+      {{ $v = printf "?v=%s" (substr (md5 (. | fingerprint "md5").Data.Integrity) 0 10) }}
+    {{ end }}{{ end }}
+  {{ end }}
   {{ with $fixed.poster }}{{ with resources.Get (path.Join "media" .) }}{{ $poster = (.Resize "1600x webp q80").RelPermalink }}{{ end }}{{ end }}
   {{ if $scrub }}
     <div class="site-fixed-bg site-fixed-bg--video site-fixed-bg--frames" aria-hidden="true"{{ with $poster }} style="background-image: url('{{ . }}');"{{ end }}>
       <canvas class="site-fixed-canvas"
               data-frames="{{ path.Dir (index $frames 0).RelPermalink }}" data-frames-count="{{ len $frames }}"
+              data-frames-v="{{ $v }}"
               {{ with $frames_small }}data-frames-small="{{ path.Dir (index . 0).RelPermalink }}" data-frames-small-count="{{ len . }}"{{ end }}></canvas>
       {{ if $hold }}<video class="site-fixed-video site-fixed-video--hold" muted playsinline loop preload="none" disablepictureinpicture
-             data-video="{{ $hold }}"{{ with $hold_webm }} data-video-webm="{{ . }}"{{ end }}></video>{{ end }}
+             data-video="{{ $hold }}{{ $v }}"{{ with $hold_webm }} data-video-webm="{{ . }}{{ $v }}"{{ end }}></video>{{ end }}
     </div>
     <script>
       (function () {
@@ -82,7 +105,8 @@
         var base = small ? canvas.dataset.framesSmall : canvas.dataset.frames;
         var count = Number(small ? canvas.dataset.framesSmallCount : canvas.dataset.framesCount) || 0;
         if (!count) return;
-        var url = function (i) { return base + '/f' + String(i + 1).padStart(3, '0') + '.webp'; };
+        var v = canvas.dataset.framesV || '';
+        var url = function (i) { return base + '/f' + String(i + 1).padStart(3, '0') + '.webp' + v; };
 
         // Frames arrive in order, the first handful before anything else; a scroll that outruns
         // them shows the last one that has arrived.
@@ -170,7 +194,7 @@
   {{ else if $video }}
     <div class="site-fixed-bg site-fixed-bg--video" aria-hidden="true"{{ with $poster }} style="background-image: url('{{ . }}');"{{ end }}>
       <video class="site-fixed-video" muted playsinline autoplay preload="none" disablepictureinpicture
-             data-video="{{ $video }}"{{ with $video_small }} data-video-small="{{ . }}"{{ end }}{{ with $video_webm }} data-video-webm="{{ . }}"{{ end }}{{ with $poster }} poster="{{ . }}"{{ end }}></video>
+             data-video="{{ $video }}{{ $v }}"{{ with $video_small }} data-video-small="{{ . }}{{ $v }}"{{ end }}{{ with $video_webm }} data-video-webm="{{ . }}{{ $v }}"{{ end }}{{ with $poster }} poster="{{ . }}"{{ end }}></video>
     </div>
     <script>
       // The source is picked here rather than in the markup, so the video is never fetched by anyone
