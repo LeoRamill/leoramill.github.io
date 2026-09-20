@@ -15,7 +15,7 @@ galleries:
       - title: Two Minute Papers
         meta: AI research digest
         url: https://www.youtube.com/@TwoMinutePapers
-      - title: Kurzgesagt
-        meta: Science, animated
-        url: https://www.youtube.com/@kurzgesagt
+      - title: Andrej Karpathy
+        meta: Goat in AI
+        url: http://www.youtube.com/@AndrejKarpathy
 ---
