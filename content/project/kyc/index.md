@@ -16,6 +16,26 @@ url_code: 'https://github.com/u-siri-ous/KYC'
 
 **Paper** — [KYC.pdf](kyc.pdf) · **Code** — [github.com/u-siri-ous/KYC](https://github.com/u-siri-ous/KYC) (AGPL-3.0)
 
+## Abstract
+
+A collector holding a first-generation Pokémon card wants to know which card it is and what condition
+it is in, and it is the second question — the one that sets the price — that a newcomer cannot
+answer by eye. KYC answers both from a single photograph, joining a classical computer-vision grader
+to a convolutional classifier behind one desktop interface. The grader works in HSV rather than RGB
+so that the card's yellow border is a range of hue and saturation instead of a combination of
+channels that shifts with the light; the resulting mask both locates the card against its background
+and, once binarised, is what the geometric Beckett factors are measured on, the proportion of white
+pixels in each region giving centering, corner wear and edge chipping. Surface, the fourth factor, is
+explicitly out of reach of a photograph and is approximated from the other three rather than
+pretended at. The classifier is trained on roughly 7,000 hand-cropped images spread over 151 classes
+— 25 to 50 per Pokémon — with augmentation and early stopping standing in for the data that is not
+there. Two architectures were compared, and the smaller one wins clearly: two convolutional layers on
+a 64×64 input reach 96.7% validation accuracy against 94.0% for a deeper network on a 128×128 input,
+which on this dataset is capacity outrunning data rather than overfitting. Grader and classifier
+cover for each other — a card too damaged to grade well is still identifiable — and the results are
+presented as a graded slab: marks on the left, card data on the right, in the palette of the
+Pokémon's own type.
+
 ## What it does
 
 A collector holding a first-generation Pokémon card wants to know two things: which card is this, and what condition is it in. The second question is the one that sets the price, and it is the one a newcomer cannot answer — telling a Near Mint from an Excellent Mint by eye takes practice most people do not have.
