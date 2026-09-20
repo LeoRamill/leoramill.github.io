@@ -1,0 +1,7 @@
+{{/* The theme's own wrapper, with two changes. A class of our own, so the feed can be given a
+     gutter on a phone — `w-fit` inside a centred flex column otherwise leaves the text within a
+     few pixels of the screen edge, where every other page keeps 24px. And `space-y-16` is dropped
+     in favour of a rule in `custom.css`: four rem between entries is right on a wide screen and
+     nearly a screenful of nothing on a narrow one, and a utility class cannot say both. */}}
+<div class="news-feed mt-16 sm:mt-20 w-fit">
+  <div class="news-feed__list flex max-w-3xl flex-col">

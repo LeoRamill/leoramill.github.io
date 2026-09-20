@@ -77,6 +77,45 @@ body:has(.site-fixed-bg) #site-header.header:has(#nav-toggle:checked),
 }
 body:has(.site-fixed-bg) #site-header.header:has(#nav-toggle:checked)::before { opacity: 0; }
 
+/* The theme opens the phone menu by switching `display` from none to block, and `display` is the
+   one property that cannot be animated: the six links are simply there, all at once. Below the
+   breakpoint the list is therefore always displayed and collapsed by height instead — which does
+   animate — so it unrolls out of the bar and rolls back up. `visibility` is delayed on the way out
+   so nothing inside can be tabbed to while it is shut, and each link fades in a beat after the one
+   above it, which is what makes it read as opening rather than appearing. */
+@media (max-width: 1023px) {
+  #nav-menu {
+    display: block; overflow: hidden;
+    max-height: 0; opacity: 0; visibility: hidden; transform: translateY(-0.4rem);
+    transition: max-height 0.34s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.2s ease, transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+                visibility 0s linear 0.34s;
+  }
+  #nav-toggle:checked ~ #nav-menu {
+    /* Close to what the six links actually measure (about 312px), so the height spends the
+       transition arriving rather than overshooting it in the first eighth of it — and `auto`
+       overflow rather than a clip, in case the menu ever grows past this. */
+    max-height: 30rem; overflow-y: auto; opacity: 1; visibility: visible; transform: none;
+    transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.26s ease 0.04s, transform 0.34s cubic-bezier(0.22, 0.61, 0.36, 1),
+                visibility 0s;
+  }
+  #nav-menu > li { opacity: 0; transform: translateY(-0.35rem); transition: opacity 0.22s ease, transform 0.26s ease; }
+  #nav-toggle:checked ~ #nav-menu > li { opacity: 1; transform: none; }
+  #nav-toggle:checked ~ #nav-menu > li:nth-child(1) { transition-delay: 0.06s; }
+  #nav-toggle:checked ~ #nav-menu > li:nth-child(2) { transition-delay: 0.10s; }
+  #nav-toggle:checked ~ #nav-menu > li:nth-child(3) { transition-delay: 0.14s; }
+  #nav-toggle:checked ~ #nav-menu > li:nth-child(4) { transition-delay: 0.18s; }
+  #nav-toggle:checked ~ #nav-menu > li:nth-child(5) { transition-delay: 0.22s; }
+  #nav-toggle:checked ~ #nav-menu > li:nth-child(6) { transition-delay: 0.26s; }
+  /* The bar itself goes solid under the open menu; let it do that over the same moment. */
+  #site-header.header { transition: background-color 0.3s ease, border-color 0.3s ease; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  #nav-menu, #nav-menu > li, #nav-toggle:checked ~ #nav-menu, #nav-toggle:checked ~ #nav-menu > li,
+  #site-header.header { transition: none; }
+}
+
 /* On such a page the bar's contents sit on the picture whatever the scroll, so they are light
    throughout. The theme paints the links and the two buttons near-black in light mode, and the
    GitHub glyph is near-black in both — invisible over a dim museum hall or a night-time film still.
@@ -209,9 +248,29 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   .profile-hero__quote-c { transition: none; }
 }
 @media (max-width: 767px) {
-  .profile-hero { flex-direction: column; text-align: center; gap: 1.5rem; }
-  .profile-hero__avatar { width: 8.5rem; height: 8.5rem; }
-  .profile-hero__social { justify-content: center; }
+  .profile-hero { flex-direction: column; text-align: center; gap: 1.1rem; }
+  .profile-hero__avatar { width: 7.25rem; height: 7.25rem; }
+  .profile-hero__social { justify-content: center; margin-top: 1rem; gap: 0.9rem; }
+  .profile-hero__icon { height: 1.6rem; }
+  .profile-hero__role { margin-top: 0.5rem; }
+  .profile-hero__orgs { margin-top: 0.35rem; }
+  .profile-hero__btn { margin-top: 1rem; }
+}
+/* A phone in Safari shows perhaps 670px of page, and the column — avatar, name, role, the four
+   universities, the icons, the button — does not shrink with it. Centred in that space, `View CV`
+   came to rest exactly where the fixed invitation sits, one on top of the other. So on a short
+   screen the stage keeps a band clear at the foot for the invitation, which lifts everything above
+   it, and the epigraph is set at a size that leaves the band alone. */
+@media (max-width: 767px) {
+  .hero-pin__stage { padding-bottom: 5.25rem; }
+  .profile-hero__quote { font-size: clamp(1.3rem, 7.5vw, 2rem); padding-inline: 1rem; }
+}
+@media (max-width: 767px) and (max-height: 720px) {
+  .hero-pin__stage { padding-bottom: 5.75rem; }
+  .profile-hero__avatar { width: 6.25rem; height: 6.25rem; }
+  .profile-hero { gap: 0.9rem; }
+  .profile-hero__name { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .profile-hero__quote { font-size: clamp(1.15rem, 6.5vw, 1.6rem); }
 }
 
 /* ----- Cover photo + italic bio ----- */
@@ -1070,7 +1129,38 @@ a.review-genre:hover, a.review-genre:focus-visible {
 @media (max-width: 720px) {
   .review-head { grid-template-columns: 1fr; gap: 1.25rem; }
   .review-cover { width: min(100%, 14rem); margin-inline: auto; }
-  .review-intro { justify-items: start; }
+  /* The poster is centred once the two columns stack, so everything under it is centred too:
+     left-aligned type beneath a centred picture reads as two blocks that missed each other. */
+  .review-intro { justify-items: center; justify-content: center; text-align: center; gap: 0.75rem; }
+  .review-intro > * { max-width: 100%; }
+  .review-intro .shaping-stars { justify-content: center; }
+  .review-title { font-size: clamp(1.75rem, 8.5vw, 2.4rem); }
+  .review-body { padding-top: clamp(1.5rem, 6vw, 2.25rem); }
+}
+
+/* ----- The News page (the theme's `date-title-summary` feed) -----
+   Two things it does not do well on a phone. Its wrapper is `w-fit` inside a centred column, so
+   the text ends a few pixels from the screen edge while every other page on the site keeps a
+   24px gutter; and its entries are four rem apart, which at this width is nearly a screenful of
+   nothing between one item and the next. Below 767px it gets the site's gutter and a rhythm that
+   lets two entries be seen at once. */
+/* `w-fit` around a `max-w-3xl` column is exactly 768px wide, so at a viewport of exactly 768 it
+   is as wide as the screen and the page's own 24px padding pushes it off the edge. Capping the
+   wrapper costs nothing at any other width. */
+/* The theme gives each entry an invisible hover card and hit area that reach 24px past it on
+   every side (`-inset-x-4 sm:-inset-x-6`). Where the column is as wide as the space it has — around
+   a 768px screen — those overhang the page and the whole document scrolls sideways by 24px. `clip`
+   and not `hidden`: it trims them without turning the feed into a scroll container. */
+.news-feed { max-width: 100%; overflow-x: clip; }
+.news-feed__list > * + * { margin-top: 4rem; }
+@media (max-width: 767px) {
+  .news-feed { width: 100%; margin-top: 2.25rem; padding-inline: 1.5rem; }
+  .news-feed__list { width: 100%; }
+  .news-feed__list > * + * { margin-top: 2.25rem; }
+  .news-feed article h2 { font-size: 1.02rem; line-height: 1.35; }
+  .news-feed article time { margin-bottom: 0.4rem; }
+  .news-feed article p { margin-top: 0.4rem; line-height: 1.55; }
+  .news-feed article > div > div[aria-hidden] { margin-top: 0.7rem; }
 }
 
 /* ----- Publications: the News list dressed as an academic publication list -----
@@ -1158,6 +1248,11 @@ a.review-genre:hover, a.review-genre:focus-visible {
   box-shadow: 0 1px 3px rgb(24 24 27 / 0.08);
 }
 .dark .pub-figure { border-color: rgb(63 63 70); background-color: rgb(24 24 27); box-shadow: none; }
+/* Stacked on a phone the thumbnail has the whole width to sit in, and left-aligned under a
+   full-width paragraph it reads as though it had slipped. Centred, the entry has one axis. */
+@media (max-width: 767px) {
+  .pub-figure { margin-inline: auto; }
+}
 
 .pub-text { z-index: 10; }
 /* The small line above the title, where a project puts its tags. Set the way the theme sets a card's
