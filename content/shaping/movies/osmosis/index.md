@@ -4,6 +4,7 @@ meta: Audrey Fouché, Thomas Vincent
 gallery: series
 rating: 9
 catchphrase: Love lives in the margin of error.
+genres: [Science Fiction, Drama, Romance]
 summary: "An algorithm that decodes your neurons to find your soulmate, until free will starts to look like a statistical illusion."
 ---
 

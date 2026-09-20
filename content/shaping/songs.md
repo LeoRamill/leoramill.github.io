@@ -13,6 +13,8 @@ galleries:
         meta: Artist · Album
         rating: 10
         catchphrase: Why this one.
+        # Musical genres here, the way a film page lists film genres
+        genres: [Indie Pop, Dream Pop]
         review: "Example: replace with your own words. `url` adds an “Open on Spotify” link inside the review."
         url: https://open.spotify.com/
         url_text: Open on Spotify

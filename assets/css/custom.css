@@ -912,6 +912,14 @@ html.has-open-dialog { overflow: hidden; }
   .photo-item:active, .shaping-card-button:active .shaping-cover { transform: none; }
 }
 
+/* The block that closes an article page (tags, share buttons) is a `container mx-auto` inside the
+   `<main>` that already holds the text, so it centres itself in `main` while the text sits at
+   main's left padding edge. Above 1280px `article`'s own `justify-center` centres `main` too and
+   the two happen to agree; between roughly 1024 and 1280 they do not, and the tags sat up to 118px
+   to the right of the paragraph above them. Dropping the auto margins hands the block the same
+   box as the text at every width. */
+main > .container.mx-auto { margin-inline: 0; }
+
 /* ----- A single review on its own page (`read more` from a gallery card) ----- */
 .shaping-more-link { justify-self: start; color: var(--blue); font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
 .shaping-more-link:hover { color: var(--ink); }
@@ -947,6 +955,33 @@ html.has-open-dialog { overflow: hidden; }
 .review-body a { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 0.16em; }
 .review-body blockquote { margin: 1.4em 0; padding-left: 1.1rem; border-left: 0.22rem solid var(--card-accent, var(--blue)); color: var(--muted); font-style: italic; }
 .review-body img { width: 100%; height: auto; }
+
+/* Genres, the block a project page closes with, here naming what the work is rather than what the
+   research was about. Same chip as `/project/…` — 12px, medium, `rounded`, roomier from `lg` up —
+   but tinted with the page's own accent and set flush with the text column instead of centred on
+   the page, because the writing above it is a left-aligned column and not a centred article. */
+.review-genres { display: grid; gap: 0.6rem; max-width: 42rem; margin-top: clamp(2rem, 4vw, 3rem); }
+.review-genres-label { color: var(--muted); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; }
+.review-genres-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.review-genre {
+  margin: 0; padding: 0.125rem 0.625rem; border-radius: 0.25rem;
+  background-color: color-mix(in srgb, var(--card-accent, #6f4dbf), white 84%);
+  color: color-mix(in srgb, var(--card-accent, #6f4dbf), black 34%);
+  font-size: 0.75rem; font-weight: 500; line-height: 1.5;
+}
+.dark .review-genre {
+  background-color: color-mix(in srgb, var(--card-accent, #6f4dbf), #18181b 66%);
+  color: color-mix(in srgb, var(--card-accent, #6f4dbf), white 58%);
+}
+@media (min-width: 1024px) { .review-genre { padding: 0.5rem 1.25rem; } }
+/* Over a photograph the chips need their own contrast, the way the prose does */
+.has-backdrop .review-genres-label { color: #d7d8de; text-shadow: 0 1px 6px #00000096; }
+.has-backdrop .review-genre { background-color: #ffffff21; color: #f2f0fb; text-shadow: none; }
+
+/* Inside a card's preview panel the same chips, minus the label: the panel is small and the line
+   above it already says what kind of thing this is. */
+.review-genres-list--dialog { margin-top: 0.15rem; }
+.shaping-dialog-copy .review-genre { padding: 0.125rem 0.625rem; font-size: 0.75rem; }
 
 .review-back { margin-top: clamp(2.25rem, 5vw, 3.5rem); }
 .review-back a { color: var(--blue); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
