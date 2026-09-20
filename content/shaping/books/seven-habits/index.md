@@ -5,6 +5,9 @@ meta: Stephen R. Covey
 # Which gallery of the Books page this belongs to
 gallery: book
 rating: 9
+# What the work is: film genres for a movie, musical genres for a song, and so on. They show
+# as chips at the foot of the review and inside the card preview.
+genres: [Self-Help, Personal Development, Business]
 catchphrase: Write here the one line that sums up why it stayed.
 # Shown in the preview window that opens from the cover; the text below is the full review
 summary: "Example review: replace this text with your own words about what the book changed in how you think or work."

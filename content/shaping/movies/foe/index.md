@@ -4,6 +4,7 @@ meta: Garth Davis
 gallery: movie
 rating: 8.5
 catchphrase: Let time take its course
+genres: [Science Fiction, Drama, Romance]
 summary: "At the beginning you feel so full of life and it's… exciting, but time makes everything predictable."
 ---
 

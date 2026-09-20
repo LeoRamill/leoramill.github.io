@@ -4,6 +4,7 @@ meta: Joachim Trier
 gallery: movie
 rating: 7.5
 catchphrase: Stop watching your own life.
+genres: [Drama, Romance, Comedy]
 summary: "They call her a narcissist for wanting to choose; the real risk is living your own life as a spectator."
 ---
 

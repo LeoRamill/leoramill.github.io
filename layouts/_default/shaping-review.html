@@ -45,6 +45,18 @@
         {{ .Content }}
       </div>
 
+      {{/* The same closing block a project page carries under its text, with the genres of the
+           work in place of the research tags: same chip, same size, aligned with the column the
+           writing runs in rather than centred on the page. */}}
+      {{ with .Params.genres }}
+      <div class="review-genres" style="--card-accent: {{ $accent }}">
+        <span class="review-genres-label">{{ $.Params.genres_label | default "Genres" }}</span>
+        <ul class="review-genres-list">
+          {{ range . }}<li class="review-genre">{{ . }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
       {{ with .Parent }}
       <p class="review-back"><a href="{{ .RelPermalink }}">← {{ .Title }}</a></p>
       {{ end }}

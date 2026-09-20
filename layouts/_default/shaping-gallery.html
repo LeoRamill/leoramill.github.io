@@ -50,12 +50,14 @@
         {{ if not $cover }}{{ $cover = partial "shaping_cover" .Params.cover }}{{ end }}
         {{ $c = dict "title" .Title "meta" .Params.meta "rating" .Params.rating "catchphrase" .Params.catchphrase
                      "text" .Params.summary "note" .Params.note "cover" $cover "accent" .Params.accent
+                     "genres" .Params.genres
                      "more" .RelPermalink "moreText" (.Params.more_text | default "Read more")
                      "link" .Params.url "linkText" (.Params.url_text | default "Open") }}
       {{ end }}
       {{ with $entry.item }}
         {{ $c = dict "title" .title "meta" .meta "rating" .rating "catchphrase" .catchphrase
                      "text" .review "note" .note "cover" (partial "shaping_cover" .cover) "accent" .accent
+                     "genres" .genres
                      "more" "" "moreText" "" "link" .url "linkText" (.url_text | default "Open") }}
       {{ end }}
       {{ $accent := $c.accent | default (index (slice "#356b4c" "#6f4dbf" "#9f4f45" "#aa7a2f" "#1d6f8f") (mod $ii 5)) }}
@@ -91,6 +93,13 @@
               {{ with $c.rating }}{{ partial "shaping_stars" . }}{{ end }}
               {{ with $c.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
               {{ with $c.text }}<p>{{ . | markdownify }}</p>{{ end }}
+              {{/* Genres of the work — film genres, musical genres — as the same chips the full
+                   review page closes with, so a card and its page say the same thing. */}}
+              {{ with $c.genres }}
+              <ul class="review-genres-list review-genres-list--dialog">
+                {{ range . }}<li class="review-genre">{{ . }}</li>{{ end }}
+              </ul>
+              {{ end }}
               {{ with $c.more }}<a class="shaping-more-link" href="{{ . }}">{{ $c.moreText }} →</a>{{ end }}
               {{ with $c.link }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $c.linkText }} →</a>{{ end }}
             </div>
