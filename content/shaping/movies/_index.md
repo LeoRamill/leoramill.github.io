@@ -7,6 +7,7 @@ cascade:
 lead:
   text: "Watch more movies. Live more lives by projecting yourself into a body and mind other than your own."
   url: ""
+hint: click on a poster to read the review
 
 galleries:
   - title: Movies

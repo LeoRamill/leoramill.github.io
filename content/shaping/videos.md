@@ -4,6 +4,7 @@ layout: shaping-gallery
 lead:
   text: "Videos and channels worth the time."
   url: ""
+hint: click on a card to open the channel
 galleries:
   - title: Channels
     kind: compact

@@ -10,6 +10,8 @@
   {{ with .Params.lead }}
   <p class="shaping-source-note shaping-source-note--lead">{{ if .url }}<a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .text }}</a>{{ else }}{{ .text }}{{ end }}</p>
   {{ end }}
+  {{/* The small blue line that says what a card does, as on the Shaping landing and Photography */}}
+  {{ with .Params.hint }}<p class="shaping-title-hint">{{ . }}</p>{{ end }}
   {{ with .Content }}<div class="shaping-source-note">{{ . }}</div>{{ end }}
 
   {{ range $gi, $gallery := .Params.galleries }}

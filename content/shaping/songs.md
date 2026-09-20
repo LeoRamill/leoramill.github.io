@@ -4,6 +4,7 @@ layout: shaping-gallery
 lead:
   text: "Songs on repeat."
   url: ""
+hint: click on a cover to read why
 galleries:
   - title: Songs
     kind: song
