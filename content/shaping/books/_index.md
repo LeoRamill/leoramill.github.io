@@ -21,10 +21,4 @@ galleries:
       - page: atomic-habits
       - title: Deep Learning
         meta: Ian Goodfellow, Yoshua Bengio, Aaron Courville
-      - title: The Mythical Man-Month
-        meta: Frederick P. Brooks
-      - title: A Short History of the World
-        meta: H. G. Wells
-      - title: Wohpe
-        meta: Salvatore Sanfilippo
 ---
