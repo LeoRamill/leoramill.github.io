@@ -1,0 +1,28 @@
+{{ define "main" }}
+{{/* One genre — /genres/drama/ — as the same wall of covers the Movies and Books pages use, so a
+     genre reads like a shelf rather than like a search result. Reached by clicking a genre chip at
+     the foot of a review or inside a card's preview panel.
+
+     A page's `gallery` (movie, series, book…) becomes the word that opens its preview panel, so a
+     shelf holding a film and a book says which is which. */}}
+{{ $page := . }}
+{{ $entries := slice }}
+{{ range .Pages.ByTitle }}
+  {{ $entries = $entries | append (dict "page" . "label" (title (.Params.gallery | default "Review"))) }}
+{{ end }}
+
+<section class="shaping-scope shaping-page shaping-list-page">
+  <p class="shaping-genre-eyebrow">{{ i18n "genre" | default "Genre" }}</p>
+  <h1 class="shaping-title">{{ .Title }}</h1>
+  {{ with .Content }}<div class="shaping-source-note">{{ . }}</div>{{ end }}
+  <p class="shaping-source-note shaping-source-note--lead">
+    {{ $n := len .Pages }}{{ $n }} {{ cond (eq $n 1) "thing" "things" }} under this one.
+  </p>
+
+  {{ partial "shaping_wall" (dict "entries" $entries "kind" "genre" "gi" "g") }}
+
+  <p class="shaping-source-note shaping-source-note--bottom"><a href="/shaping/">← everything else</a></p>
+</section>
+
+{{ partial "shaping_wall_script" . }}
+{{ end }}

@@ -45,17 +45,18 @@
         {{ .Content }}
       </div>
 
-      {{/* The same closing block a project page carries under its text, with the genres of the
-           work in place of the research tags: same chip, same size, aligned with the column the
-           writing runs in rather than centred on the page. */}}
+      {{/* The same closing block a project page carries under its text: the genres of the work in
+           place of the research tags, then the author card the theme puts under an article. Same
+           chips and same card, aligned with the column the writing runs in rather than centred on
+           the page. Each chip goes to its own genre page, the way a project's tag goes to /tags/. */}}
       {{ with .Params.genres }}
       <div class="review-genres" style="--card-accent: {{ $accent }}">
         <span class="review-genres-label">{{ $.Params.genres_label | default "Genres" }}</span>
-        <ul class="review-genres-list">
-          {{ range . }}<li class="review-genre">{{ . }}</li>{{ end }}
-        </ul>
+        {{ partial "shaping_genres" (dict "genres" .) }}
       </div>
       {{ end }}
+
+      <div class="review-author">{{ partial "page_author" . }}</div>
 
       {{ with .Parent }}
       <p class="review-back"><a href="{{ .RelPermalink }}">← {{ .Title }}</a></p>

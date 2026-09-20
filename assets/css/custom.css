@@ -926,12 +926,15 @@ main > .container.mx-auto { margin-inline: 0; }
 
 .shaping-review-page { width: 100%; }
 /* A wider gutter than the rest of Shaping uses, because these are reading pages: on a phone the
-   text was running to within 10px of the screen edge, where a project page leaves 24. The hero
-   takes the same box so the poster's left edge and the first line of the writing agree. */
-.review-hero-inner, .review-sheet-inner { width: min(100% - 3rem, var(--max)); margin-inline: auto; }
+   text was running to within 10px of the screen edge, where a project page leaves 24.
+   The hero and the writing share one box, 44rem wide and centred: poster, title, prose, genres and
+   author all start and end on the same two lines. Before this the hero ran the full 1160px while
+   the writing sat in a 672px column at the far left of it, so the title was 390px to the right of
+   the paragraph under it and the right half of the page stayed empty. */
+.review-hero-inner, .review-sheet-inner { width: min(100% - 3rem, 44rem); margin-inline: auto; }
 .review-hero { padding-block: clamp(1.25rem, 3vw, 2.5rem); }
 .review-sheet { padding-block: 0 clamp(3rem, 8vw, 6rem); }
-.review-head { display: grid; grid-template-columns: minmax(0, 21rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.25rem); align-items: center; }
+.review-head { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: clamp(1.1rem, 2.6vw, 1.85rem); align-items: center; }
 .review-cover {
   position: relative; display: grid; place-items: center; overflow: hidden; align-self: start;
   aspect-ratio: 2 / 3; border: 1px solid color-mix(in srgb, var(--card-accent), var(--line) 62%);
@@ -940,18 +943,18 @@ main > .container.mx-auto { margin-inline: 0; }
 }
 .dark .review-cover { background: linear-gradient(135deg, color-mix(in srgb, var(--card-accent), #18181b 70%), #27272a), var(--paper); }
 .review-cover img { width: 100%; height: 100%; object-fit: cover; }
-.review-cover span { max-width: 12ch; padding: 0.5rem; color: color-mix(in srgb, var(--card-accent), var(--ink) 34%); font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 900; line-height: 0.95; text-align: center; text-transform: lowercase; hyphens: auto; }
+.review-cover span { max-width: 12ch; padding: 0.5rem; color: color-mix(in srgb, var(--card-accent), var(--ink) 34%); font-size: clamp(1.3rem, 2.4vw, 1.9rem); font-weight: 900; line-height: 0.95; text-align: center; text-transform: lowercase; hyphens: auto; }
 .review-intro { display: grid; gap: 1rem; }
 /* Still a poster title, but no longer three times the size of anything else on the page: an 83px
    head over a 20px body is the jump that made these read as a different template. */
-.review-title { margin: 0; color: var(--ink); font-size: clamp(2.2rem, 4.6vw, 3.6rem); font-weight: 800; line-height: 1; }
+.review-title { margin: 0; color: var(--ink); font-size: clamp(2rem, 3.4vw, 2.9rem); font-weight: 800; line-height: 1.02; }
 
 /* The writing is set by `prose` and `lg:prose-xl` in the markup — the project pages' own classes —
    so the sizes, the line height and the space between paragraphs and headings are not written here
    a second time and cannot drift from them. What stays is what belongs to a review rather than to
    an article: the column width, the accent colours, and a full-width image.
    The column is 42rem, the width a project page's text runs at, rather than `prose`'s own 65ch. */
-.review-body { max-width: 42rem; padding-top: clamp(2rem, 5vw, 3.5rem); color: var(--ink); }
+.review-body { padding-top: clamp(2rem, 5vw, 3.5rem); color: var(--ink); }
 .review-body a { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 0.16em; }
 .review-body blockquote { margin: 1.4em 0; padding-left: 1.1rem; border-left: 0.22rem solid var(--card-accent, var(--blue)); color: var(--muted); font-style: italic; }
 .review-body img { width: 100%; height: auto; }
@@ -960,23 +963,53 @@ main > .container.mx-auto { margin-inline: 0; }
    research was about. Same chip as `/project/…` — 12px, medium, `rounded`, roomier from `lg` up —
    but tinted with the page's own accent and set flush with the text column instead of centred on
    the page, because the writing above it is a left-aligned column and not a centred article. */
-.review-genres { display: grid; gap: 0.6rem; max-width: 42rem; margin-top: clamp(2rem, 4vw, 3rem); }
+.review-genres { display: grid; gap: 0.6rem; margin-top: clamp(2rem, 4vw, 3rem); }
 .review-genres-label { color: var(--muted); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; }
 .review-genres-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+/* Each chip is a link to its own genre page, so the `li` is only the slot it sits in */
+.review-genres-list > li { display: flex; margin: 0; padding: 0; }
 .review-genre {
   margin: 0; padding: 0.125rem 0.625rem; border-radius: 0.25rem;
   background-color: color-mix(in srgb, var(--card-accent, #6f4dbf), white 84%);
   color: color-mix(in srgb, var(--card-accent, #6f4dbf), black 34%);
-  font-size: 0.75rem; font-weight: 500; line-height: 1.5;
+  font-size: 0.75rem; font-weight: 500; line-height: 1.5; text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+a.review-genre:hover, a.review-genre:focus-visible {
+  background-color: color-mix(in srgb, var(--card-accent, #6f4dbf), white 58%);
+  color: color-mix(in srgb, var(--card-accent, #6f4dbf), black 52%);
 }
 .dark .review-genre {
   background-color: color-mix(in srgb, var(--card-accent, #6f4dbf), #18181b 66%);
   color: color-mix(in srgb, var(--card-accent, #6f4dbf), white 58%);
 }
+.dark a.review-genre:hover, .dark a.review-genre:focus-visible {
+  background-color: color-mix(in srgb, var(--card-accent, #6f4dbf), #18181b 38%);
+  color: #ffffff;
+}
 @media (min-width: 1024px) { .review-genre { padding: 0.5rem 1.25rem; } }
 /* Over a photograph the chips need their own contrast, the way the prose does */
 .has-backdrop .review-genres-label { color: #d7d8de; text-shadow: 0 1px 6px #00000096; }
 .has-backdrop .review-genre { background-color: #ffffff21; color: #f2f0fb; text-shadow: none; }
+.has-backdrop a.review-genre:hover, .has-backdrop a.review-genre:focus-visible { background-color: #ffffff3d; color: #ffffff; }
+
+/* The author card the theme puts at the foot of an article, brought onto the reviews and given the
+   review's own column. The card itself is the theme's markup, so it says the same thing here as it
+   does under a project; over a backdrop its neutral greys would sink into the photograph, so the
+   text and the avatar's edge come back light. */
+.review-author .flex { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); }
+.has-backdrop .review-author .text-neutral-500,
+.has-backdrop .review-author .text-neutral-700,
+.has-backdrop .review-author .text-neutral-800 { color: #e7e7ee; text-shadow: 0 1px 7px #000000a6; }
+.has-backdrop .review-author a { color: #f6f6f8; }
+.has-backdrop .review-author a:hover { color: #cbb8ff; }
+.has-backdrop .review-author img { box-shadow: 0 0 0 1px #ffffff4d, 0 10px 26px #00000073; }
+
+/* A genre page: same wall as a Movies or Books page, with the genre named above the title */
+.shaping-genre-eyebrow {
+  width: min(100% - 1.25rem, var(--max)); margin: 0 auto 0.35rem; color: var(--muted);
+  font-size: 0.76rem; font-weight: 800; letter-spacing: 0.06em; text-align: center; text-transform: uppercase;
+}
 
 /* Inside a card's preview panel the same chips, minus the label: the panel is small and the line
    above it already says what kind of thing this is. */

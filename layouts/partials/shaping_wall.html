@@ -1,0 +1,86 @@
+{{/* One wall of covers. Lifted out of `shaping-gallery.html` so the genre pages (/genres/drama/)
+     can show the same wall the Movies and Books pages show, instead of a second kind of list.
+
+     Takes:
+       entries  a list of {page: <review page>} or {item: <inline front-matter entry>}
+       kind     `movie`, `book`, `song`... — sets the class on the section and the default label
+       title    the eyebrow above the wall (optional)
+       label    the word that opens the meta line inside a preview panel (optional)
+       gi       a number that keeps dialog ids unique when a page holds several walls
+
+     An entry with a rating, a catchphrase or some text opens a preview panel on click; a review
+     page adds a "Read more" link to the full page. An entry may carry its own `label`, which a
+     genre page uses to say `MOVIE` on one card and `BOOK` on the next. */}}
+{{ $kind := .kind | default "book" }}
+{{ $label := .label | default (title $kind) }}
+{{ $gi := .gi | default 0 }}
+<section class="shaping-gallery shaping-gallery--{{ $kind }}" aria-label="{{ .title | default $kind }}">
+  {{ with .title }}<p class="shaping-gallery-eyebrow">{{ . }}</p>{{ end }}
+  <div class="shaping-wall">
+    {{ range $ii, $entry := .entries }}
+    {{ $id := printf "%s-%v-%d" $kind $gi $ii }}
+
+    {{/* Normalise both shapes into one card, so everything below is rendered once */}}
+    {{ $c := dict }}
+    {{ with $entry.page }}
+      {{ $cover := "" }}
+      {{ with (.Resources.ByType "image").GetMatch "cover.*" }}{{ $cover = (.Fit "600x900 webp q85").RelPermalink }}{{ end }}
+      {{ if not $cover }}{{ $cover = partial "shaping_cover" .Params.cover }}{{ end }}
+      {{ $c = dict "title" .Title "meta" .Params.meta "rating" .Params.rating "catchphrase" .Params.catchphrase
+                   "text" .Params.summary "note" .Params.note "cover" $cover "accent" .Params.accent
+                   "genres" .Params.genres
+                   "more" .RelPermalink "moreText" (.Params.more_text | default "Read more")
+                   "link" .Params.url "linkText" (.Params.url_text | default "Open") }}
+    {{ end }}
+    {{ with $entry.item }}
+      {{ $c = dict "title" .title "meta" .meta "rating" .rating "catchphrase" .catchphrase
+                   "text" .review "note" .note "cover" (partial "shaping_cover" .cover) "accent" .accent
+                   "genres" .genres
+                   "more" "" "moreText" "" "link" .url "linkText" (.url_text | default "Open") }}
+    {{ end }}
+    {{ $accent := $c.accent | default (index (slice "#356b4c" "#6f4dbf" "#9f4f45" "#aa7a2f" "#1d6f8f") (mod $ii 5)) }}
+    {{ $has_dialog := or $c.rating $c.catchphrase $c.text }}
+    {{/* Nothing to preview but a page behind it: the card just goes there */}}
+    {{ $href := cond (ne $c.more "") $c.more ($c.link | default "") }}
+    {{ $external := and (ne $href "") (hasPrefix $href "http") }}
+
+    <article class="shaping-card" style="--card-accent: {{ $accent }}">
+      {{ if $has_dialog }}<button class="shaping-card-button" type="button" data-open-shaping="{{ $id }}" aria-haspopup="dialog">
+      {{ else if $href }}<a class="shaping-card-static" href="{{ $href }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}>
+      {{ else }}<div class="shaping-card-static">{{ end }}
+        <span class="shaping-cover" aria-hidden="true">
+          {{ with $c.cover }}<img src="{{ . }}" alt="" loading="lazy" decoding="async">{{ else }}<span class="shaping-cover-fallback">{{ $c.title }}</span>{{ end }}
+        </span>
+        <span class="shaping-card-copy">
+          {{ with $c.meta }}<span class="shaping-card-meta">{{ . }}</span>{{ end }}
+          <strong>{{ $c.title }}</strong>
+          {{ with $c.note }}<span class="shaping-card-note">{{ . | markdownify }}</span>{{ end }}
+        </span>
+      {{ if $has_dialog }}</button>{{ else if $href }}</a>{{ else }}</div>{{ end }}
+
+      {{ if $has_dialog }}
+      <dialog id="{{ $id }}" class="shaping-dialog shaping-scope" aria-label="{{ $c.title }} review">
+        <div class="shaping-dialog-panel">
+          <button class="shaping-dialog-close" type="button" data-close-shaping aria-label="Close review">×</button>
+          <div class="shaping-dialog-cover" style="--card-accent: {{ $accent }}">
+            {{ with $c.cover }}<img src="{{ . }}" alt="" loading="lazy" decoding="async">{{ else }}<span>{{ $c.title }}</span>{{ end }}
+          </div>
+          <div class="shaping-dialog-copy">
+            <p class="shaping-card-meta">{{ $entry.label | default $label }}{{ with $c.meta }} · {{ . }}{{ end }}</p>
+            <h2>{{ $c.title }}</h2>
+            {{ with $c.rating }}{{ partial "shaping_stars" . }}{{ end }}
+            {{ with $c.catchphrase }}<p class="shaping-dialog-catchphrase">{{ . | markdownify }}</p>{{ end }}
+            {{ with $c.text }}<p>{{ . | markdownify }}</p>{{ end }}
+            {{/* Genres of the work — film genres, musical genres — as the same chips the full
+                 review page closes with, so a card and its page say the same thing. */}}
+            {{ partial "shaping_genres" (dict "genres" $c.genres "class" "review-genres-list--dialog") }}
+            {{ with $c.more }}<a class="shaping-more-link" href="{{ . }}">{{ $c.moreText }} →</a>{{ end }}
+            {{ with $c.link }}<a class="shaping-spotify-link" href="{{ . }}" target="_blank" rel="noopener noreferrer">{{ $c.linkText }} →</a>{{ end }}
+          </div>
+        </div>
+      </dialog>
+      {{ end }}
+    </article>
+    {{ end }}
+  </div>
+</section>
