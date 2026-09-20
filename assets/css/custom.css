@@ -920,6 +920,12 @@ html.has-open-dialog { overflow: hidden; }
    box as the text at every width. */
 main > .container.mx-auto { margin-inline: 0; }
 
+/* A table wider than the phone screen scrolls inside its own box instead of pushing the whole page
+   sideways. Only where it does not fit: on a wide screen the table lays out normally. */
+@media (max-width: 720px) {
+  main .prose table, .review-body table { display: block; max-width: 100%; overflow-x: auto; }
+}
+
 /* ----- A single review on its own page (`read more` from a gallery card) ----- */
 .shaping-more-link { justify-self: start; color: var(--blue); font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
 .shaping-more-link:hover { color: var(--ink); }
