@@ -16,6 +16,23 @@ url_code: 'https://github.com/LeoRamill/WASAPhoto'
 
 **Code** — [github.com/LeoRamill/WASAPhoto](https://github.com/LeoRamill/WASAPhoto)
 
+## Abstract
+
+A photo-sharing social network specified in one sentence and delivered as a running system. The work
+starts from the resources rather than from the code: the whole surface is written first as an
+OpenAPI 3 contract — seventeen operations covering sessions, profiles, photographs, the stream,
+likes, comments, following and banning — and the implementation is then held to it. The backend is
+Go, layered so that a package of HTTP handlers, one per concern, sits over a data layer of one file
+per table and lets no SQL escape it; persistence is SQLite with six tables whose foreign keys cascade
+on delete, so removing a photograph removes its likes and its comments with it. Authentication is a
+bearer identifier resolved on every request and checked against the user the URL names. The frontend
+is a Vue 3 single-page application of small single-purpose components over that API, and the whole
+thing ships as two multi-stage Docker images — a compiled binary on a bare Debian, and a static
+build served by nginx — or, optionally, as one executable with the interface embedded in it. The
+design decisions worth keeping are in the URL shapes: a like is an idempotent `PUT` on a resource
+rather than a `POST` to an action, and a ban is a resource on the banning user's own profile, which
+turns visibility rules into a join instead of a special case in every handler.
+
 ## The brief
 
 > *Keep in touch with your friends by sharing photos of special moments. Directly from your PC, you

@@ -19,6 +19,27 @@ url_code: 'https://github.com/hercolelab/CARLA/tree/branch_1'
 
 **Code** — [github.com/hercolelab/CARLA (branch_1)](https://github.com/hercolelab/CARLA/tree/branch_1) · built on [CARLA](https://arxiv.org/abs/2108.00783)
 
+## Abstract
+
+Algorithmic recourse asks not why a model refused someone, but what would have had to be different
+for it to accept them. CARLA is the reference library for benchmarking the methods that answer that
+question, and like all of them it assumes the instance under examination is a row in a table. Anomaly
+detection on financial transactions breaks that assumption: an account is flagged because of the
+company it keeps, the model that flags it is a graph neural network, and a counterfactual for it has
+to be a change to a graph. This work extends CARLA to that setting without leaving its interfaces.
+An anti-money-laundering transaction log is lifted into a graph — accounts as nodes carrying
+per-currency aggregates, transactions as edges carrying amount, currency, format and time — beside
+the standard citation benchmarks. GCN, GAT and GIN enter the model catalogue, each in a dense and a
+sparse edge-attributed variant, trained with neighbour sampling under Bayesian hyperparameter sweeps,
+and the model API gains graph-aware prediction methods so that a recourse method can query them the
+way the existing methods query a tabular model. Two families of counterfactual generator are then
+built on that base: CF-GNNExplainer adapted to all three architectures, which searches for the
+smallest set of edges whose removal flips the prediction, and a node perturber and an edge perturber
+that instead learn a minimal perturbation of node or edge features under a loss combining
+cross-entropy towards the opposite class with distance from the original instance. All of them are
+scored on validity, sparsity and fidelity, averaged over repeated samples with standard deviations,
+and the graph-based extensions improve validity and fidelity by roughly 20% over the baseline.
+
 ## The problem
 
 The picture above is the canonical example of algorithmic recourse. Alice applies for a loan, a

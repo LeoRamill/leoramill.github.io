@@ -16,6 +16,27 @@ url_code: 'https://github.com/LeoRamill/VesselVerse-QualityControl'
 
 **Slides** — [the presentation](vesselverse-quality-control.pptx) · **Code** — [github.com/LeoRamill/VesselVerse-QualityControl](https://github.com/LeoRamill/VesselVerse-QualityControl)
 
+## Abstract
+
+VesselVerse collects annotations of cerebral vessels from automatic models, semi-automatic tools and
+manual correction, and they are not equally trustworthy. Deciding which segmentations need a human to
+look again is a job that does not scale to a person, so this project frames it as a binary decision
+taken from the segmentation alone, with no reference to compare against. Each 3D volume is reduced to
+three maximum intensity projections — axial, sagittal and coronal — which keeps the vessel tree
+legible while making the problem tractable on a small dataset, and is described in parallel by a
+vector of nineteen graph metrics of the same tree. Three models are compared over fifty epochs and
+three optimizers: an MLP on the metrics alone, a multi-branch CNN on the projections alone, and a
+multimodal network that concatenates a ResNet representation of each projection with the metric
+branch. The tabular baseline is stable and stuck at about 79%; the multimodal model reaches about 83%
+with Adam, but the training curves matter more than the peak — SGD underfits, RMSprop is violently
+unstable, and Adam's best figure comes with training accuracy past 94% and validation loss turning
+upward, which is overfitting rather than superiority. GradCAM over each projection branch is what
+makes that reading concrete: when the model is right the evidence sits on the vasculature, and when
+it is wrong the heat sits in the corners and along the edges of an otherwise empty frame, in one case
+at maximum confidence. The conclusion the project keeps is that 83% validation accuracy from a model
+that sometimes attends to empty space is not 83% of the job done, and that the explanation is what
+tells you the metric is soft.
+
 ## The question
 
 [VesselVerse](https://link.springer.com/chapter/10.1007/978-3-032-04947-6_62) is a dataset and collaborative framework for annotating cerebral vessels. Annotations arrive from several sources — automatic segmentation models, manual corrections, semi-automatic tools — and they are not equally good. Someone has to decide which ones can be trusted and which need a human to look again, and at the scale a dataset like this grows to, that someone cannot be a person.

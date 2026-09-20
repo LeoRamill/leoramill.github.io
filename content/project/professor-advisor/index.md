@@ -8,7 +8,7 @@ tags:
 url_code: 'https://github.com/LeoRamill/Human-Computer-Interaction-Project'
 ---
 
-![A storyboard from the needfinding: two students find out that a new professor will teach next semester, realise that nobody they know can tell them anything about her, look her up in the app, and read her rating and other students' comments.](figure.jpg)
+![The home screen of the digital prototype, in Sapienza's own dark red: a greeting with the student's photograph, settings top right, and the three ways in — Insegnamenti, Professore, Corsi di Laurea — with the university's seal at the foot.](figure.png)
 
 **Course** — Human-Computer Interaction, Sapienza University of Rome · 2023/2024
 
@@ -19,6 +19,23 @@ Guarnizo Orjuela, Leonard Vincent Ramil
 with particular attention to students' opinions about professors.*
 
 **Code and material** — [github.com/LeoRamill/Human-Computer-Interaction-Project](https://github.com/LeoRamill/Human-Computer-Interaction-Project)
+
+## Abstract
+
+Choosing a university course means choosing a professor, and students have almost no way of finding
+out who that professor is before they commit. This project treats that gap as a design problem
+rather than an engineering one, and runs the full Human-Centred Design cycle against it. Semi-
+structured interviews conducted across the university, followed by a questionnaire answered by about
+a hundred students from eleven faculties, establish both halves of the problem: the professor is a
+first-order criterion in choosing a course and in choosing an internship, and the information needed
+to judge one is not anywhere a student can reach it — the dominant source is word of mouth. The
+responses also order what students actually want to know (clarity in lectures, exam format and
+syllabus, far above the academic CV), and that ordering becomes the feature list. Each need is then
+carried through a storyboard, two rounds of paper prototyping and two of digital prototyping in
+Figma, with user testing on every round and expert review on three, converging on an application
+built around three entry points — teaching, professors and degree courses — validated end to end on
+three tasks: finding notes other students posted on a specific topic, reading students' opinions of
+a professor, and consulting the internships that professor still has available.
 
 ## Not a coding project
 
@@ -65,6 +82,10 @@ The findings that shaped the product:
 Each need became a **storyboard** first — a hand-drawn strip of a student hitting the problem, using
 the app, and getting out of it — because a storyboard makes you write the *situation* before the
 interface, and a screen nobody can draw a situation for is a screen nobody needs.
+
+![The storyboard for knowing a professor, with the need written above it: two students hear that a
+new professor will teach next semester, find that nobody they know can tell them anything about her,
+look her up in the app, and read her rating and other students' comments.](storyboard-professor.jpg)
 
 ![The internship storyboard: a student wants to ask a professor about a thesis but has no idea which topics are on offer, nobody around the table knows either, and then the app shows the professor's available internships.](storyboard-internship.png)
 
