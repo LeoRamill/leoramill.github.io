@@ -1,0 +1,17 @@
+{{/* Behaviour for every wall on the page: each card grows into its review panel and shrinks back
+     on close. Called once per layout, however many walls the page holds. */}}
+{{ partial "morph_dialog" . }}
+<script>
+  document.querySelectorAll('[data-open-shaping]').forEach(function (btn) {
+    var dlg = document.getElementById(btn.dataset.openShaping);
+    if (!(dlg instanceof HTMLDialogElement)) return;
+    window.hbMorph({
+      dialog: dlg,
+      triggers: [btn],
+      closers: Array.prototype.slice.call(dlg.querySelectorAll('[data-close-shaping]')),
+      source: function () { return btn.querySelector('.shaping-cover'); },
+      target: function () { return dlg.querySelector('.shaping-dialog-cover'); },
+      extras: function () { return [dlg.querySelector('.shaping-dialog-copy'), dlg.querySelector('.shaping-dialog-close')]; }
+    });
+  });
+</script>

@@ -46,6 +46,9 @@ taxonomies:
   author: authors
   tag: tags
   publication_type: publication_types
+  # `genres:` on a review page. Each genre gets its own page at /genres/<name>/, drawn by
+  # layouts/genres/term.html as the same wall of covers the Movies and Books pages use.
+  genre: genres
 markup:
   _merge: deep
   highlight:

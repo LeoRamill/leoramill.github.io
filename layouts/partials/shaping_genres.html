@@ -1,0 +1,20 @@
+{{/* The genres of a work, as the chips a project page closes with — film genres for a film, musical
+     genres for a song, and so on. Each one links to its own page at /genres/<name>/, exactly the
+     way a project's `Deep Learning` tag links to /tags/deep-learning/.
+
+     A genre only has a page if some *page* carries it, which is how the `genres` taxonomy is built.
+     An entry written inline in a gallery's `items:` is not a page, so a genre only it uses has
+     nowhere to link: that chip is rendered as a plain label rather than as a dead link.
+
+     Takes: `genres` (a list of names), and `class` for an extra class on the list. */}}
+{{ with .genres }}
+<ul class="review-genres-list{{ with $.class }} {{ . }}{{ end }}">
+  {{ range . }}
+    {{ with site.GetPage (printf "/genres/%s" (urlize .)) }}
+      <li><a class="review-genre" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{ else }}
+      <li class="review-genre">{{ . }}</li>
+    {{ end }}
+  {{ end }}
+</ul>
+{{ end }}
