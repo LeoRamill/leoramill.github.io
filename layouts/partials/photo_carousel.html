@@ -76,6 +76,17 @@
     function schedule() { if (!queued) { queued = true; requestAnimationFrame(paint); } }
     track.addEventListener('scroll', schedule, { passive: true });
     addEventListener('resize', schedule);
+
+    // The two ends of the row are sized so the first and the last photograph can each reach the
+    // middle. With every slide one width the stylesheet can do that alone; with portraits and
+    // landscapes mixed, the end ones have to be measured.
+    function ends() {
+      var w = track.clientWidth;
+      track.style.setProperty('--lead', Math.max(0, (w - items[0].offsetWidth) / 2) + 'px');
+      track.style.setProperty('--trail', Math.max(0, (w - items[items.length - 1].offsetWidth) / 2) + 'px');
+    }
+    ends();
+    addEventListener('resize', function () { ends(); schedule(); });
     schedule();
 
     // Which slide is nearest the middle right now — the answer to "advance from where?", asked at

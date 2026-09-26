@@ -6,12 +6,19 @@
      (optional; it becomes the alt text too, which is the one place a photograph on this site has
      ever had any). */}}
 {{ $p := .photo }}
+{{/* A phone stores a portrait photo as a landscape image plus an EXIF note saying "turn me",
+     and this Hugo does not read that note when it resizes: a vertical picture came out lying on
+     its side. Turned upright first — only when the note asks for it, since re-encoding every
+     original at full size to change nothing would be a large cost for no gain. */}}
+{{ $o := 1 }}
+{{ with $p.Exif }}{{ with .Tags.Orientation }}{{ $o = int . }}{{ end }}{{ end }}
+{{ if gt $o 1 }}{{ $p = $p | images.Filter images.AutoOrient }}{{ end }}
 {{ $h := .height | default 560 }}
 {{ $cap := .caption | default "" }}
 {{ $thumb := $p.Resize (printf "x%v webp q80" $h) }}
 {{ $full := $p }}
 {{ if gt $p.Width 1800 }}{{ $full = $p.Resize "1800x webp q82" }}{{ end }}
-<button type="button" class="photo-item" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}"
+<button type="button" class="photo-item{{ if lt $thumb.Width $thumb.Height }} is-portrait{{ end }}" style="--ar: {{ $thumb.Width }} / {{ $thumb.Height }}" data-photo-full="{{ $full.RelPermalink }}" data-photo-w="{{ $full.Width }}" data-photo-h="{{ $full.Height }}"
         {{ with $cap }}data-photo-caption="{{ . }}"{{ end }}
         aria-label="{{ with $cap }}Open photo: {{ . }}{{ else }}Open photo{{ end }}">
   <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ $cap }}" loading="lazy" decoding="async">

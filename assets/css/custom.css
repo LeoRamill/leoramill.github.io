@@ -304,6 +304,8 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
    pass through rather than as photographs of assorted shapes lined up. */
 .photo-carousel {
   position: relative;
+  /* The slides are sized against the row's width in `cqw`, so the row is their container. */
+  container-type: inline-size;
   /* Named once because the hover rule below has to repeat it: the strip's own
      `.photo-item:hover` sets a large lift shadow and carries the same specificity as
      `.photo-carousel .photo-item`, so being later in the file it wins — and pointing at the
@@ -326,7 +328,7 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
      at scale 1 and only the neighbours shrink. */
   padding-block: 0.4rem 0.75rem;
   scrollbar-width: none;
-  --slide: 74%;
+  --slide: 0.74;
 }
 .photo-carousel__track::-webkit-scrollbar { display: none; }
 /* The room at the two ends, so the first and last photograph can reach the middle like the others.
@@ -336,10 +338,21 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
    first slide sits off centre by exactly the padding. As spacers, both resolve against the same box
    and `(100% - slide) / 2` is exactly right. */
 .photo-carousel__track::before, .photo-carousel__track::after {
-  content: ""; flex: 0 0 calc((100% - var(--slide)) / 2);
+  content: ""; flex: 0 0 calc((100% - 100% * var(--slide)) / 2);
+}
+/* With photographs of different shapes the first and the last are not the width of a standard slide,
+   so the script measures them and sizes the two ends to centre exactly those. */
+.photo-carousel__track::before { flex-basis: var(--lead, calc((100% - 100% * var(--slide)) / 2)); }
+.photo-carousel__track::after { flex-basis: var(--trail, calc((100% - 100% * var(--slide)) / 2));
 }
 .photo-carousel .photo-item {
-  flex: 0 0 var(--slide); height: auto; aspect-ratio: 3 / 2; scroll-snap-align: center;
+  /* Every slide is the same height — that of a 3:2 frame the width of a standard slide — and as wide
+     as its own photograph at that height: a landscape fills the frame, a portrait stands in it at
+     full height and narrower, with nothing cropped off its head or its feet. Only a picture wider
+     than 3:2, a panorama, is trimmed at the sides, so it cannot take over the row. */
+  flex: 0 0 auto; width: auto; aspect-ratio: var(--ar, 3 / 2);
+  height: calc(100cqw * var(--slide) * 2 / 3); max-width: calc(100cqw * var(--slide));
+  scroll-snap-align: center;
   border-radius: 0.7rem;
   /* A contact shadow, not a drop shadow. The soft `0 22px 50px` this replaces peaked 22px
      below the picture — exactly where the caption's text sits — so the line read as printed
@@ -366,7 +379,7 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
 @media (max-width: 767px) {
   /* A phone has no room for two neighbours and a big middle: the slide takes most of the width and
      the sides become an edge rather than a picture. */
-  .photo-carousel__track { padding-block: 0.3rem 0.6rem; --slide: 86%; }
+  .photo-carousel__track { padding-block: 0.3rem 0.6rem; --slide: 0.86; }
 }
 /* The line under the row, for whichever photograph is in the middle. It fades out and back in as
    the middle changes, and when a photograph has no caption the line has no text and takes no
@@ -831,13 +844,18 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
 }
 .academic-photos .photo-nav-btn { pointer-events: auto; background: #ffffffd9; backdrop-filter: blur(6px); }
 .dark .academic-photos .photo-nav-btn { background: #18181bcc; }
-.academic-photos .photo-carousel__track { --slide: 72%; }
+.academic-photos .photo-carousel__track { --slide: 0.72; }
 .academic-photos .photo-carousel__caption { padding: 0 8%; font-size: 0.85rem; }
 /* A stop with one photograph shows it in the same 3:2 frame and at the same size as the middle of
    a row, so a picture on the timeline is one size whichever kind of stop it belongs to — at its
    own proportions it came out half as big again as its neighbours in the carousels. */
+.academic-photo { container-type: inline-size; }
+/* The same height as a carousel slide, and as wide as the photograph is at that height — so a
+   portrait stands upright at full height instead of being cut down to a landscape strip. */
 .academic-photo .photo-item {
-  display: block; width: 72%; height: auto; margin-inline: auto; aspect-ratio: 3 / 2;
+  --one: 0.72;
+  display: block; width: auto; margin-inline: auto; aspect-ratio: var(--ar, 3 / 2);
+  height: calc(100cqw * var(--one) * 2 / 3); max-width: 100%;
   border-radius: 0.7rem; box-shadow: 0 8px 16px -8px #00000080;
 }
 .academic-photo .photo-item img { width: 100%; height: 100%; object-fit: cover; }
@@ -869,8 +887,8 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
   .academic-roadmap { --rail-x: 1.55rem; }
   .academic-stop { grid-template-columns: 3.7rem minmax(0, 1fr); }
   .academic-photos, .academic-photo { width: 100%; }
-  .academic-photos .photo-carousel__track { --slide: 84%; }
-  .academic-photo .photo-item { width: 84%; }
+  .academic-photos .photo-carousel__track { --slide: 0.84; }
+  .academic-photo .photo-item { --one: 0.84; }
 }
 
 /* ----- Shaping galleries: clickable cards, modal reviews, notes ----- */
