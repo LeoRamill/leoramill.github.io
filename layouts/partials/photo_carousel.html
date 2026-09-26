@@ -28,7 +28,13 @@
 </div>
 
 <script>
+  // This script is written out once per carousel, and each copy looks at every carousel parsed so far.
+  // With one carousel on a page that was harmless; with one per stop on the timeline, the first row
+  // would be set up six times over — six timers each advancing it, so every tick jumped several
+  // photographs. A carousel is marked the first time it is set up, and the later copies leave it be.
   document.querySelectorAll('[data-photo-carousel]').forEach(function (root) {
+    if (root.dataset.photoReady) return;
+    root.dataset.photoReady = '1';
     var track = root.querySelector('[data-photo-strip]');
     if (!track) return;
     // By class, not by children: the track's two end spacers are flex children as well.
