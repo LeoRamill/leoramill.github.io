@@ -1,5 +1,15 @@
 {{ define "main" }}
-{{/* Vertical roadmap of studies. Stops come from `stops` in the front matter. */}}
+{{/* Vertical roadmap of studies. Every stop is a folder next to this page's `_index.md`, read in
+     the order of the folder names (`00-early`, `01-liceo-cavour`, ...): its `index.md` gives the
+     place (`title`), the span (`period`), the degree or role (`school`) and, below the front
+     matter, the text; the photographs in the same folder become that stop's pictures.
+
+     Two or more photographs are a row that turns on its own, the same component as the homepage;
+     one is shown by itself; none and the stop is text only. Either way a photograph opens full
+     size on click. The stops are not pages of their own — `_index.md` sets them to never render —
+     so this is the only place they appear. */}}
+{{ $stops := sort .Pages "File.Dir" }}
+{{ $hasPhotos := false }}
 <section class="shaping-scope shaping-page academic-page">
   <div class="academic-shell">
     <h1 id="academic-title" class="shaping-title">{{ .Title }}</h1>
@@ -11,17 +21,36 @@
     {{ end }}
     <div class="academic-roadmap">
       <ol class="academic-stops">
-        {{ range .Params.stops }}
-        <li class="academic-stop">
+        {{ range $i, $stop := $stops }}
+        {{ $photos := sort ($stop.Resources.ByType "image") "Name" }}
+        {{ $caps := $stop.Params.captions | default dict }}
+        {{ $text := trim ($stop.Content | plainify) " \n\r\t" }}
+        <li class="academic-stop{{ if $photos }} academic-stop--photos{{ end }}">
           <span class="academic-dot" aria-hidden="true"></span>
           <div class="academic-copy">
-            <span class="academic-label">{{ .label }}</span>
-            {{ with .date }}<span class="academic-date">{{ . }}</span>{{ end }}
-            {{ with .school }}<span class="academic-school">{{ . | markdownify }}</span>{{ end }}
-            {{ with .text }}<p class="academic-text">{{ . | markdownify }}</p>{{ end }}
+            <span class="academic-label">{{ $stop.Title }}</span>
+            {{ with $stop.Params.period }}<span class="academic-date">{{ . }}</span>{{ end }}
+            {{ with $stop.Params.school }}<span class="academic-school">{{ . | markdownify }}</span>{{ end }}
+            {{ with $text }}<div class="academic-text">{{ $stop.Content }}</div>{{ end }}
           </div>
-          {{ with .image }}
-          <figure class="academic-card">{{ with $.Params.url }}<a href="{{ . }}">{{ end }}<img src="{{ . }}" alt="" loading="lazy">{{ if $.Params.url }}</a>{{ end }}</figure>
+
+          {{ if ge (len $photos) 2 }}
+            {{ $hasPhotos = true }}
+            <div class="academic-photos" data-photo-scope>
+              {{ partial "photo_nav" (dict "label" (printf "photos of %s" $stop.Title)) }}
+              {{ partial "photo_carousel" (dict "photos" $photos "label" (printf "Photos: %s" $stop.Title)
+                                                "height" 560
+                                                "interval" ($stop.Params.interval | default 3500)
+                                                "captions" $caps) }}
+            </div>
+          {{ else if eq (len $photos) 1 }}
+            {{ $hasPhotos = true }}
+            {{ $p := index $photos 0 }}
+            {{ $cap := index $caps (path.Base $p.Name) }}
+            <figure class="academic-photo">
+              {{ partial "photo_item" (dict "photo" $p "height" 560 "caption" $cap) }}
+              {{ with $cap }}<figcaption>{{ . }}</figcaption>{{ end }}
+            </figure>
           {{ end }}
         </li>
         {{ end }}
@@ -30,4 +59,6 @@
     {{ with .Content }}<div class="prose prose-slate dark:prose-invert mx-auto mt-10">{{ . }}</div>{{ end }}
   </div>
 </section>
+{{/* One full-size view for every photograph on the page, after all of them so it finds them all */}}
+{{ if $hasPhotos }}{{ partial "photo_lightbox" . }}{{ end }}
 {{ end }}

@@ -814,8 +814,40 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
 .academic-date { color: var(--muted); font-size: clamp(0.9rem, 1.1vw, 1.05rem); font-weight: 700; line-height: 1.15; }
 .academic-school { color: var(--blue); font-size: clamp(0.86rem, 1vw, 0.98rem); font-weight: 800; line-height: 1.15; }
 .academic-text { margin: 0; color: var(--ink); font-size: 0.95rem; line-height: 1.4; }
-.academic-card { grid-column: 3; width: min(100%, 22rem); padding: 0.45rem; margin: 0; border: 0.16rem solid var(--ink); background: #fff; box-shadow: 0 1.4rem 2.2rem #16201b33; }
-.academic-card img { display: block; width: 100%; height: auto; }
+.academic-text p { margin: 0; }
+.academic-text p + p { margin-top: 0.55em; }
+
+/* A stop's photographs, in the third column beside its text. Two or more are the homepage's
+   carousel — one picture held in the middle, its neighbours leaning in — at a size that belongs to
+   a timeline rather than to a cover; one is shown on its own in its own proportions. */
+.academic-photos, .academic-photo { grid-column: 3; width: min(100%, 36rem); margin: 0; }
+.academic-photos { position: relative; }
+/* The arrows ride on the two edges of the row, as on the homepage, over a row that takes no clicks
+   of its own so the photographs underneath stay reachable. */
+.academic-photos .photo-nav {
+  position: absolute; inset: 0 0 1.6rem; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 0; padding: 0 0.35rem; pointer-events: none;
+}
+.academic-photos .photo-nav-btn { pointer-events: auto; background: #ffffffd9; backdrop-filter: blur(6px); }
+.dark .academic-photos .photo-nav-btn { background: #18181bcc; }
+.academic-photos .photo-carousel__track { --slide: 72%; }
+.academic-photos .photo-carousel__caption { padding: 0 8%; font-size: 0.85rem; }
+/* A stop with one photograph shows it in the same 3:2 frame and at the same size as the middle of
+   a row, so a picture on the timeline is one size whichever kind of stop it belongs to — at its
+   own proportions it came out half as big again as its neighbours in the carousels. */
+.academic-photo .photo-item {
+  display: block; width: 72%; height: auto; margin-inline: auto; aspect-ratio: 3 / 2;
+  border-radius: 0.7rem; box-shadow: 0 8px 16px -8px #00000080;
+}
+.academic-photo .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+.academic-photo figcaption { margin-top: 0.55rem; color: var(--muted); font-size: 0.85rem; font-style: italic; text-align: center; }
+/* Between the phone layout and a screen wide enough for three columns the third column is a sliver,
+   so the photographs go under the text instead of beside it. */
+@media (max-width: 960px) {
+  .academic-photos, .academic-photo { grid-column: 2; width: min(100%, 34rem); margin-top: 0.35rem; }
+}
+@media (pointer: coarse) { .academic-photos .photo-nav { display: none; } }
 
 @keyframes mini-me-drift { 0%, 100% { transform: translate3d(0, var(--mini-me-lift, 0), 0) rotate(-1deg); } 50% { transform: translate3d(0.35rem, calc(var(--mini-me-lift, 0rem) - 0.8rem), 0) rotate(1.5deg); } }
 @keyframes shaping-float { 0%, 100% { translate: 0 0; rotate: -3deg; } 50% { translate: 0.55rem -0.9rem; rotate: 3deg; } }
@@ -836,7 +868,9 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
   .shaping-card:nth-child(n) .shaping-cover { margin-top: 0; }
   .academic-roadmap { --rail-x: 1.55rem; }
   .academic-stop { grid-template-columns: 3.7rem minmax(0, 1fr); }
-  .academic-card { grid-column: 2; }
+  .academic-photos, .academic-photo { width: 100%; }
+  .academic-photos .photo-carousel__track { --slide: 84%; }
+  .academic-photo .photo-item { width: 84%; }
 }
 
 /* ----- Shaping galleries: clickable cards, modal reviews, notes ----- */
