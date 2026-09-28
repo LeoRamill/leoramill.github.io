@@ -37,7 +37,6 @@
           {{ if ge (len $photos) 2 }}
             {{ $hasPhotos = true }}
             <div class="academic-photos" data-photo-scope>
-              {{ partial "photo_nav" (dict "label" (printf "photos of %s" $stop.Title)) }}
               {{ partial "photo_carousel" (dict "photos" $photos "label" (printf "Photos: %s" $stop.Title)
                                                 "height" 560
                                                 "interval" ($stop.Params.interval | default 3500)

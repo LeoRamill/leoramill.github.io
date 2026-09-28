@@ -41,7 +41,6 @@
 
   {{ if ge (len $covers) 2 }}
     <div class="cover-strip" data-photo-scope>
-      {{ partial "photo_nav" (dict "label" "cover photos") }}
       {{ partial "photo_carousel" (dict "photos" $covers "label" "Cover photos"
                                         "interval" ($block.content.interval | default 3000)
                                         "captions" ($block.content.captions | default dict)) }}
