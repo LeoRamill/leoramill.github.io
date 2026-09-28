@@ -39,7 +39,7 @@
             <div class="academic-photos" data-photo-scope>
               {{ partial "photo_carousel" (dict "photos" $photos "label" (printf "Photos: %s" $stop.Title)
                                                 "height" 560
-                                                "interval" ($stop.Params.interval | default 3500)
+                                                "interval" ($stop.Params.interval | default 2600)
                                                 "captions" $caps) }}
             </div>
           {{ else if eq (len $photos) 1 }}

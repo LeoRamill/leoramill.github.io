@@ -367,7 +367,7 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
      picture behind it show through and the two mix into a smear; a darker but solid one still reads
      as a photograph standing next in line. */
   filter: brightness(calc(1 - 0.42 * var(--d, 1)));
-  transition: transform 0.45s ease, filter 0.45s ease;
+  transition: transform 0.32s ease, filter 0.32s ease;
 }
 .photo-carousel .photo-item img { width: 100%; height: 100%; object-fit: cover; }
 /* The hover lift belongs to the strip, where every photograph is equal. Here the middle one is
@@ -849,7 +849,21 @@ a.shaping-card-static:hover .shaping-cover, a.shaping-card-static:focus-visible 
 /* A stop with one photograph shows it in the same 3:2 frame and at the same size as the middle of
    a row, so a picture on the timeline is one size whichever kind of stop it belongs to — at its
    own proportions it came out half as big again as its neighbours in the carousels. */
-.academic-photo { container-type: inline-size; }
+.academic-photo, .photo-single { container-type: inline-size; }
+/* Photography: a larger row than the timeline's, since here the photographs are the page. */
+.photo-album .photo-carousel__track { --slide: 0.62; }
+.photo-single { margin: 0; }
+.photo-single .photo-item {
+  display: block; width: auto; margin-inline: auto; aspect-ratio: var(--ar, 3 / 2);
+  height: calc(100cqw * 0.62 * 2 / 3); max-width: 100%;
+  border-radius: 0.7rem; box-shadow: 0 8px 16px -8px #00000080;
+}
+.photo-single .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+.photo-single figcaption { margin-top: 0.55rem; color: var(--muted); font-size: 0.85rem; font-style: italic; text-align: center; }
+@media (max-width: 767px) {
+  .photo-album .photo-carousel__track { --slide: 0.86; }
+  .photo-single .photo-item { height: calc(100cqw * 0.86 * 2 / 3); }
+}
 /* The same height as a carousel slide, and as wide as the photograph is at that height — so a
    portrait stands upright at full height instead of being cut down to a landscape strip. */
 .academic-photo .photo-item {
