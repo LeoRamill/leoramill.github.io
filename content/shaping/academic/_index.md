@@ -2,7 +2,7 @@
 title: My Timeline
 layout: shaping-academic
 lead:
-  text: "Where I have been studying and researching, oldest first."
+  text: "Where my creativity grows."
   url: ""
 # Every stop on the road is a folder next to this file, and they are read in the order of their
 # names — which is why they start with a number:
