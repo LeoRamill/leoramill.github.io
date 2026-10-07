@@ -28,9 +28,15 @@ sections:
       # it asks for begins, and clicking it goes straight to the content. Remove the line and the
       # invitation goes with it.
       scroll_hint: Come Closer...🌌
-      button:
-        text: View CV
-        url: /cv/
+      # The row of buttons under the icons, left to right. `new_tab: true` opens one in a new tab.
+      buttons:
+        - text: View CV
+          url: /cv/
+          new_tab: true
+        - text: View My Timeline
+          url: /shaping/academic/
+        - text: Shaping
+          url: /shaping/
     design:
       css_class: dark home-no-veil
       # No per-section wash here. The veil is one scrim on the fixed layer itself
