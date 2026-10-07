@@ -35,8 +35,6 @@ sections:
           new_tab: true
         - text: View My Timeline
           url: /shaping/academic/
-        - text: Shaping
-          url: /shaping/
     design:
       css_class: dark home-no-veil
       # No per-section wash here. The veil is one scrim on the fixed layer itself
