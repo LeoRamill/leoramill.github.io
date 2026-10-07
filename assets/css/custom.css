@@ -179,6 +179,9 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   font-weight: 600; font-size: 0.9rem; transition: background-color 0.15s ease;
 }
 .profile-hero__btn:hover { background-color: rgba(255, 255, 255, 0.14); }
+/* The buttons side by side; the margin that used to sit on the single button sits on the row. */
+.profile-hero__btns { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.4rem; }
+.profile-hero__btns .profile-hero__btn { margin-top: 0; }
 /* The invitation to scroll, in the same voice the Shaping page uses for its hints: small, lower
    case, the same lilac. Fixed to the window and not to the hero — at the top of the page the last
    stretch of the pinned stage is already below the fold, which is precisely where this would sit.
@@ -254,7 +257,13 @@ body:has(.site-fixed-bg) #site-header .navbar-social a { text-shadow: 0 1px 2px 
   .profile-hero__icon { height: 1.6rem; }
   .profile-hero__role { margin-top: 0.5rem; }
   .profile-hero__orgs { margin-top: 0.35rem; }
-  .profile-hero__btn { margin-top: 1rem; }
+  .profile-hero__btns { justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+  .profile-hero__btn { padding: 0.5rem 0.85rem; font-size: 0.85rem; }
+}
+/* On the narrowest phones the three still fit on one line; on two they reached the invitation. */
+@media (max-width: 380px) {
+  .profile-hero__btns { gap: 0.4rem; }
+  .profile-hero__btn { padding: 0.45rem 0.65rem; font-size: 0.8rem; }
 }
 /* A phone in Safari shows perhaps 670px of page, and the column — avatar, name, role, the four
    universities, the icons, the button — does not shrink with it. Centred in that space, `View CV`

@@ -277,8 +277,18 @@
     </ul>
     {{ end }}
 
-    {{ with $block.content.button }}
-    <a class="profile-hero__btn" href="{{ strings.TrimPrefix "/" .url | relURL }}" target="_blank" rel="noopener">{{ .text }}</a>
+    {{/* One row of buttons under the icons. `buttons` is a list of `text` + `url`, and `new_tab: true`
+         on one opens it in a new tab; the older single `button` still works, as the first of the row. */}}
+    {{ $btns := slice }}
+    {{ with $block.content.button }}{{ $btns = $btns | append . }}{{ end }}
+    {{ with $block.content.buttons }}{{ range . }}{{ $btns = $btns | append . }}{{ end }}{{ end }}
+    {{ with $btns }}
+    <div class="profile-hero__btns">
+      {{ range . }}
+      {{ $ext := hasPrefix .url "http" }}
+      <a class="profile-hero__btn" href="{{ if $ext }}{{ .url }}{{ else }}{{ strings.TrimPrefix "/" .url | relURL }}{{ end }}"{{ if or .new_tab $ext }} target="_blank" rel="noopener"{{ end }}>{{ .text }}</a>
+      {{ end }}
+    </div>
     {{ end }}
   </div>
 </div>
