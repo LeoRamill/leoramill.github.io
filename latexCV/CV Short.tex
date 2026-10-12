@@ -1,0 +1,128 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% "ModernCV" CV and Cover Letter
+% LaTeX Template
+% Version 1.11 (19/6/14)
+%
+% Original author: Xavier Danaux
+% License: CC BY-NC-SA 3.0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,a4paper,sans]{moderncv} 
+
+\moderncvstyle{classic} 
+%\moderncvcolor{blue} 
+
+% Colore Principale Custom
+\definecolor{color1}{HTML}{A2BFF4} 
+
+\usepackage[utf8]{inputenc} 
+
+% --- GEOMETRIA PAGINA ---
+% Margini ridotti ma equilibrati per lasciare respiro all'intestazione
+\usepackage[scale=0.93, top=1.5cm, bottom=1.5cm, left=1.2cm, right=1.2cm]{geometry}
+
+% Include other packages here, before hyperref.
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+
+\usepackage[pagebackref,breaklinks]{hyperref}
+\usepackage{fontawesome5}
+
+% Larghezza colonna date ottimizzata per "2024--2026"
+\setlength{\hintscolumnwidth}{2.6cm} 
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION SECTION
+%----------------------------------------------------------------------------------------
+
+\firstname{\textcolor{color1}{Leonard Vincent}}
+\familyname{\textcolor{color1}{Ramil}}
+
+\email{leonardvincentramil@icloud.com}
+\social[linkedin]{leonard-vincent-ramil}
+\social[github]{LeoRamill}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+% Titolo Standard (Spaziatura originale ripristinata)
+\makecvtitle 
+\vspace*{-8mm} % Leggero aggiustamento solo DOPO il titolo per avvicinare la prima sezione
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Education}
+
+\cventry{2025--2026}{Double MSc in Computer Science}{EURECOM}{Sophia Antipolis, France}{\textit{17.36/20}}{
+    \textbf{Focus:} Digital Image and Sound Music Processing, Optimization, Reinforcement Learning, Cloud Computing.\\
+    \textbf{Semester Project:} Quality Control of large database (Vessel Verse) annotations and model re-training.\\
+    \textbf{Major:} Data Science
+}
+
+\cventry{2024--2026}{MSc in Data Science and Engineering}{Politecnico di Torino}{Turin, Italy}{}{
+\textbf{Focus:} Distributed System, Data Science, Information Theory, ML \& Deep learning, Math for ML.}
+
+\cventry{2021--2024}{BSc in Computer Science and AI}{Sapienza University of Rome}{Italy}{\textit{110/110 cum laude}}{
+\textbf{Honours Program:} Top 6 students. Focus on Safety, Robustness, Privacy \& Explainability in AI, \\ under supervision of Prof. Iacopo Masi.
+}
+\cventry{2016--2021}{High School Diploma (Scientific Focus)}{Liceo Statale "Camillo Cavour"}{Rome, Italy}{\textit{90/100}}{
+}
+%----------------------------------------------------------------------------------------
+%	WORK AND RESEARCH EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Experience}
+
+
+\cventry{March 2026 -- \\Aug 2026}{Research Intern}{Inria (EPIONE Team)}{Sophia Antipolis, France}{}{Conducted research on scalable spatio-temporal analysis of multi-modal medical images (MRI/PET) under the supervision of Prof. Marco Lorenzi. The project focuses on extending Neural Cellular Automata architectures to predict neurodegenerative disease evolution, leveraging disentanglement learning to model the joint variability of structural and molecular brain data.}
+
+\cventry{Sept 2024 -- \\June 2025}{Data AI Engineer}{CLUSTER Reply}{Turin, Italy}{}{Engineered an Azure RAG vector database to optimize chatbot precision and developed GenAI models for automated document chunking, scaling the system to 10k+ daily documents with 25\% higher efficiency.}
+
+\cventry{May 2024 -- \\Oct 2024}{Research Intern}{HERCOLE Lab (Sapienza University of Rome)}{Rome, Italy}{}{Conducted research on \textit{Counterfactual Explainable AI for Anomaly Detection using Graph Neural Networks} applied to financial transactions, supervised by Prof. Gabriele Tolomei. Extended the CARLA library with GNN-based models (GNN, GAT, GIN), achieving a 20\% improvement in validity and fidelity metrics within a PNRR project in collaboration with Intesa San Paolo.}
+
+%----------------------------------------------------------------------------------------
+%	SELECTED PROJECTS SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Selected Projects}
+
+\cventry{May 2025 -- \\Jul 2025}{ADACS: Adversarial Domain Adaptation via Cross-Domain \textcolor{color1} {\href{https://github.com/LeoRamill/ADACS}{\faGithub}}}{Python, PyTorch, Wandb}{}{}{
+Developed an unsupervised domain adaptation framework aligning synthetic (GTA5) to real-world (Cityscapes) data. Improved mIoU from 26.38\% to 37.01\% (ResNet-101) and 23.80\% to 29.76\% (ResNet-18).
+}
+
+\cventry{May 2024 -- \\Oct 2024}{CARLA -- Counterfactual And Recourse LibrAry \textcolor{color1}{\href{https://github.com/hercolelab/CARLA}{\faGithub}}}{Python, PyTorch}{}{}{
+Extended CARLA benchmarking library by implementing novel graph-based counterfactual explainability methods as part of thesis work.}
+
+\cventry{Jul 2023 -- \\Sep 2023}{KYC - Know Your Cards \textcolor{color1}{\href{https://github.com/LeoRamill/KYC}{\faGithub}}}{Python, Tensorflow}{}{}{
+Designed CV pipeline using bitmasking and CNNs to grade Pokémon TCG cards, achieving 92\% classification accuracy on a test set of 500 images.}
+
+%----------------------------------------------------------------------------------------
+%	EXTRACURRICULAR ACTIVITY SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Extracurricular Activity}
+
+\cventry{Aug 2024}{BOOST'24 Summer School}{ELICSIR Foundation}{Bologna, Italy}{}{
+Intensive program on cutting-edge CS research with lectures from Cornell University and Sapienza faculty.
+}
+
+\cventry{2022 -- 2023}{Scholarship Team Lead}{Sapienza Università di Roma}{Rome, Italy}{}{
+Managed a tutor group assisting 200+ students, improving administrative response times by 15\%.}
+
+%----------------------------------------------------------------------------------------
+%	SKILLS & LANGUAGES
+%----------------------------------------------------------------------------------------
+
+\section{Skills \& Languages}
+
+\cvitem{Programming}{Python, Java, Go, C++, SQL, LaTeX, HTML, CSS, JavaScript, Vue.js}
+\cvitem{Tools}{Git, Docker, Figma, PyTorch, Tensorflow, Wandb}
+\cvitem{Languages}{\textbf{Italian} (Native), \textbf{English} (Professional), \textbf{Filipino} (Basic), \textbf{French} (A2)}
+
+\end{document}
