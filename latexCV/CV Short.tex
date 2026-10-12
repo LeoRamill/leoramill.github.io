@@ -28,8 +28,8 @@
 \usepackage{booktabs}
 \usepackage[utf8]{inputenc}
 
-\usepackage[pagebackref,breaklinks]{hyperref}
 \usepackage{fontawesome5}
+\usepackage{needspace}
 
 % Larghezza colonna date ottimizzata per "2024--2026"
 \setlength{\hintscolumnwidth}{2.6cm} 
@@ -92,6 +92,10 @@
 
 \section{Selected Projects}
 
+\cventry{Sep 2025 -- \\Dec 2025}{VesselVerse Quality Control \textcolor{color1}{\href{https://github.com/LeoRamill/VesselVerse-QualityControl}{\faGithub}}}{Python, PyTorch}{}{}{
+Built a multimodal network combining ResNet branches on three MIP projections with an MLP on 19 graph metrics to flag low-quality cerebrovascular segmentations, reaching $\sim$83\% validation accuracy (vs.\ 79\% tabular baseline), with GradCAM used to audit failure cases.
+}
+
 \cventry{May 2025 -- \\Jul 2025}{ADACS: Adversarial Domain Adaptation via Cross-Domain \textcolor{color1} {\href{https://github.com/LeoRamill/ADACS}{\faGithub}}}{Python, PyTorch, Wandb}{}{}{
 Developed an unsupervised domain adaptation framework aligning synthetic (GTA5) to real-world (Cityscapes) data. Improved mIoU from 26.38\% to 37.01\% (ResNet-101) and 23.80\% to 29.76\% (ResNet-18).
 }
@@ -103,9 +107,24 @@ Extended CARLA benchmarking library by implementing novel graph-based counterfac
 Designed CV pipeline using bitmasking and CNNs to grade Pokémon TCG cards, achieving 92\% classification accuracy on a test set of 500 images.}
 
 %----------------------------------------------------------------------------------------
+%	PUBLICATIONS SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Publications}
+
+\cvitem{2026}{Projection-Based Quality Assessment of Cerebrovascular Segmentations (\textcolor{color1}{\href{https://papers.miccai.org/miccai-2026-sat/paper/SWITCH_009.pdf}{\small\faIcon{external-link-alt}}})\newline
+Ion, B., Zhang, X., \textbf{Ramil, L. V.}, Boccadifuoco, A., Ourselin, S., Cleary, J., and Zuluaga, M. A.\newline
+\textit{SWITCH+, MICCAI Workshop on Stroke and Neurovascular Diseases, 2026}}
+
+\cvitem{2026}{PET-SMART: An Interpretable, Flexible, and Scalable Model of tau-PET Progression\newline in Alzheimer's Disease\newline
+\textbf{Ramil, L. V.}, Kalkhof, J., Humbert, O., and Lorenzi, M.\newline
+\textit{Under submission at MLCN, MICCAI Workshop on Machine Learning in Clinical Neuroimaging}}
+
+%----------------------------------------------------------------------------------------
 %	EXTRACURRICULAR ACTIVITY SECTION
 %----------------------------------------------------------------------------------------
 
+\needspace{5\baselineskip}
 \section{Extracurricular Activity}
 
 \cventry{Aug 2024}{BOOST'24 Summer School}{ELICSIR Foundation}{Bologna, Italy}{}{
