@@ -752,6 +752,17 @@ INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/booktabs/booktabs.sty
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/booktabs/booktabs.sty
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/inputenc.sty
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/fontawesome5/fontawesome5.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
+INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/hyperref/hyperref.sty
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/hyperref/hyperref.sty
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -1156,3 +1167,4 @@ INPUT /usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.p
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb

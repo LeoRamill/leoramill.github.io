@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1791816364 "/Users/leonardvincentramil/Documents/GitHub/leoramill.github.io/latexCV/CV Short.tex" "CV Short.pdf" "CV Short" 1791816365 0
-  "/Users/leonardvincentramil/Documents/GitHub/leoramill.github.io/latexCV/CV Short.tex" 1791816362 7289 abf85eed7458f597196a36834681c0f7 ""
+["pdflatex"] 1791999576 "/Users/leonardvincentramil/Documents/GitHub/leoramill.github.io/latexCV/CV Short.tex" "CV Short.pdf" "CV Short" 1791999578 0
+  "/Users/leonardvincentramil/Documents/GitHub/leoramill.github.io/latexCV/CV Short.tex" 1791999573 8093 167890511527998814562ebac320151f ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.enc" 1622837620 2920 d63721872b8c77041b88e51b8f7c291d ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc" 1622837620 3042 0e2b14b9be7d01075a4c4591d5d1781b ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -37,6 +37,7 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb" 1248133631 24416 36515493f76659302880e2604105b074 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb" 1248133631 28902 2f5c04fd2884d1878057baa5aad22765 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb" 1248133631 25150 e0d09798d232ab9d00c5c0a8df6cc22d ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Brands-Regular.pfb" 1651520503 204258 177851ae99767090543ae24e73c92f2f ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Regular.pfb" 1651520503 58496 99faf1e070706908acf67d1cfee72833 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb" 1651520503 295323 d099723373a00cc17d5ae0c9738bb5b3 ""
@@ -177,6 +178,7 @@
   "/usr/local/texlive/2023/texmf-dist/tex/latex/moderncv/moderncvstyleclassic.sty" 1645477037 2306 f4d1f7aafe038489d856091f12d87b22 ""
   "/usr/local/texlive/2023/texmf-dist/tex/latex/moderncv/tweaklist.sty" 1645477037 2019 cb29d3f6a08bf1e85170b28fbe6588d8 ""
   "/usr/local/texlive/2023/texmf-dist/tex/latex/multirow/multirow.sty" 1615845910 6149 2398eec4faa1ee24ff761581e580ecf1 ""
+  "/usr/local/texlive/2023/texmf-dist/tex/latex/needspace/needspace.sty" 1364856750 852 0e34dbb72efc69fa07602405ad95585e ""
   "/usr/local/texlive/2023/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty" 1601326656 1090 bae35ef70b3168089ef166db3e66f5b2 ""
   "/usr/local/texlive/2023/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty" 1673816307 373 00b204b1d7d095b892ad31a7494b0373 ""
   "/usr/local/texlive/2023/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty" 1601326656 21013 f4ff83d25bb56552493b030f27c075ae ""
@@ -197,9 +199,9 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1679384925 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1679384845 7883460 8f7102bf89e5e62929ae06f4741c20cc ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "CV Short.aux" 1791816365 1186 7d2dd83cfec26d84d8373b4a34198ad8 "pdflatex"
-  "CV Short.out" 1791816365 723 3e32aeab23676cfe40d1fd76ec4491b5 "pdflatex"
-  "CV Short.tex" 1791816362 7289 abf85eed7458f597196a36834681c0f7 ""
+  "CV Short.aux" 1791999577 1186 e5dcb1bdf6c3e1c8a72d24a9833b532f "pdflatex"
+  "CV Short.out" 1791999577 723 3e32aeab23676cfe40d1fd76ec4491b5 "pdflatex"
+  "CV Short.tex" 1791999573 8093 167890511527998814562ebac320151f ""
   (generated)
   "CV Short.aux"
   "CV Short.log"
